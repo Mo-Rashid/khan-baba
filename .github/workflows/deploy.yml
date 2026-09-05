@@ -1,0 +1,50 @@
+name: Deploy KHAN SPLOIT
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy application to EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          script: |
+            set -e
+
+            echo "================================"
+            echo "🚀 KHAN SPLOIT DEPLOYMENT START"
+            echo "================================"
+
+            cd ~/khan-baba
+
+            echo "📥 Updating source code..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "🐳 Building Docker containers..."
+            docker compose build
+
+            echo "🚀 Starting containers..."
+            docker compose up -d
+
+            echo "🧹 Cleaning unused Docker images..."
+            docker image prune -f
+
+            echo "📊 Container status:"
+            docker compose ps
+
+            echo "================================"
+            echo "✅ DEPLOYMENT SUCCESSFUL"
+            echo "================================"
