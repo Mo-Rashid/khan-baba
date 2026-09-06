@@ -216,7 +216,7 @@ const Dashboard = () => {
 
       </section>
 
-      <h2 className="section-title">WELCOME TO KHAN SPLOIT </h2>
+      <h2 className="section-title">WELCOME TO KHAN SPLOIT tet </h2>
 
       {/* ============ FEATURE CARDS ============ */}
       <section className="feature-grid" id="portfolio">
