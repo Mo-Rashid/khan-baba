@@ -129,7 +129,7 @@ const Dashboard = () => {
             <img src="/images/logo.png" alt="KHAN SPLOIT" className="logo" />
           </div>
           <div className="logo-content">
-            <h1 className="logo-title">RASHID KHAN SPLOIT</h1>
+            <h1 className="logo-title">KHAN SPLOIT</h1>
             <p className="logo-sub">CYBER SECURITY PLATFORM</p>
           </div>
         </div>
