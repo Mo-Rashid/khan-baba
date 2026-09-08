@@ -106,7 +106,7 @@ const Login = () => {
         <h1>Welcome Back</h1>
 
         <p className="auth-subtitle">
-          Login to your KHAN SPLOIT account
+          Login to your The VulnXploit account
         </p>
 
         {error && (

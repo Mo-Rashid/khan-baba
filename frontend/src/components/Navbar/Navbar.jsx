@@ -93,14 +93,14 @@ const Navbar = () => {
         <div className="logo-wrapper">
           <img
             src="/images/logo.png"
-            alt="KHAN SPLOIT"
+            alt="The VulnXploit"
             className="logo"
           />
         </div>
 
         <div className="logo-content">
           <h1 className="logo-title">
-            KHAN SPLOIT
+            The VulnXploit
           </h1>
 
           <p className="logo-sub">

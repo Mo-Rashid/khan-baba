@@ -258,7 +258,7 @@ const Portfolio = () => {
 
       
 
-      <h2>KHAN SPLOIT</h2>
+      <h2>The VulnXploit</h2>
 
       <p>
         Cyber Security Researcher • Application Security Engineer •

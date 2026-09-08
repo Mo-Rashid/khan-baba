@@ -126,10 +126,10 @@ const Dashboard = () => {
       <header className="navbar">
         <div className="logo-area">
           <div className="logo-wrapper">
-            <img src="/images/logo.png" alt="KHAN SPLOIT" className="logo" />
+            <img src="/images/logo.png" alt="The VulnXploit" className="logo" />
           </div>
           <div className="logo-content">
-            <h1 className="logo-title">KHAN SPLOIT</h1>
+            <h1 className="logo-title">The VulnXploit</h1>
             <p className="logo-sub">CYBER SECURITY PLATFORM</p>
           </div>
         </div>
@@ -198,7 +198,7 @@ const Dashboard = () => {
         <div className="hero-left">
           <span className="hero-badge">CYBER SECURITY PLATFORM</span>
           <h1 className="hero-title">
-            LEARNING <span className="extrude-text">KHAN SPLOIT</span>   PLATFORM
+            LEARNING <span className="extrude-text">The VulnXploit</span>   PLATFORM
           </h1>
           <p className="hero-description">
             Red Teaming <span> • </span> Penetration Testing <span> • </span> AI Security <span> • </span> Ethical
@@ -210,13 +210,13 @@ const Dashboard = () => {
         
             <img
               src="/images/logo.png"
-              alt="KHAN SPLOIT"
+              alt="The VulnXploit"
               className="hero-logo"
             />
 
       </section>
 
-      <h2 className="section-title">WELCOME TO KHAN SPLOIT  </h2>
+      <h2 className="section-title">WELCOME TO The VulnXploit  </h2>
 
       {/* ============ FEATURE CARDS ============ */}
       <section className="feature-grid" id="portfolio">
@@ -632,7 +632,7 @@ const Dashboard = () => {
         <div className="footer-brand">
 
             <h2 className="extrude-text-sm">
-                KHAN SPLOIT
+                The VulnXploit
             </h2>
 
             <p className="footer-desc">
@@ -751,7 +751,7 @@ const Dashboard = () => {
 
         <p>
 
-            © 2026 KHAN SPLOIT • All Rights Reserved
+            © 2026 The VulnXploit • All Rights Reserved
 
         </p>
 
