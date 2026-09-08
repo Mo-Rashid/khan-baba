@@ -136,7 +136,6 @@ const AllCTFLab = () => {
                 return (
                   <div key={cat.id} className="category-section">
                     <div className="section-header">
-                    <img src="/images/logo.png" alt="logo" className="section-logo" />
                     <h2 className="category-title">{cat.label}</h2>
                     </div>
                     
