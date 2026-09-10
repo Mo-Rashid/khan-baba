@@ -1,16 +1,11 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:5000";
+const API_BASE_URL = "/api";
 
 export const API = {
-  SIGNUP: `${API_BASE_URL}/api/auth/signup`,
-  LOGIN: `${API_BASE_URL}/api/auth/login`,
+  SIGNUP: `${API_BASE_URL}/auth/signup`,
+  LOGIN: `${API_BASE_URL}/auth/login`,
 };
 
-export async function apiRequest(
-  url,
-  options = {}
-) {
+export async function apiRequest(url, options = {}) {
   const response = await fetch(url, {
     ...options,
 
@@ -18,6 +13,8 @@ export async function apiRequest(
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
+
+    credentials: "include",
   });
 
   let data;
@@ -25,15 +22,12 @@ export async function apiRequest(
   try {
     data = await response.json();
   } catch {
-    throw new Error(
-      "Invalid server response"
-    );
+    throw new Error("Invalid server response");
   }
 
   if (!response.ok) {
     throw new Error(
-      data.message ||
-        `Request failed (${response.status})`
+      data.message || `Request failed (${response.status})`
     );
   }
 
