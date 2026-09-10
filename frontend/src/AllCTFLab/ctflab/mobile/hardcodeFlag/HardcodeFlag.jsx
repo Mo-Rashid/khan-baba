@@ -437,7 +437,7 @@ const HardcodeFlag = () => {
                 {showHint && (
                   <div className="hint-content">
                     <div className="hint-warning">
-                      ⚠ Using hints may reduce your challenge score.
+                      ⚠ Using hints may reduce your challenge score..
                     </div>
                     <p>{LAB.hint}</p>
                   </div>
