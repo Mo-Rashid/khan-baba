@@ -140,6 +140,11 @@ import AndroidLab from "./AllCTFLab/ctflab/mobile/android/AndroidLab";
 import IOSLab from "./AllCTFLab/ctflab/mobile/ios/iOSLab";
 import APKLab from "./AllCTFLab/ctflab/mobile/apk-analysis/APKLab";
 
+import HardcodeFlag from "./AllCTFLab/ctflab/mobile/hardcodeFlag/HardcodeFlag";
+import VulnApktool from "./AllCTFLab/ctflab/mobile/vulnApktool/VulnApktool";
+import VulnX from "./AllCTFLab/ctflab/mobile/vulnX/VulnX";
+import VulnX2 from "./AllCTFLab/ctflab/mobile/vulnX2/VulnX2";
+
 
 //  ai 
 
@@ -255,6 +260,11 @@ function App() {
                 <Route  path="/ctf-lab/mobile-ios-lab"  element={<IOSLab />}/>
                 <Route  path="/ctf-lab/mobile-apk-analysis"  element={<APKLab />}/>
 
+                <Route  path="/ctf-lab/mobile-hardcode-flag"  element={<HardcodeFlag />}/>
+                <Route  path="/ctf-lab/mobile-vuln-apktool"  element={<VulnApktool />}/>
+                <Route  path="/ctf-lab/mobile-vulnx"  element={<VulnX />}/>
+                <Route  path="/ctf-lab/mobile-vulnx2"  element={<VulnX2 />}/>
+                
 
 
 

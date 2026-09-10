@@ -1,0 +1,1402 @@
+/* =========================================================
+   VULNX2
+   ANDROID MOBILE SECURITY CTF
+========================================================= */
+
+.vulnx2-page {
+  min-height: 100vh;
+  color: #f4f4f5;
+  background:
+    radial-gradient(
+      circle at 80% 0%,
+      rgba(124, 58, 237, 0.18),
+      transparent 32%
+    ),
+    #07070d;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.vulnx2-hero {
+  max-width: 1200px;
+  margin: auto;
+  padding: 65px 25px 40px;
+}
+
+.vulnx2-hero-content {
+  padding: 45px;
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.08),
+      rgba(255, 255, 255, 0.02)
+    );
+}
+
+.vulnx2-hero-badge {
+  display: inline-block;
+  padding: 8px 13px;
+  border: 1px solid #7c3aed;
+  border-radius: 20px;
+  color: #c4b5fd;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.vulnx2-hero h1 {
+  margin: 18px 0 10px;
+  font-size: 58px;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.vulnx2-hero h1 span {
+  color: #a855f7;
+}
+
+.vulnx2-hero p {
+  max-width: 760px;
+  margin: 0;
+  color: #a1a1aa;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.vulnx2-hero-stats {
+  display: flex;
+  gap: 35px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.vulnx2-hero-stats div {
+  min-width: 90px;
+}
+
+.vulnx2-hero-stats strong {
+  display: block;
+  color: #f4f4f5;
+  font-size: 24px;
+}
+
+.vulnx2-hero-stats span {
+  display: block;
+  margin-top: 4px;
+  color: #71717a;
+  font-size: 10px;
+  letter-spacing: 1.4px;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.vulnx2-layout {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 25px 70px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 24px;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.vulnx2-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vulnx2-sidebar-card {
+  padding: 18px;
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.vulnx2-sidebar-title {
+  margin-bottom: 15px;
+  color: #71717a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.vulnx2-lab-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+
+.vulnx2-lab-item.active {
+  border-color: rgba(168, 85, 247, 0.3);
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.vulnx2-lab-number {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: #c4b5fd;
+  background: rgba(124, 58, 237, 0.18);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.vulnx2-lab-item strong {
+  display: block;
+  font-size: 13px;
+}
+
+.vulnx2-lab-item span {
+  display: block;
+  margin-top: 3px;
+  color: #71717a;
+  font-size: 9px;
+}
+
+.vulnx2-status-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.vulnx2-status-row:last-child {
+  border-bottom: 0;
+}
+
+.vulnx2-status-row span {
+  color: #71717a;
+  font-size: 12px;
+}
+
+.vulnx2-status-row strong {
+  color: #c4b5fd;
+  font-size: 12px;
+}
+
+.vulnx2-reset {
+  padding: 12px;
+  border: 1px solid #27272a;
+  border-radius: 10px;
+  color: #a1a1aa;
+  background: #111114;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   CHALLENGE
+========================================================= */
+
+.vulnx2-challenge {
+  min-width: 0;
+}
+
+.vulnx2-challenge-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+.vulnx2-category {
+  color: #a855f7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.vulnx2-challenge-top h2 {
+  margin: 8px 0;
+  font-size: 29px;
+}
+
+.vulnx2-challenge-top p {
+  margin: 0;
+  color: #a1a1aa;
+  line-height: 1.6;
+}
+
+.vulnx2-points {
+  min-width: 100px;
+  padding: 14px;
+  text-align: center;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.07);
+}
+
+.vulnx2-points span {
+  display: block;
+  color: #71717a;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.vulnx2-points strong {
+  display: block;
+  margin-top: 4px;
+  color: #c4b5fd;
+  font-size: 23px;
+}
+
+.vulnx2-points small {
+  color: #71717a;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.vulnx2-card {
+  margin-bottom: 18px;
+  padding: 26px;
+  border: 1px solid rgba(168, 85, 247, 0.14);
+  border-radius: 17px;
+  background: rgba(255,255,255,0.035);
+}
+
+.vulnx2-card-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.vulnx2-card-title > span {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(124,58,237,0.13);
+  font-size: 19px;
+}
+
+.vulnx2-card-title h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.vulnx2-card-title small {
+  display: block;
+  margin-top: 4px;
+  color: #71717a;
+}
+
+
+/* =========================================================
+   OBJECTIVE
+========================================================= */
+
+.vulnx2-objective {
+  margin-top: 20px;
+  padding: 18px;
+  border-left: 3px solid #a855f7;
+  border-radius: 8px;
+  background: rgba(168,85,247,0.07);
+}
+
+.vulnx2-objective strong {
+  color: #c4b5fd;
+}
+
+.vulnx2-objective p {
+  margin: 8px 0 0;
+  color: #a1a1aa;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   START CARD
+========================================================= */
+
+.vulnx2-start-card {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 30px;
+  border: 1px solid rgba(168,85,247,0.2);
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124,58,237,0.1),
+      rgba(255,255,255,0.025)
+    );
+}
+
+.vulnx2-start-icon {
+  width: 75px;
+  height: 75px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: rgba(124,58,237,0.14);
+  font-size: 35px;
+}
+
+.vulnx2-start-content h3 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.vulnx2-start-content p {
+  max-width: 650px;
+  color: #a1a1aa;
+  line-height: 1.7;
+}
+
+.vulnx2-start-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vulnx2-start-meta span {
+  padding: 6px 9px;
+  border-radius: 7px;
+  color: #a1a1aa;
+  background: rgba(255,255,255,0.05);
+  font-size: 10px;
+}
+
+.vulnx2-start-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.vulnx2-start-actions button {
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.vulnx2-download-button {
+  color: white;
+  background: #27272a;
+}
+
+.vulnx2-start-button {
+  color: white;
+  background: #7c3aed;
+}
+
+
+/* =========================================================
+   APK BOX
+========================================================= */
+
+.vulnx2-apk-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 17px;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  background: #0b0b10;
+}
+
+.vulnx2-apk-icon {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: #c4b5fd;
+  background: rgba(124,58,237,0.15);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.vulnx2-apk-info {
+  flex: 1;
+}
+
+.vulnx2-apk-info strong {
+  display: block;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.vulnx2-apk-info span {
+  display: block;
+  margin-top: 4px;
+  color: #71717a;
+  font-size: 11px;
+}
+
+.vulnx2-apk-box button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  color: white;
+  background: #7c3aed;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   METHODOLOGY
+========================================================= */
+
+.vulnx2-methodology {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 13px;
+  margin-top: 22px;
+}
+
+.vulnx2-methodology article {
+  padding: 17px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+}
+
+.vulnx2-methodology article > div {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  color: #c4b5fd;
+  background: rgba(124,58,237,0.14);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.vulnx2-methodology h4 {
+  margin: 0 0 7px;
+}
+
+.vulnx2-methodology p {
+  min-height: 60px;
+  color: #71717a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.vulnx2-methodology code {
+  display: block;
+  padding: 8px;
+  overflow-x: auto;
+  border-radius: 6px;
+  color: #c4b5fd;
+  background: #08080b;
+  font-family: monospace;
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   TERMINAL
+========================================================= */
+
+.vulnx2-terminal {
+  margin-top: 20px;
+  overflow: hidden;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  background: #030303;
+}
+
+.vulnx2-terminal-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 13px;
+  background: #18181b;
+}
+
+.vulnx2-terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.vulnx2-terminal-dots i {
+  width: 9px;
+  height: 9px;
+  display: block;
+  border-radius: 50%;
+  background: #71717a;
+}
+
+.vulnx2-terminal-top span {
+  flex: 1;
+  color: #71717a;
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.vulnx2-terminal-top button {
+  border: 0;
+  border-radius: 5px;
+  padding: 5px 8px;
+  color: #c4b5fd;
+  background: rgba(124,58,237,0.12);
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.vulnx2-terminal pre {
+  margin: 0;
+  padding: 20px;
+  overflow-x: auto;
+  color: #d4d4d8;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.vulnx2-notes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.vulnx2-notes div {
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+}
+
+.vulnx2-notes strong {
+  color: #c4b5fd;
+  font-size: 13px;
+}
+
+.vulnx2-notes p {
+  margin-bottom: 0;
+  color: #71717a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   COLLAPSIBLE
+========================================================= */
+
+.vulnx2-collapse {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  color: white;
+  background: transparent;
+  cursor: pointer;
+}
+
+.vulnx2-collapse > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vulnx2-collapse > div span {
+  font-size: 17px;
+}
+
+.vulnx2-collapse > span {
+  color: #71717a;
+  font-size: 20px;
+}
+
+.vulnx2-hint-content {
+  margin-top: 17px;
+  padding: 15px;
+  border-radius: 9px;
+  background: rgba(168,85,247,0.07);
+}
+
+.vulnx2-hint-content div {
+  color: #fbbf24;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.vulnx2-hint-content p {
+  margin-bottom: 0;
+  color: #a1a1aa;
+  line-height: 1.6;
+}
+
+.vulnx2-source {
+  margin-top: 18px;
+  color: #a1a1aa;
+}
+
+.vulnx2-source li {
+  margin: 7px 0;
+  color: #a1a1aa;
+  font-family: monospace;
+}
+
+
+/* =========================================================
+   FLAG SUBMISSION
+========================================================= */
+
+.vulnx2-flag-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 0 14px;
+  border: 1px solid #3f3f46;
+  border-radius: 10px;
+  background: #09090b;
+}
+
+.vulnx2-flag-input input {
+  width: 100%;
+  padding: 16px 4px;
+  border: 0;
+  outline: none;
+  color: white;
+  background: transparent;
+  font-family: monospace;
+}
+
+.vulnx2-submit-button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border: 0;
+  border-radius: 9px;
+  color: white;
+  background: #7c3aed;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.vulnx2-submit-button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.vulnx2-message {
+  display: flex;
+  gap: 9px;
+  margin-top: 12px;
+  padding: 11px;
+  border-radius: 8px;
+  color: #fca5a5;
+  background: rgba(239,68,68,0.07);
+  font-size: 12px;
+}
+
+.vulnx2-message span {
+  font-weight: 900;
+}
+
+.vulnx2-result {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(34,197,94,0.07);
+}
+
+.vulnx2-result small {
+  display: block;
+  color: #71717a;
+  font-size: 9px;
+}
+
+.vulnx2-result strong {
+  color: #86efac;
+}
+
+
+/* =========================================================
+   RESPONSE
+========================================================= */
+
+.vulnx2-response-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.vulnx2-response-grid > div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #27272a;
+  border-radius: 9px;
+  background: #09090b;
+}
+
+.vulnx2-response-grid span {
+  color: #71717a;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.vulnx2-response-grid pre {
+  margin-bottom: 0;
+  overflow: auto;
+  color: #a1a1aa;
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   FLAG REVEAL
+========================================================= */
+
+.vulnx2-flag-reveal {
+  margin-bottom: 18px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 12px;
+  background: rgba(34,197,94,0.07);
+}
+
+.vulnx2-flag-reveal span {
+  display: block;
+  color: #4ade80;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.vulnx2-flag-reveal code {
+  display: block;
+  margin-top: 9px;
+  color: #c4b5fd;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+
+/* =========================================================
+   SUCCESS MODAL
+========================================================= */
+
+.vulnx2-success-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0,0,0,.82);
+  backdrop-filter: blur(10px);
+}
+
+.vulnx2-success-modal {
+  width: min(520px,100%);
+  padding: 35px;
+  text-align: center;
+  border: 1px solid rgba(168,85,247,.35);
+  border-radius: 20px;
+  background: #11111b;
+  box-shadow: 0 30px 100px rgba(0,0,0,.6);
+}
+
+.vulnx2-success-icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin: auto;
+  border: 1px solid rgba(34,197,94,.35);
+  border-radius: 50%;
+  color: #4ade80;
+  background: rgba(34,197,94,.1);
+  font-size: 38px;
+  font-weight: 900;
+}
+
+.vulnx2-success-label {
+  margin-top: 18px;
+  color: #4ade80;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.vulnx2-success-modal h2 {
+  margin: 10px 0;
+  font-size: 30px;
+}
+
+.vulnx2-success-modal > p {
+  color: #a1a1aa;
+  line-height: 1.6;
+}
+
+.vulnx2-earned {
+  margin-top: 20px;
+}
+
+.vulnx2-earned span,
+.vulnx2-modal-flag span {
+  display: block;
+  color: #71717a;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+
+.vulnx2-earned strong {
+  display: block;
+  margin-top: 5px;
+  color: #fbbf24;
+  font-size: 21px;
+}
+
+.vulnx2-modal-flag {
+  margin-top: 17px;
+  padding: 15px;
+  border: 1px solid #27272a;
+  border-radius: 9px;
+  background: #09090b;
+}
+
+.vulnx2-modal-flag code {
+  display: block;
+  margin-top: 8px;
+  color: #c4b5fd;
+  word-break: break-all;
+}
+
+.vulnx2-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.vulnx2-modal-actions button {
+  flex: 1;
+  padding: 12px;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.vulnx2-close-modal {
+  color: white;
+  background: #27272a;
+}
+
+.vulnx2-next-modal {
+  color: white;
+  background: #7c3aed;
+}
+
+
+/* =========================================================
+   COMMUNITY
+========================================================= */
+
+.vulnx2-experience-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 25px 100px;
+}
+
+.vulnx2-community-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.vulnx2-community-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.vulnx2-community-icon {
+  width: 55px;
+  height: 55px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(168,85,247,.2);
+  border-radius: 14px;
+  background: rgba(124,58,237,.1);
+  font-size: 23px;
+}
+
+.vulnx2-community-title span {
+  color: #a855f7;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.vulnx2-community-title h3 {
+  margin: 4px 0;
+  font-size: 23px;
+}
+
+.vulnx2-community-title p {
+  margin: 0;
+  color: #71717a;
+  font-size: 12px;
+}
+
+.vulnx2-community-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.vulnx2-community-stats div:not(.vulnx2-stat-line) {
+  text-align: center;
+}
+
+.vulnx2-community-stats strong {
+  display: block;
+  color: #c4b5fd;
+  font-size: 20px;
+}
+
+.vulnx2-community-stats span {
+  color: #71717a;
+  font-size: 9px;
+}
+
+.vulnx2-stat-line {
+  width: 1px;
+  height: 30px;
+  background: #27272a;
+}
+
+
+/* =========================================================
+   REVIEW GRID
+========================================================= */
+
+.vulnx2-review-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 15px;
+}
+
+.vulnx2-review-card {
+  padding: 20px;
+  border: 1px solid rgba(168,85,247,.13);
+  border-radius: 14px;
+  background: rgba(255,255,255,.03);
+}
+
+.vulnx2-review-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vulnx2-review-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vulnx2-avatar {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #c4b5fd;
+  background: rgba(124,58,237,.16);
+  font-weight: 800;
+}
+
+.vulnx2-review-user strong {
+  display: block;
+  font-size: 12px;
+}
+
+.vulnx2-review-user span {
+  display: block;
+  margin-top: 3px;
+  color: #4ade80;
+  font-size: 9px;
+}
+
+.vulnx2-quote {
+  color: #7c3aed;
+  font-size: 30px;
+}
+
+.vulnx2-stars {
+  margin-top: 15px;
+  color: #fbbf24;
+  letter-spacing: 2px;
+  font-size: 12px;
+}
+
+.vulnx2-review-message {
+  min-height: 45px;
+  margin-top: 10px;
+  color: #a1a1aa;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.vulnx2-review-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 13px;
+  margin-top: 13px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  color: #52525b;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   EMPTY REVIEWS
+========================================================= */
+
+.vulnx2-empty-reviews {
+  padding: 50px 20px;
+  text-align: center;
+  border: 1px dashed #27272a;
+  border-radius: 15px;
+}
+
+.vulnx2-empty-reviews div {
+  font-size: 30px;
+}
+
+.vulnx2-empty-reviews strong {
+  display: block;
+  margin-top: 10px;
+}
+
+.vulnx2-empty-reviews span {
+  display: block;
+  margin-top: 6px;
+  color: #71717a;
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   FEEDBACK FORM
+========================================================= */
+
+.vulnx2-feedback-card {
+  position: relative;
+  overflow: hidden;
+  margin-top: 20px;
+  padding: 30px;
+  border: 1px solid rgba(168,85,247,.2);
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(124,58,237,.12),
+      transparent 35%
+    ),
+    rgba(255,255,255,.03);
+}
+
+.vulnx2-feedback-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.vulnx2-feedback-title > div {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: #c4b5fd;
+  background: rgba(124,58,237,.15);
+}
+
+.vulnx2-feedback-title section > span {
+  display: block;
+  color: #a855f7;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.vulnx2-feedback-title strong {
+  display: block;
+  margin-top: 3px;
+}
+
+.vulnx2-feedback-title p {
+  margin: 4px 0 0;
+  color: #71717a;
+  font-size: 11px;
+}
+
+.vulnx2-feedback-fields {
+  display: grid;
+  grid-template-columns: .8fr 1.5fr;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.vulnx2-feedback-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #a1a1aa;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.vulnx2-name-input,
+.vulnx2-message-input {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border: 1px solid #27272a;
+  border-radius: 9px;
+  background: #09090b;
+}
+
+.vulnx2-name-input {
+  align-items: center;
+}
+
+.vulnx2-name-input span,
+.vulnx2-message-input > span {
+  padding: 12px;
+  color: #71717a;
+}
+
+.vulnx2-name-input input {
+  width: 100%;
+  padding: 12px 8px;
+  border: 0;
+  outline: none;
+  color: white;
+  background: transparent;
+}
+
+.vulnx2-message-label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vulnx2-message-label span {
+  color: #52525b;
+  font-size: 9px;
+}
+
+.vulnx2-message-input textarea {
+  flex: 1;
+  min-height: 80px;
+  padding: 12px;
+  border: 0;
+  outline: none;
+  resize: vertical;
+  color: white;
+  background: transparent;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.vulnx2-quick-feedback {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.vulnx2-quick-feedback > span {
+  color: #71717a;
+  font-size: 10px;
+}
+
+.vulnx2-quick-feedback button {
+  padding: 7px 9px;
+  border: 1px solid #27272a;
+  border-radius: 7px;
+  color: #a1a1aa;
+  background: #111114;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.vulnx2-publish {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: 9px;
+  color: white;
+  background: #7c3aed;
+  cursor: pointer;
+}
+
+.vulnx2-publish strong {
+  flex: 1;
+  text-align: left;
+}
+
+.vulnx2-publish:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.vulnx2-feedback-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 13px;
+  color: #52525b;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .vulnx2-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .vulnx2-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vulnx2-reset {
+    grid-column: 1 / -1;
+  }
+
+  .vulnx2-review-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .vulnx2-hero {
+    padding: 30px 14px;
+  }
+
+  .vulnx2-hero-content {
+    padding: 25px;
+  }
+
+  .vulnx2-hero h1 {
+    font-size: 40px;
+  }
+
+  .vulnx2-layout {
+    padding: 0 14px 50px;
+  }
+
+  .vulnx2-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .vulnx2-challenge-top {
+    flex-direction: column;
+  }
+
+  .vulnx2-points {
+    width: 100%;
+  }
+
+  .vulnx2-start-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vulnx2-start-actions {
+    flex-direction: column;
+  }
+
+  .vulnx2-start-actions button {
+    width: 100%;
+  }
+
+  .vulnx2-methodology,
+  .vulnx2-notes,
+  .vulnx2-response-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vulnx2-apk-box {
+    flex-wrap: wrap;
+  }
+
+  .vulnx2-apk-box button {
+    width: 100%;
+  }
+
+  .vulnx2-community-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vulnx2-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vulnx2-feedback-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .vulnx2-modal-actions {
+    flex-direction: column;
+  }
+
+}

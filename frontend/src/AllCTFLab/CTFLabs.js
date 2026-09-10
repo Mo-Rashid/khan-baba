@@ -264,7 +264,49 @@ export const allCTFLabs = [
   image: "/images/labs/mobile-apk.png",
   path: "/ctf-lab/mobile-apk-analysis",
 },
+{
+  id: "mobile-hardcode-flag",
+  title: "Hardcode Flag Lab",
+  description:
+    "Analyze an intentionally vulnerable Android application and discover the hardcoded flag.",
+  category: "mobile",
+  level: "Beginner",
+  image: "/images/labs/mobile-hardcode.png",
+  path: "/ctf-lab/mobile-hardcode-flag",
+},
 
+{
+  id: "mobile-vuln-apktool",
+  title: "Vuln Apktool Lab",
+  description:
+    "Decompile an intentionally vulnerable APK using Apktool, analyze the application files, and discover the hidden flag.",
+  category: "mobile",
+  level: "Intermediate",
+  image: "/images/labs/mobile-apktool.png",
+  path: "/ctf-lab/mobile-vuln-apktool",
+},
+
+{
+  id: "mobile-vulnx",
+  title: "VulnX Mobile Lab",
+  description:
+    "Analyze an intentionally vulnerable Android application and identify the security weakness to discover the hidden flag.",
+  category: "mobile",
+  level: "Intermediate",
+  image: "/images/labs/mobile-vulnx.png",
+  path: "/ctf-lab/mobile-vulnx",
+},
+
+{
+  id: "mobile-vulnx2",
+  title: "VulnX2 Mobile Lab",
+  description:
+    "Complete an advanced Android security challenge by analyzing the vulnerable application and discovering the hidden flag.",
+  category: "mobile",
+  level: "Advanced",
+  image: "/images/labs/mobile-vulnx2.png",
+  path: "/ctf-lab/mobile-vulnx2",
+},
   // CLOUD
   // CLOUD
 
