@@ -322,26 +322,26 @@ function validateAWS(level, payload) {
 
     case 2:
       return (
-        p.includes("public bucket") ||
-        p.includes("bucket policy")
-      );
-
-    case 3:
-      return (
         p.includes("iam") ||
         p.includes("access key")
       );
 
-    case 4:
+    case 3:
       return (
         p.includes("metadata") ||
         p.includes("169.254.169.254")
       );
 
+    case 4:
+      return (
+        p.includes("ports") ||
+        p.includes("169.254.169.254")
+      );
+
     case 5:
       return (
-        p.includes("privilege escalation") ||
-        p.includes("iam")
+        p.includes("access key") ||
+        p.includes("secret key")
       );
 
     default:
