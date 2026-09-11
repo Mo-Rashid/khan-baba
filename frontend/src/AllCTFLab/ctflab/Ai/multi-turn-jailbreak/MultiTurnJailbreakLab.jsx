@@ -228,7 +228,7 @@ const sendPrompt = async () => {
     // ========================================
   // EXPERIENCE / COMMUNITY REVIEWS
   // ========================================
-  
+
   const LAB_KEY = "multi-turn-jailbreak";
   
   const [expName, setExpName] = useState("");
@@ -483,7 +483,7 @@ const sendPrompt = async () => {
                       disabled={loading}
                     />
                     <button onClick={sendPrompt} disabled={loading || !payload.trim()}>
-                      {loading ? "Sending..." : "Send"} {!loading && <span>→</span>}
+                      {loading ? "Sending..." : "Send Prompt"} {!loading && <span>→</span>}
                     </button>
                   </div>
                 </div>
