@@ -160,53 +160,93 @@ const RAGSecurityLab = () => {
   };
 
   const submitToBackend = async () => {
-    if (!input.trim()) {
-      setChallengeMessage("Enter your RAG attack query.");
-      return;
-    }
+  if (!input.trim()) {
+    setChallengeMessage("Enter your RAG attack query.");
+    return;
+  }
 
-    setIsSubmitting(true);
-    setChallengeMessage("");
-    setResult("");
-    setRequestLog("");
-    setResponseLog("");
-    setFlag("");
-    setShowFlag(false);
+  setIsSubmitting(true);
+  setChallengeMessage("");
+  setResult("");
+  setRequestLog("");
+  setResponseLog("");
+  setFlag("");
+  setShowFlag(false);
 
-    try {
-      const res = await fetch(`${API_BASE}/ai/rag-security/${currentLab}/submit`, {
+  try {
+    const res = await fetch(
+      `${API_BASE}/labs/ai/rag-security/${currentLab}/submit`,
+      {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ payload: input }),
-      });
-
-      const data = await res.json();
-
-      setRequestLog(data.request || `Input: ${input}`);
-      setResponseLog(data.response || "");
-
-      if (data.success) {
-        setResult("RAG attack successful!");
-        setFlag(data.flag);
-        setShowFlag(true);
-        setShowSuccess(true);
-        setChallengeMessage(data.message || "Challenge solved successfully.");
-
-        if (!completedLabs.includes(currentLab)) {
-          setCompletedLabs((prev) => [...prev, currentLab]);
-        }
-      } else {
-        setResult("Attack failed.");
-        setChallengeMessage(data.message || "Try a different query or technique.");
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          payload: input.trim(),
+        }),
       }
-    } catch (err) {
-      console.error(err);
-      setChallengeMessage("Server error. Is backend running on port 5000?");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    );
 
+    const data = await res.json();
+
+    setRequestLog(
+      data.request || `Input: ${input.trim()}`
+    );
+
+    setResponseLog(
+      data.response || ""
+    );
+
+    if (!res.ok) {
+      throw new Error(
+        data.message ||
+        `Request failed with status ${res.status}`
+      );
+    }
+
+    if (data.success) {
+      setResult("RAG attack successful!");
+
+      setFlag(data.flag || "");
+      setShowFlag(Boolean(data.flag));
+      setShowSuccess(true);
+
+      setChallengeMessage(
+        data.message ||
+        "Challenge solved successfully."
+      );
+
+      if (!completedLabs.includes(currentLab)) {
+        setCompletedLabs((prev) => [
+          ...prev,
+          currentLab,
+        ]);
+      }
+    } else {
+      setResult("Attack failed.");
+
+      setChallengeMessage(
+        data.message ||
+        "Try a different query or technique."
+      );
+    }
+  } catch (err) {
+    console.error(
+      "RAG Security API Error:",
+      err
+    );
+
+    setResult("Request failed.");
+
+    setChallengeMessage(
+      err instanceof Error
+        ? `Backend error: ${err.message}`
+        : "Backend connection failed."
+    );
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   const executeLab = () => submitToBackend();
 
   const nextLab = () => {
