@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../../../components/Navbar/Navbar";
 import "./CustomerSupportLab.css";
 
-const API_BASE = "/api/labs";
+
+const API_BASE =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const challenges = [
   {
@@ -145,7 +147,7 @@ export default function CustomerSupportLab() {
 
     try {
       const response = await fetch(
-        `${API_BASE}/ai/customer-support/${activeChallenge}/submit`,
+        `${API_BASE}/api/labs/ai/customer-support/${activeChallenge}/submit`,
         {
           method: "POST",
           headers: {
