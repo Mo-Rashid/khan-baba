@@ -3,7 +3,6 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./MultiTurnJailbreakLab.css";
 
 
-const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 const challenges = [
   { id: 1, title: "Two-Turn Extraction", type: "BASIC", difficulty: "Easy", points: 100 },
@@ -80,59 +79,98 @@ export default function MultiTurnJailbreakLab() {
       }));
   };
 
-  const sendPrompt = async () => {
-    const text = payload.trim();
-    if (!text || !apiKey) return;
-    if (!started) setStarted(true);
+  const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
-    const history = buildHistory();
+const sendPrompt = async () => {
+  const text = payload.trim();
 
-    setMessages((prev) => [...prev, { role: "user", text }]);
-    setPayload("");
-    setLoading(true);
-    setCapturedFlag(null);
+  if (!text || !apiKey) return;
 
-    try {
-      const res = await fetch(
-        `${API_BASE}/labs/ai/multi-turn-jailbreak/${activeChallenge}/submit`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            payload: text,
-            apiKey,
-            history,
-          }),
-        }
+  if (!started) {
+    setStarted(true);
+  }
+
+  const history = buildHistory();
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      role: "user",
+      text,
+    },
+  ]);
+
+  setPayload("");
+  setLoading(true);
+  setCapturedFlag(null);
+
+  try {
+    const res = await fetch(
+      `${API_BASE}/labs/ai/multi-turn-jailbreak/${activeChallenge}/submit`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          payload: text,
+          apiKey: apiKey.trim(),
+          history,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.message || `Request failed with status ${res.status}`
+      );
+    }
+
+    const botText =
+      data.response ||
+      data.message ||
+      "No response.";
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "bot",
+        text: botText,
+        success: data.success === true,
+      },
+    ]);
+
+    if (data.success === true) {
+      setSolved((prev) =>
+        prev.includes(activeChallenge)
+          ? prev
+          : [...prev, activeChallenge]
       );
 
-      const data = await res.json();
-      const botText = data.response || data.message || "No response.";
-
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", text: botText, success: data.success === true },
-      ]);
-
-      if (data.success === true) {
-        setSolved((prev) =>
-          prev.includes(activeChallenge) ? prev : [...prev, activeChallenge]
-        );
-        if (data.flag) setCapturedFlag(data.flag);
+      if (data.flag) {
+        setCapturedFlag(data.flag);
       }
-    } catch (e) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: "Backend connection failed. Is server running on port 5000?",
-          error: true,
-        },
-      ]);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Multi-Turn Jailbreak API Error:", error);
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "bot",
+        text:
+          error instanceof Error
+            ? `Backend error: ${error.message}`
+            : "Backend connection failed.",
+        error: true,
+      },
+    ]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
