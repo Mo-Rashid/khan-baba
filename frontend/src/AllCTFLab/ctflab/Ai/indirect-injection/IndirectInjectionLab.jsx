@@ -3,7 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./IndirectInjectionLab.css";
 
 
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 
 const challenges = [
@@ -140,7 +140,7 @@ export default function IndirectInjectionLab() {
 
     try {
       const response = await fetch(
-        `${API_BASE}/api/labs/ai/indirect-injection/${activeChallenge}/submit`,
+        `${API_BASE}/labs/ai/indirect-injection/${activeChallenge}/submit`,
         {
           method: "POST",
           headers: {

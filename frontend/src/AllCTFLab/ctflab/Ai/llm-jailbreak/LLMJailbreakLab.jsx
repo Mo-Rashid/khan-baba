@@ -4,8 +4,7 @@ import "./LLMJailbreakLab.css";
 
 const TOTAL_LABS = 5;
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 const LABS = [
   {
@@ -180,7 +179,8 @@ const LLMJailbreakLab = () => {
     setShowFlag(false);
 
     try {
-      const res = await fetch(`${API_BASE}/ai/llm-jailbreak/${currentLab}/submit`, {
+      const res = await fetch
+      (`${API_BASE}/ai/llm-jailbreak/${currentLab}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ payload: input }),

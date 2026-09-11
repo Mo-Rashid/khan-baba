@@ -4,7 +4,7 @@ import "./ToolAbuseLab.css";
 
 
 
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 const challenges = [
   {
@@ -140,7 +140,7 @@ export default function ToolAbuseLab() {
 
     try {
       const response = await fetch(
-        `${API_BASE}/api/labs/ai/tool-abuse/${activeChallenge}/submit`,
+        `${API_BASE}/labs/ai/tool-abuse/${activeChallenge}/submit`,
         {
           method: "POST",
           headers: {

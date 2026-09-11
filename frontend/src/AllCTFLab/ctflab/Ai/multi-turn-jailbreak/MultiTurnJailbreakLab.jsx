@@ -403,6 +403,7 @@ export default function MultiTurnJailbreakLab() {
                 <div className="live-indicator"><span /> LIVE</div>
               </div>
 
+
               <div className="browser-window">
                 <div className="browser-bar">
                   <div className="browser-dots"><span /><span /><span /></div>
