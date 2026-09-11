@@ -4,8 +4,6 @@ import "./LLMJailbreakLab.css";
 
 const TOTAL_LABS = 5;
 
-const API_BASE = import.meta.env.VITE_API_URL || "/api";
-
 const LABS = [
   {
     id: 1,
@@ -164,54 +162,107 @@ const LLMJailbreakLab = () => {
     setFlag("");
   };
 
-  const submitToBackend = async () => {
-    if (!input.trim()) {
-      setChallengeMessage("Enter your jailbreak payload.");
-      return;
-    }
+  const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
-    setIsSubmitting(true);
-    setChallengeMessage("");
-    setResult("");
-    setRequestLog("");
-    setResponseLog("");
-    setFlag("");
-    setShowFlag(false);
+const submitToBackend = async () => {
+  if (!input.trim()) {
+    setChallengeMessage("Enter your jailbreak payload.");
+    return;
+  }
 
-    try {
-      const res = await fetch
-      (`${API_BASE}/ai/llm-jailbreak/${currentLab}/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ payload: input }),
+  setIsSubmitting(true);
+  setChallengeMessage("");
+  setResult("");
+  setRequestLog("");
+  setResponseLog("");
+  setFlag("");
+  setShowFlag(false);
+
+  try {
+    const endpoint =
+      `${API_BASE}/labs/ai/llm-jailbreak/${currentLab}/submit`;
+
+    console.log("Submitting to:", endpoint);
+
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        payload: input.trim(),
+      }),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+
+      console.error("API Error:", {
+        status: res.status,
+        statusText: res.statusText,
+        endpoint,
+        response: errorText,
       });
 
-      const data = await res.json();
-
-      setRequestLog(data.request || `Input: ${input}`);
-      setResponseLog(data.response || "");
-
-      if (data.success) {
-        setResult("Jailbreak successful!");
-        setFlag(data.flag);
-        setShowFlag(true);
-        setShowSuccess(true);
-        setChallengeMessage(data.message || "Challenge solved successfully.");
-
-        if (!completedLabs.includes(currentLab)) {
-          setCompletedLabs((prev) => [...prev, currentLab]);
-        }
-      } else {
-        setResult("Jailbreak failed.");
-        setChallengeMessage(data.message || "Try a stronger or different technique.");
-      }
-    } catch (err) {
-      console.error(err);
-      setChallengeMessage("Server error. Is backend running on port 5000?");
-    } finally {
-      setIsSubmitting(false);
+      throw new Error(
+        `HTTP ${res.status}: ${res.statusText}`
+      );
     }
-  };
+
+    const data = await res.json();
+
+    console.log("Jailbreak API Response:", data);
+
+    setRequestLog(
+      data.request || `Input: ${input.trim()}`
+    );
+
+    setResponseLog(
+      data.response || ""
+    );
+
+    if (data.success === true) {
+      setResult("Jailbreak successful!");
+
+      setFlag(data.flag || "");
+      setShowFlag(Boolean(data.flag));
+      setShowSuccess(true);
+
+      setChallengeMessage(
+        data.message ||
+          "Challenge solved successfully."
+      );
+
+      if (!completedLabs.includes(currentLab)) {
+        setCompletedLabs((prev) => [
+          ...prev,
+          currentLab,
+        ]);
+      }
+    } else {
+      setResult("Jailbreak failed.");
+
+      setChallengeMessage(
+        data.message ||
+          "Try a stronger or different technique."
+      );
+    }
+
+  } catch (err) {
+    console.error(
+      "LLM Jailbreak submission error:",
+      err
+    );
+
+    setChallengeMessage(
+      err.message ||
+        "Server error. Check the backend API route."
+    );
+
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const executeLab = () => submitToBackend();
 
