@@ -3,6 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./CustomerSupportLab.css";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
+
 const challenges = [
   {
     id: 1,
