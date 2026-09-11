@@ -3,7 +3,8 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./PromptInjectionLab.css";
 
 const TOTAL_LABS = 5;
-const API_BASE = import.meta.env.VITE_API_URL;
+
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 const LABS = [
   {
@@ -174,7 +175,7 @@ const PromptInjectionLab = () => {
     setShowFlag(false);
 
     try {
-      const res = await fetch(`${API_BASE}/ai/prompt-injection/${currentLab}/submit`, {
+      const res = await fetch(`${API_BASE}/labs/ai/prompt-injection/${currentLab}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ payload: input }),
