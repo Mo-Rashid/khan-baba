@@ -565,7 +565,7 @@ export default function SystemPromptLeakLab() {
                     <span />
                   </div>
                   <div className="browser-url">
-                    secure-assistant.khansploit.local
+                    secure-assistant.vulnxploit-ai.local
                   </div>
                   <div className="browser-refresh">↻</div>
                 </div>

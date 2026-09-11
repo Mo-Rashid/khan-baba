@@ -55,7 +55,7 @@ export default function CustomerSupportLab() {
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      text: "Hello! Welcome to KhanSploit Customer Support. How can I help you today?",
+      text: "Hello! Welcome to VulnXploit Customer Support. How can I help you today?",
     },
   ]);
   const [payload, setPayload] = useState("");
@@ -260,7 +260,7 @@ export default function CustomerSupportLab() {
     setMessages([
       {
         role: "bot",
-        text: "Hello! Welcome to KhanSploit Customer Support. How can I help you today?",
+        text: "Hello! Welcome to VulnXploit Customer Support. How can I help you today?",
       },
     ]);
     setPayload("");
@@ -560,7 +560,7 @@ export default function CustomerSupportLab() {
                     <span />
                     <span />
                   </div>
-                  <div className="browser-url">chat.khansploit-ai.local</div>
+                  <div className="browser-url">chat.vulnxploit-ai.local</div>
                   <div className="browser-refresh">↻</div>
                 </div>
 

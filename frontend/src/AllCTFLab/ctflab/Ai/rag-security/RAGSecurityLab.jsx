@@ -95,7 +95,7 @@ const RAGSecurityLab = () => {
   const [currentLab, setCurrentLab] = useState(1);
   const [completedLabs, setCompletedLabs] = useState(() => {
     try {
-      const saved = localStorage.getItem("khansploit-rag-security-progress");
+      const saved = localStorage.getItem("vulnxploit-rag-security-progress");
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -123,7 +123,7 @@ const RAGSecurityLab = () => {
   const progress = Math.round((completedCount / TOTAL_LABS) * 100);
 
   useEffect(() => {
-    localStorage.setItem("khansploit-rag-security-progress", JSON.stringify(completedLabs));
+    localStorage.setItem("vulnxploit-rag-security-progress", JSON.stringify(completedLabs));
   }, [completedLabs]);
 
   useEffect(() => {
@@ -428,7 +428,7 @@ const RAGSecurityLab = () => {
                 <div className="browser">
                   <div className="browser-top">
                     <div className="browser-dots"><i /><i /><i /></div>
-                    <div className="browser-address">rag.khansploit-ai.com</div>
+                    <div className="browser-address">rag.vulnxploit-ai.com</div>
                     <span>⟳</span>
                   </div>
 

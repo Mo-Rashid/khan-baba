@@ -544,7 +544,7 @@ export default function IndirectInjectionLab() {
                     <span />
                   </div>
                   <div className="browser-url">
-                    docs.khansploit-ai.local
+                    docs.vulnxploit-ai.local
                   </div>
                   <div className="browser-refresh">↻</div>
                 </div>

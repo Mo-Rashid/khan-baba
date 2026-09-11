@@ -101,7 +101,7 @@ const LLMJailbreakLab = () => {
   const [currentLab, setCurrentLab] = useState(1);
   const [completedLabs, setCompletedLabs] = useState(() => {
     try {
-      const saved = localStorage.getItem("khansploit-llm-jailbreak-progress");
+      const saved = localStorage.getItem("vulnxploit-llm-jailbreak-progress");
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -129,7 +129,7 @@ const LLMJailbreakLab = () => {
   const progress = Math.round((completedCount / TOTAL_LABS) * 100);
 
   useEffect(() => {
-    localStorage.setItem("khansploit-llm-jailbreak-progress", JSON.stringify(completedLabs));
+    localStorage.setItem("vulnxploit-llm-jailbreak-progress", JSON.stringify(completedLabs));
   }, [completedLabs]);
 
   useEffect(() => {
@@ -220,7 +220,7 @@ const LLMJailbreakLab = () => {
   };
 
   const resetProgress = () => {
-    localStorage.removeItem("khansploit-llm-jailbreak-progress");
+    localStorage.removeItem("vulnxploit-llm-jailbreak-progress");
     setCompletedLabs([]);
     setCurrentLab(1);
     setInput("");
@@ -434,7 +434,7 @@ const LLMJailbreakLab = () => {
                 <div className="browser">
                   <div className="browser-top">
                     <div className="browser-dots"><i /><i /><i /></div>
-                    <div className="browser-address">chat.khansploit-ai.com</div>
+                    <div className="browser-address">chat.vulnxploit-ai.com</div>
                     <span>⟳</span>
                   </div>
 

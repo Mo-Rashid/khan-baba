@@ -95,7 +95,7 @@ const PromptInjectionLab = () => {
   const [currentLab, setCurrentLab] = useState(1);
   const [completedLabs, setCompletedLabs] = useState(() => {
     try {
-      const saved = localStorage.getItem("khansploit-prompt-injection-progress");
+      const saved = localStorage.getItem("VulnXploit-prompt-injection-progress");
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -123,7 +123,7 @@ const PromptInjectionLab = () => {
   const progress = Math.round((completedCount / TOTAL_LABS) * 100);
 
   useEffect(() => {
-    localStorage.setItem("khansploit-prompt-injection-progress", JSON.stringify(completedLabs));
+    localStorage.setItem("VulnXploit-prompt-injection-progress", JSON.stringify(completedLabs));
   }, [completedLabs]);
 
   useEffect(() => {
@@ -214,7 +214,7 @@ const PromptInjectionLab = () => {
   };
 
   const resetProgress = () => {
-    localStorage.removeItem("khansploit-prompt-injection-progress");
+    localStorage.removeItem("vulnxploit-prompt-injection-progress");
     setCompletedLabs([]);
     setCurrentLab(1);
     setInput("");
@@ -428,7 +428,7 @@ const PromptInjectionLab = () => {
                 <div className="browser">
                   <div className="browser-top">
                     <div className="browser-dots"><i /><i /><i /></div>
-                    <div className="browser-address">chat.khansploit-ai.com</div>
+                    <div className="browser-address">chat.vulnxploit-ai.com</div>
                     <span>⟳</span>
                   </div>
 

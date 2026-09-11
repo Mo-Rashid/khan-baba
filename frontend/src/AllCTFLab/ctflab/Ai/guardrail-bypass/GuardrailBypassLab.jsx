@@ -544,7 +544,7 @@ export default function GuardrailBypassLab() {
                     <span />
                   </div>
                   <div className="browser-url">
-                    guardrails.khansploit-ai.local
+                    guardrails.vulnxploit-ai.local
                   </div>
                   <div className="browser-refresh">↻</div>
                 </div>

@@ -544,7 +544,7 @@ export default function ToolAbuseLab() {
                     <span />
                     <span />
                   </div>
-                  <div className="browser-url">tools.khansploit-ai.local</div>
+                  <div className="browser-url">tools.vulnxploit-ai.local</div>
                   <div className="browser-refresh">↻</div>
                 </div>
 

@@ -406,7 +406,7 @@ export default function MultiTurnJailbreakLab() {
               <div className="browser-window">
                 <div className="browser-bar">
                   <div className="browser-dots"><span /><span /><span /></div>
-                  <div className="browser-url">multi-turn.khansploit.local</div>
+                  <div className="browser-url">multi-turn.VulnXploit.local</div>
                 </div>
 
                 <div className="chat-screen">
