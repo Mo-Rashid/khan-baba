@@ -3,8 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./SystemPromptLeakLab.css";
 
 
-
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 
 const challenges = [
@@ -148,7 +147,7 @@ export default function SystemPromptLeakLab() {
 
     try {
       const response = await fetch(
-        `${API_BASE}/api/labs/ai/system-prompt-leak/${activeChallenge}/submit`,
+        `${API_BASE}/labs/ai/system-prompt-leak/${activeChallenge}/submit`,
         {
           method: "POST",
           headers: {
