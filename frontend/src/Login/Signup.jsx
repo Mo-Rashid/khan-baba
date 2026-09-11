@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import {
   FaUser,
   FaEnvelope,
@@ -8,6 +9,8 @@ import {
   FaEyeSlash,
   FaShieldAlt,
 } from "react-icons/fa";
+
+import Navbar from "../components/Navbar/Navbar";
 
 import { API, apiRequest } from "./LoginData";
 import "./Signup.css";
@@ -95,6 +98,7 @@ const Signup = () => {
         API.SIGNUP,
         {
           method: "POST",
+
           body: JSON.stringify({
             firstName,
             lastName,
@@ -128,28 +132,39 @@ const Signup = () => {
         error.message ||
           "Unable to create account"
       );
+
     } finally {
       setLoading(false);
     }
   };
-
   return (
-    <div className="auth-page">
+  <div className="signup-page">
 
-      <div className="auth-card">
+    {/* ================= NAVBAR ================= */}
 
-        <div className="auth-icon">
+    <div className="signup-navbar">
+      <Navbar />
+    </div>
+
+
+    {/* ================= MAIN ================= */}
+
+    <main className="signup-main">
+
+      <div className="signup-card">
+
+        <div className="signup-icon">
           <FaShieldAlt />
         </div>
 
         <h1>Create Account</h1>
 
-        <p className="auth-subtitle">
+        <p className="signup-subtitle">
           Join the VulnXploit community
         </p>
 
         {error && (
-          <div className="auth-error">
+          <div className="signup-error">
             {error}
           </div>
         )}
@@ -159,11 +174,9 @@ const Signup = () => {
           <div className="name-row">
 
             <div>
-
               <label>First Name</label>
 
-              <div className="auth-input">
-
+              <div className="signup-input">
                 <FaUser />
 
                 <input
@@ -175,17 +188,14 @@ const Signup = () => {
                   disabled={loading}
                   required
                 />
-
               </div>
-
             </div>
 
-            <div>
 
+            <div>
               <label>Last Name</label>
 
-              <div className="auth-input">
-
+              <div className="signup-input">
                 <FaUser />
 
                 <input
@@ -197,17 +207,17 @@ const Signup = () => {
                   disabled={loading}
                   required
                 />
-
               </div>
-
             </div>
 
           </div>
 
+
+          {/* EMAIL */}
+
           <label>Email Address</label>
 
-          <div className="auth-input">
-
+          <div className="signup-input">
             <FaEnvelope />
 
             <input
@@ -219,21 +229,19 @@ const Signup = () => {
               disabled={loading}
               required
             />
-
           </div>
+
+
+          {/* PASSWORD */}
 
           <label>Password</label>
 
-          <div className="auth-input">
+          <div className="signup-input">
 
             <FaLock />
 
             <input
-              type={
-                showPassword
-                  ? "text"
-                  : "password"
-              }
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Minimum 8 characters"
               value={form.password}
@@ -246,9 +254,7 @@ const Signup = () => {
               type="button"
               className="password-toggle"
               onClick={() =>
-                setShowPassword(
-                  !showPassword
-                )
+                setShowPassword((previous) => !previous)
               }
             >
               {showPassword ? (
@@ -260,20 +266,17 @@ const Signup = () => {
 
           </div>
 
-          <label>
-            Confirm Password
-          </label>
 
-          <div className="auth-input">
+          {/* CONFIRM PASSWORD */}
+
+          <label>Confirm Password</label>
+
+          <div className="signup-input">
 
             <FaLock />
 
             <input
-              type={
-                showConfirm
-                  ? "text"
-                  : "password"
-              }
+              type={showConfirm ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm password"
               value={form.confirmPassword}
@@ -286,9 +289,7 @@ const Signup = () => {
               type="button"
               className="password-toggle"
               onClick={() =>
-                setShowConfirm(
-                  !showConfirm
-                )
+                setShowConfirm((previous) => !previous)
               }
             >
               {showConfirm ? (
@@ -300,9 +301,12 @@ const Signup = () => {
 
           </div>
 
+
+          {/* BUTTON */}
+
           <button
             type="submit"
-            className="auth-button"
+            className="signup-button"
             disabled={loading}
           >
             {loading
@@ -312,17 +316,28 @@ const Signup = () => {
 
         </form>
 
-        <p className="auth-footer">
+
+        {/* FOOTER */}
+
+        <p className="signup-footer">
+
           Already have an account?{" "}
+
           <Link to="/login">
             Sign In
           </Link>
+
         </p>
 
       </div>
 
-    </div>
-  );
+    </main>
+
+  </div>
+);
+
+  
+  
 };
 
 export default Signup;
