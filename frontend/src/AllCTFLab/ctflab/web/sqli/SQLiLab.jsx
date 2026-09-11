@@ -3,7 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./SQLiLab.css";
 
 const TOTAL_LABS = 5;
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api/labs";
+const API_BASE = import.meta.env.VITE_API_BASE ;
 
 const LABS = [
   {
@@ -296,7 +296,7 @@ const SQLiLab = () => {
       <Navbar />
 
       <section className="sqli-hero">
-        <div className="hero-badge">KHAN SPLOIT / WEB CTF</div>
+        <div className="hero-badge">VulnXploit / WEB CTF</div>
         <h1>
           SQL
           <span>INJECTION</span>

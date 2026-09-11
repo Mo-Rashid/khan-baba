@@ -145,7 +145,7 @@ const Signup = () => {
         <h1>Create Account</h1>
 
         <p className="auth-subtitle">
-          Join the KHAN SPLOIT community
+          Join the VulnXploit community
         </p>
 
         {error && (

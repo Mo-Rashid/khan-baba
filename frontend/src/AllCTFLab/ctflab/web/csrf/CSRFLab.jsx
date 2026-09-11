@@ -303,7 +303,7 @@ const CSRFLab = () => {
       <Navbar />
 
       <section className="csrf-hero">
-        <div className="hero-badge">KHAN SPLOIT / WEB CTF</div>
+        <div className="hero-badge">VulnXploit / WEB CTF</div>
         <h1>
           CSRF
           <span>PLAYGROUND</span>

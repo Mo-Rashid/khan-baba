@@ -295,7 +295,7 @@ const IDORLab = () => {
       <Navbar />
 
       <section className="idor-hero">
-        <div className="hero-badge">KHAN SPLOIT / WEB CTF</div>
+        <div className="hero-badge">VulnXploit / WEB CTF</div>
         <h1>
           IDOR
           <span>PLAYGROUND</span>

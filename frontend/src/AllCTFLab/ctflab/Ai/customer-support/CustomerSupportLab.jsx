@@ -334,7 +334,7 @@ export default function CustomerSupportLab() {
         <main className="api-page">
           <div className="api-card">
             <div className="api-icon">🔑</div>
-            <div className="api-kicker">KHAN SPLOIT AI LAB</div>
+            <div className="api-kicker">VulnXploit AI LAB</div>
             <h1>Enter Your Groq API Key</h1>
             <p>
               Connect your own Groq API key to interact with the live AI model
@@ -565,7 +565,7 @@ export default function CustomerSupportLab() {
                 </div>
 
                 <div className="chat-screen">
-                  <div className="chat-brand">KHAN SPLOIT AI</div>
+                  <div className="chat-brand">VulnXploit AI</div>
                   <h3>Customer Support Assistant</h3>
                   <p className="chat-description">
                     Interact with the support assistant and test its

@@ -3,7 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./GCPLab.css";
 
 const TOTAL_LABS = 5;
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api/labs";
+const API_BASE = import.meta.env.VITE_API_BASE ;
 
 const LABS = [
   {
@@ -309,7 +309,7 @@ const visibleExperiences = experiences.filter(
       <Navbar />
 
       <section className="gcp-hero">
-        <div className="hero-badge">KHAN SPLOIT / CLOUD SECURITY</div>
+        <div className="hero-badge">VulnXploit / CLOUD SECURITY</div>
         <h1>
           GCP
           <span>SECURITY LAB</span>

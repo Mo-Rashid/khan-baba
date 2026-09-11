@@ -3,7 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./SSRFLab.css";
 
 const TOTAL_LABS = 5;
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api/labs";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 const LABS = [
   {
@@ -289,7 +289,7 @@ const SSRFLab = () => {
       <Navbar />
 
       <section className="ssrf-hero">
-        <div className="hero-badge">KHAN SPLOIT / WEB CTF</div>
+        <div className="hero-badge">VulnXploit / WEB CTF</div>
         <h1>
           SSRF
           <span>PLAYGROUND</span>

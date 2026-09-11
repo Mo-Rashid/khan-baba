@@ -311,7 +311,7 @@ const LLMJailbreakLab = () => {
       <Navbar />
 
       <section className="aws-hero">
-        <div className="hero-badge">KHAN SPLOIT / AI SECURITY</div>
+        <div className="hero-badge">VulnXploit / AI SECURITY</div>
         <h1>
           LLM
           <span>JAILBREAK LAB</span>
@@ -440,7 +440,7 @@ const LLMJailbreakLab = () => {
 
                   <div className="browser-content">
                     <div className="target-brand">
-                      KHAN <span>SPLOIT AI</span>
+                      Vuln <span>Xploit AI</span>
                     </div>
                     <h3>
                       {currentLab === 1 && "Basic Safety System"}

@@ -550,7 +550,7 @@ export default function IndirectInjectionLab() {
                 </div>
 
                 <div className="chat-screen">
-                  <div className="chat-brand">KHAN SPLOIT AI</div>
+                  <div className="chat-brand">VulnXploit AI</div>
                   <h3>Document Assistant</h3>
                   <p className="chat-description">
                     Paste document, email, or markdown content. Hidden

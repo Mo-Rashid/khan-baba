@@ -571,7 +571,7 @@ export default function SystemPromptLeakLab() {
                 </div>
 
                 <div className="chat-screen">
-                  <div className="chat-brand">KHAN SPLOIT AI</div>
+                  <div className="chat-brand">VulnXploit AI</div>
                   <h3>Secure Assistant</h3>
                   <p className="chat-description">
                     Interact with the protected assistant and try to extract its

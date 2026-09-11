@@ -286,7 +286,7 @@ const XXELab = () => {
     <div className="xxe-lab-page">
       <Navbar />
       <section className="xxe-hero">
-        <div className="hero-badge">KHAN SPLOIT / WEB CTF</div>
+        <div className="hero-badge">VulnXploit / WEB CTF</div>
         <h1>XXE<span>PLAYGROUND</span></h1>
         <p>
           Master XML External Entity attacks through progressive hands-on challenges

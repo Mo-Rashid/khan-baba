@@ -3,7 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./ReverseEngineeringLab.css";
 
 const TOTAL_LABS = 5;
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api/labs";
+const API_BASE = import.meta.env.VITE_API_BASE ;
 
 const LABS = [
   {
@@ -295,7 +295,7 @@ const ReverseEngineeringLab = () => {
       <Navbar />
 
       <section className="xss-hero">
-        <div className="hero-badge">KHAN SPLOIT / RED TEAM</div>
+        <div className="hero-badge">VulnXploit / RED TEAM</div>
         <h1>
           REVERSE
           <span>ENGINEERING</span>

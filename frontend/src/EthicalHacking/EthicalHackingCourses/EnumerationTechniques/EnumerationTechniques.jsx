@@ -4,7 +4,7 @@ import Navbar from "../../../components/Navbar/Navbar";
 import "./EnumerationTechniques.css";
 
 /* =========================================================
-   KHAN SPLOIT — Enumeration Techniques
+   VulnXploit — Enumeration Techniques
    Chapters + Quiz + Progress + Congrats
 ========================================================= */
 

@@ -273,7 +273,7 @@ const SystemHackingLab = () => {
     <div className="xss-lab-page">
       <Navbar />
       <section className="xss-hero">
-        <div className="hero-badge">KHAN SPLOIT / RED TEAM</div>
+        <div className="hero-badge">VulnXploit / RED TEAM</div>
         <h1>SYSTEM<span>HACKING</span></h1>
         <p>
           Practice host-based red team skills: enumeration, weak creds, sudo,

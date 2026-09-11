@@ -322,7 +322,7 @@ const visibleExperiences = experiences.filter(
       <Navbar />
 
       <section className="android-hero">
-        <div className="hero-badge">KHAN SPLOIT / MOBILE SECURITY</div>
+        <div className="hero-badge">VulnXploit / MOBILE SECURITY</div>
         <h1>
           ANDROID
           <span>SECURITY LAB</span>

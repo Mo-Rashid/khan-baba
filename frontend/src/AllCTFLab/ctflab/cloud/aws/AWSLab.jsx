@@ -336,7 +336,7 @@ const visibleExperiences = experiences.filter(
       <Navbar />
 
       <section className="aws-hero">
-        <div className="hero-badge">KHAN SPLOIT / CLOUD SECURITY</div>
+        <div className="hero-badge">VulnXploit / CLOUD SECURITY</div>
         <h1>
           AWS
           <span>SECURITY LAB</span>

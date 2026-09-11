@@ -308,7 +308,7 @@ const XSSLab = () => {
       <Navbar />
 
       <section className="xss-hero">
-        <div className="hero-badge">KHAN SPLOIT / WEB CTF</div>
+        <div className="hero-badge">VulnXploit / WEB CTF</div>
         <h1>
           XSS
           <span>PLAYGROUND</span>

@@ -549,7 +549,7 @@ export default function ToolAbuseLab() {
                 </div>
 
                 <div className="chat-screen">
-                  <div className="chat-brand">KHAN SPLOIT AI</div>
+                  <div className="chat-brand">VulnXploit AI</div>
                   <h3>Tool Assistant</h3>
                   <p className="chat-description">
                     Interact with the tool-enabled assistant and try to abuse its

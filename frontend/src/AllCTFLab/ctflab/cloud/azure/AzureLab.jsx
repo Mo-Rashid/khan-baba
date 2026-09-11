@@ -3,7 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./AzureLab.css";
 
 const TOTAL_LABS = 5;
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api/labs";
+const API_BASE = import.meta.env.VITE_API_BASE ;
 
 const LABS = [
   {
@@ -314,7 +314,7 @@ const visibleExperiences = experiences.filter(
       <Navbar />
 
       <section className="azure-hero">
-        <div className="hero-badge">KHAN SPLOIT / CLOUD SECURITY</div>
+        <div className="hero-badge">VulnXploit / CLOUD SECURITY</div>
         <h1>
           AZURE
           <span>SECURITY LAB</span>

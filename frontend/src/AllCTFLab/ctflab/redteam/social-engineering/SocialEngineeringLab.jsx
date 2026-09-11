@@ -289,7 +289,7 @@ const SocialEngineeringLab = () => {
       <Navbar />
 
       <section className="xss-hero">
-        <div className="hero-badge">KHAN SPLOIT / RED TEAM</div>
+        <div className="hero-badge">VulnXploit / RED TEAM</div>
         <h1>
           SOCIAL
           <span>ENGINEERING</span>

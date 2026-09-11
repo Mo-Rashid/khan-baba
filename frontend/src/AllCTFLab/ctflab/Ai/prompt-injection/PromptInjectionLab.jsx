@@ -305,7 +305,7 @@ const PromptInjectionLab = () => {
       <Navbar />
 
       <section className="aws-hero">
-        <div className="hero-badge">KHAN SPLOIT / AI SECURITY</div>
+        <div className="hero-badge">VulnXploit / AI SECURITY</div>
         <h1>
           PROMPT
           <span>INJECTION LAB</span>
@@ -434,7 +434,7 @@ const PromptInjectionLab = () => {
 
                   <div className="browser-content">
                     <div className="target-brand">
-                      KHAN <span>SPLOIT AI</span>
+                      Vuln <span>Xploit AI</span>
                     </div>
                     <h3>
                       {currentLab === 1 && "Basic System Prompt"}

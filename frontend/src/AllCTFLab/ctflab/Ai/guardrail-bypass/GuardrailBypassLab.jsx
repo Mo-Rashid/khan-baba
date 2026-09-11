@@ -550,7 +550,7 @@ export default function GuardrailBypassLab() {
                 </div>
 
                 <div className="chat-screen">
-                  <div className="chat-brand">KHAN SPLOIT AI</div>
+                  <div className="chat-brand">VulnXploit AI</div>
                   <h3>Filtered Assistant</h3>
                   <p className="chat-description">
                     Interact with the filtered assistant and try to bypass its
