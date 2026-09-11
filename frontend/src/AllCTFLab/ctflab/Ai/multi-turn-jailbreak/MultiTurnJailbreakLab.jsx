@@ -3,7 +3,7 @@ import Navbar from "../../../../components/Navbar/Navbar";
 import "./MultiTurnJailbreakLab.css";
 
 
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 const challenges = [
   { id: 1, title: "Two-Turn Extraction", type: "BASIC", difficulty: "Easy", points: 100 },
@@ -94,7 +94,7 @@ export default function MultiTurnJailbreakLab() {
 
     try {
       const res = await fetch(
-        `${API_BASE}/api/labs/ai/multi-turn-jailbreak/${activeChallenge}/submit`,
+        `${API_BASE}/labs/ai/multi-turn-jailbreak/${activeChallenge}/submit`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
