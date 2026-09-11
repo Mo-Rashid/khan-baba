@@ -229,7 +229,7 @@ const sendPrompt = async () => {
   // EXPERIENCE / COMMUNITY REVIEWS
   // ========================================
   
-  const LAB_KEY = "cloud-aws";
+  const LAB_KEY = "multi-turn-jailbreak";
   
   const [expName, setExpName] = useState("");
   const [expMessage, setExpMessage] = useState("");
