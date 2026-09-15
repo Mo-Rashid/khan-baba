@@ -517,7 +517,7 @@ const downloadCertificatePDF = async () => {
                 <input
                   id="certificate-serial"
                   type="text"
-                  placeholder="Example: VULNX-AI-CollageID"
+                  placeholder="Example: VulnXploit-CollageID"
                   value={serialNumber}
                   onChange={(e) => {
                     setSerialNumber(e.target.value.toUpperCase());
