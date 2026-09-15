@@ -9,7 +9,10 @@ import {
   FaUserSecret,
   FaSignInAlt,
   FaSignOutAlt,
-  FaUserCircle,
+  FaFlag,
+  FaAward,
+
+
 } from "react-icons/fa";
 
 import { useAuth } from "../../context/AuthContext";
@@ -54,11 +57,17 @@ const NAV_ITEMS = [
     icon: <FaUserSecret />,
   },
   {
-    id: "All-CTF-Lab",
-    label: "All-CTF-Lab",
-    path: "/all-ctf-lab",
-    icon: <FaUserSecret />,
-  },
+  id: "All-CTF-Lab",
+  label: "All-CTF-Lab",
+  path: "/all-ctf-lab",
+  icon: <FaFlag />,
+},
+  {
+  id: "Certifications",
+  label: "Certifications",
+  path: "/certifications",
+  icon: <FaAward />,
+},
 ];
 
 const Navbar = () => {

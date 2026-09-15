@@ -12,6 +12,12 @@ import EthicalHacking from "./EthicalHacking/EthicalHacking";
 import RedTeaming from './RedTeaming/RedTeaming';
 import AIRedTeaming from "./AIRedTeaming/AIRedTeaming";
 import AllCTFLab from "./AllCTFLab/AllCTFLab";
+import Certification from "./Certification/Certification";
+
+
+
+
+
 
 import XSS from "./BugBounty/BugBountyCourse/XSS/XSS";
 import SQLi from "./BugBounty/BugBountyCourse/SQLi/SQLi";
@@ -218,6 +224,7 @@ function App() {
                 <Route path="/ai-red-teaming" element={<AIRedTeaming />} />
                 <Route path="/navbar" element={<Navbar />} />
                 <Route path="/all-ctf-lab" element={<AllCTFLab />} />
+                <Route  path="/certifications"  element={<Certification />}/>
                 <Route element={<ProtectedRoute />}>        
                 
                 
