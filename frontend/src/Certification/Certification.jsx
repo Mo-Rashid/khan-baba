@@ -12,7 +12,7 @@ const Certification = () => {
   const [loading, setLoading] = useState(false);
 
   const demoCertificates = {
-    "VulnXploit-2024012072": true,
+    "VULNX-AI-2024012072": true,
     
   };
 
@@ -517,7 +517,7 @@ const downloadCertificatePDF = async () => {
                 <input
                   id="certificate-serial"
                   type="text"
-                  placeholder="Example: VulnXploit-CollageID"
+                  placeholder="Example: VULNX-AI-CollageID"
                   value={serialNumber}
                   onChange={(e) => {
                     setSerialNumber(e.target.value.toUpperCase());
