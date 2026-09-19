@@ -11,8 +11,7 @@ import {
   FaSignOutAlt,
   FaFlag,
   FaAward,
-
-
+  FaUserCircle,
 } from "react-icons/fa";
 
 import { useAuth } from "../../context/AuthContext";
