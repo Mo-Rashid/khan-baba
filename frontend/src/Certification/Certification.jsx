@@ -339,6 +339,8 @@ const Certification = () => {
           </div>
         </div>
       </section>
+
+
 {/* ==================== STUDENT FEEDBACK ==================== */}
 <section className="hacker-experiences-section">
   <div className="hacker-experiences-container">
@@ -454,6 +456,13 @@ const Certification = () => {
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
       {/* ==================== CERTIFICATE MODAL ==================== */}
       {showCertificate && (
         <div className="certificate-modal-overlay" onClick={closeCertificate}>

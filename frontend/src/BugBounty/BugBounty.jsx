@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { bugBountyCourses } from "./bugBountyData";
+import Feedback from "../components/Feedback/Feedback";
 import "./BugBounty.css";
 
 const BugBounty = () => {
@@ -80,6 +81,7 @@ const BugBounty = () => {
           ))}
         </div>
       </section>
+      <Feedback section="bug-bounty" />
     </div>
   );
 };

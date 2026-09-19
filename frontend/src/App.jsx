@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import Feedback from "./components/Feedback/Feedback";
 
 import Dashboard from "./Dashboard/Dashboard";
 import Login from "./Login/Login";
@@ -13,6 +14,8 @@ import RedTeaming from './RedTeaming/RedTeaming';
 import AIRedTeaming from "./AIRedTeaming/AIRedTeaming";
 import AllCTFLab from "./AllCTFLab/AllCTFLab";
 import Certification from "./Certification/Certification";
+
+
 
 
 
@@ -236,6 +239,9 @@ function App() {
               <Route  path="/ctf-lab/redteam-web"  element={<WebRedTeamLab />}/>
               <Route  path="/ctf-lab/redteam-social-engineering"  element={<SocialEngineeringLab />}/>
               <Route path="/ctf-lab/redteam-system-hacking" element={<SystemHackingLab />} />
+
+
+              <Route  path="/feedback"  element={<Feedback section="portfolio" />}/>
 
 
               

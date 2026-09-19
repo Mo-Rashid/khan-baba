@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
+import Feedback from "../components/Feedback/Feedback";
 import "./AIRedTeaming.css";
 
 export const aiRedTeamingCourses = [
@@ -157,6 +158,7 @@ const AIRedTeaming = () => {
           ))}
         </div>
       </section>
+      <Feedback section="ai-red-teaming" />
     </div>
   );
 };

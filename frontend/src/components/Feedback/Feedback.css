@@ -1,0 +1,926 @@
+/* =========================================================
+   FEEDBACK SECTION
+========================================================= */
+
+.feedback-section {
+  width: 100%;
+  padding: 100px 24px 120px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(132, 0, 255, 0.08),
+      transparent 40%
+    ),
+    #05030b;
+  color: #ffffff;
+}
+
+
+.feedback-container {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+
+  padding: 30px;
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.35);
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(20, 10, 35, 0.96),
+      rgba(8, 5, 16, 0.96)
+    );
+
+  box-shadow:
+    0 0 35px
+    rgba(132, 0, 255, 0.08);
+}
+
+
+.feedback-header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+
+.feedback-header-icon {
+  width: 56px;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(132, 0, 255, 0.28),
+      rgba(157, 78, 255, 0.08)
+    );
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.45);
+
+  font-size: 25px;
+}
+
+
+.feedback-eyebrow {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #a970ff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+
+.feedback-header h2 {
+  margin: 0;
+
+  font-size: clamp(26px, 3vw, 38px);
+
+  font-weight: 900;
+
+  letter-spacing: -1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #b86cff
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+.feedback-header p {
+  margin: 8px 0 0;
+
+  color: #9b91ad;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+.feedback-header-stats {
+  display: flex;
+  gap: 14px;
+}
+
+
+.feedback-stat {
+  min-width: 105px;
+
+  padding: 15px;
+
+  text-align: center;
+
+  border-radius: 12px;
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.25);
+
+  background:
+    rgba(132, 0, 255, 0.06);
+}
+
+
+.feedback-stat strong {
+  display: block;
+
+  color: #c184ff;
+
+  font-size: 20px;
+}
+
+
+.feedback-stat span {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #777080;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.feedback-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-top: 28px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.feedback-card {
+  position: relative;
+
+  padding: 24px;
+
+  border-radius: 16px;
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.25);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17, 10, 29, 0.98),
+      rgba(7, 5, 13, 0.98)
+    );
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.feedback-card:hover {
+  transform: translateY(-5px);
+
+  border-color:
+    rgba(170, 92, 255, 0.65);
+
+  box-shadow:
+    0 15px 45px
+    rgba(102, 0, 255, 0.12);
+}
+
+
+.feedback-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+
+.feedback-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.feedback-avatar {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #741cff,
+      #c05aff
+    );
+
+  color: #ffffff;
+
+  font-size: 16px;
+
+  font-weight: 900;
+}
+
+
+.feedback-user-details strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 14px;
+}
+
+
+.feedback-user-details span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #a66dff;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+.feedback-quote {
+  color: rgba(177, 102, 255, 0.28);
+
+  font-size: 36px;
+
+  line-height: 1;
+}
+
+
+.feedback-stars {
+  display: flex;
+
+  gap: 3px;
+
+  margin-top: 20px;
+}
+
+
+.feedback-stars span {
+  color: #4e4658;
+
+  font-size: 17px;
+}
+
+
+.feedback-stars span.filled {
+  color: #a855ff;
+
+  text-shadow:
+    0 0 12px
+    rgba(168, 85, 255, 0.55);
+}
+
+
+.feedback-message {
+  min-height: 68px;
+
+  margin: 15px 0;
+
+  color: #c0b7cb;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+
+.feedback-tags {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+
+.feedback-tags span {
+  padding: 6px 9px;
+
+  border-radius: 7px;
+
+  background:
+    rgba(132, 0, 255, 0.08);
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.18);
+
+  color: #a98ac4;
+
+  font-size: 9px;
+}
+
+
+.feedback-card-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 20px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid
+    rgba(255, 255, 255, 0.06);
+
+  color: #70677b;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+.feedback-card-footer span {
+  color: #a45cff;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.feedback-empty {
+  grid-column: 1 / -1;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  border: 1px dashed
+    rgba(157, 78, 255, 0.28);
+
+  border-radius: 16px;
+
+  background:
+    rgba(132, 0, 255, 0.03);
+}
+
+
+.feedback-empty-icon {
+  font-size: 38px;
+
+  margin-bottom: 12px;
+}
+
+
+.feedback-empty h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 20px;
+}
+
+
+.feedback-empty p {
+  margin: 8px 0 0;
+
+  color: #777080;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+.feedback-loader {
+  width: 30px;
+  height: 30px;
+
+  margin: 0 auto 15px;
+
+  border: 3px solid
+    rgba(157, 78, 255, 0.15);
+
+  border-top-color: #9c4dff;
+
+  border-radius: 50%;
+
+  animation:
+    feedbackSpin 0.8s linear infinite;
+}
+
+
+@keyframes feedbackSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.feedback-form {
+  margin-top: 35px;
+
+  padding: 32px;
+
+  border-radius: 18px;
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.35);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(18, 9, 32, 0.98),
+      rgba(7, 5, 13, 0.98)
+    );
+
+  box-shadow:
+    0 20px 60px
+    rgba(76, 0, 150, 0.08);
+}
+
+
+.feedback-form-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 28px;
+}
+
+
+.feedback-form-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background:
+    rgba(132, 0, 255, 0.1);
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.3);
+
+  color: #b45dff;
+
+  font-size: 21px;
+}
+
+
+.feedback-form-header span {
+  color: #a35aff;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+
+.feedback-form-header h3 {
+  margin: 4px 0;
+
+  color: #ffffff;
+
+  font-size: 23px;
+}
+
+
+.feedback-form-header p {
+  margin: 0;
+
+  color: #766e80;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.feedback-form-group {
+  margin-top: 22px;
+}
+
+
+.feedback-form-group > label {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #a59bad;
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   RATING
+========================================================= */
+
+.feedback-rating {
+  display: flex;
+
+  gap: 5px;
+}
+
+
+.feedback-rating button {
+  padding: 3px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #4d4557;
+
+  cursor: pointer;
+
+  font-size: 28px;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.feedback-rating button:hover {
+  transform: scale(1.12);
+
+  color: #b15cff;
+}
+
+
+.feedback-rating button.active {
+  color: #a855ff;
+
+  text-shadow:
+    0 0 15px
+    rgba(168, 85, 255, 0.6);
+}
+
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+.feedback-form textarea {
+  width: 100%;
+
+  min-height: 125px;
+
+  resize: vertical;
+
+  box-sizing: border-box;
+
+  padding: 16px;
+
+  border-radius: 12px;
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.25);
+
+  outline: none;
+
+  background:
+    rgba(4, 3, 8, 0.9);
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.feedback-form textarea::placeholder {
+  color: #51495a;
+}
+
+
+.feedback-form textarea:focus {
+  border-color: #9447ff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(132, 0, 255, 0.08);
+}
+
+
+.feedback-character-count {
+  margin-top: 7px;
+
+  text-align: right;
+
+  color: #655c6d;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   QUICK TAGS
+========================================================= */
+
+.feedback-quick-tags {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+}
+
+
+.feedback-quick-tags button {
+  padding: 9px 13px;
+
+  border-radius: 9px;
+
+  border: 1px solid
+    rgba(157, 78, 255, 0.22);
+
+  background:
+    rgba(132, 0, 255, 0.04);
+
+  color: #8f819d;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  transition: all 0.2s ease;
+}
+
+
+.feedback-quick-tags button:hover {
+  border-color:
+    rgba(157, 78, 255, 0.55);
+
+  color: #c28aff;
+}
+
+
+.feedback-quick-tags button.active {
+  border-color: #9447ff;
+
+  background:
+    rgba(132, 0, 255, 0.14);
+
+  color: #d19bff;
+
+  box-shadow:
+    0 0 15px
+    rgba(132, 0, 255, 0.08);
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.feedback-submit {
+  width: 100%;
+
+  margin-top: 28px;
+
+  min-height: 52px;
+
+  border: 1px solid
+    rgba(190, 107, 255, 0.5);
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6617d9,
+      #9c3cff
+    );
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+.feedback-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 30px
+    rgba(132, 0, 255, 0.25);
+}
+
+
+.feedback-submit:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   BUTTON SPINNER
+========================================================= */
+
+.button-spinner {
+  display: inline-block;
+
+  width: 13px;
+  height: 13px;
+
+  margin-right: 8px;
+
+  vertical-align: -2px;
+
+  border: 2px solid
+    rgba(255, 255, 255, 0.3);
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation:
+    feedbackSpin 0.7s linear infinite;
+}
+
+
+/* =========================================================
+   FORM FOOTER
+========================================================= */
+
+.feedback-form-footer {
+  margin-top: 15px;
+
+  text-align: center;
+
+  color: #5f5768;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .feedback-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .feedback-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .feedback-header-stats {
+    width: 100%;
+  }
+
+  .feedback-stat {
+    flex: 1;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .feedback-section {
+    padding:
+      70px 15px 90px;
+  }
+
+  .feedback-header {
+    padding: 22px;
+  }
+
+  .feedback-header-left {
+    align-items: flex-start;
+  }
+
+  .feedback-header-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+
+  .feedback-header-stats {
+    gap: 8px;
+  }
+
+  .feedback-stat {
+    min-width: 0;
+    padding: 12px 8px;
+  }
+
+  .feedback-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-form {
+    padding: 22px;
+  }
+
+  .feedback-form-header {
+    align-items: flex-start;
+  }
+}

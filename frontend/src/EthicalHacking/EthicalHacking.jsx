@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
+import Feedback from "../components/Feedback/Feedback";
 import "./EthicalHacking.css";
 
 export const ethicalHackingCourses = [
@@ -174,6 +175,7 @@ const EthicalHacking = () => {
           ))}
         </div>
       </section>
+      <Feedback section="ethical-hacking" />
     </div>
   );
 };

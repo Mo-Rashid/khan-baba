@@ -10,6 +10,7 @@ const labRoutes = require("./allctflab/routes/labRoutes");
 const { Resend } = require("resend");
 
 const app = express();
+const feedbackRoutes = require("./routes/feedbackRoutes");
 
 // ======================================================
 // CONFIG
@@ -60,6 +61,8 @@ app.use(
     limit: "1mb",
   })
 );
+
+app.use("/api/feedback", feedbackRoutes);
 
 // ======================================================
 // EMAIL FUNCTION

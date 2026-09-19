@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { allCTFLabs, ctfCategories } from "./CTFLabs";
+import Feedback from "../components/Feedback/Feedback";
 import "./AllCTFLab.css";
 
 const AllCTFLab = () => {
@@ -220,6 +221,7 @@ const AllCTFLab = () => {
           </div>
         )}
       </section>
+      <Feedback section="all-ctf-lab" />
     </div>
   );
 };
