@@ -1,8 +1,6 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
+import React, {  useEffect,  useState,} from "react";
 
+import {  getFeedback,  createFeedback,} from "./feedbackApi";
 import "./Feedback.css";
 
 
