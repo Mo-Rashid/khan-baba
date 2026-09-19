@@ -7,15 +7,15 @@ function submitSSRF(level, payload) {
 
   const requests = {
     1: `GET /fetch?url=${encodeURIComponent(payload.substring(0, 80))} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     2: `GET /proxy?url=${encodeURIComponent(payload.substring(0, 80))} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     3: `GET /preview?url=${encodeURIComponent(payload.substring(0, 80))} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     4: `GET /load?url=${encodeURIComponent(payload.substring(0, 80))} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     5: `GET /fetch?url=${encodeURIComponent(payload.substring(0, 80))} HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 # Filter bypass`,
   };
 

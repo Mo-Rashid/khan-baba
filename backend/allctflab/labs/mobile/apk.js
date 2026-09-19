@@ -6,13 +6,13 @@ function submitAPK(level, payload) {
   const isCorrect = validateAPK(id, payload);
 
   const requests = {
-    1: `jadx -d output khansploit.apk
+    1: `jadx -d output VulnXploit.apk
 # or
-apktool d khansploit.apk -o output`,
+apktool d VulnXploit.apk -o output`,
     2: `grep -r "AIza\\|sk_live\\|api_key\\|secret\\|password" output/`,
     3: `cat output/AndroidManifest.xml | grep -E "debuggable|allowBackup|exported|cleartext"`,
-    4: `apksigner verify --print-certs khansploit.apk
-keytool -printcert -jarfile khansploit.apk`,
+    4: `apksigner verify --print-certs VulnXploit.apk
+keytool -printcert -jarfile VulnXploit.apk`,
     5: `# Searching for root detection
 grep -r "su\\|magisk\\|RootBeer\\|SafetyNet" output/`,
   };
@@ -29,7 +29,7 @@ Sources and resources successfully extracted.`,
 resources/res/values/strings.xml
   API_KEY = "AIzaSyD-HardcodedKeyFromAPK"
 
-sources/com/khansploit/app/Config.java
+sources/com/VulnXploit/app/Config.java
   public static final String SECRET = "sk_live_51ABCXYZ...";
 
 Hardcoded secrets extracted.`,

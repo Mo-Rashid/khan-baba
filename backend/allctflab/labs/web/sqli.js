@@ -7,19 +7,19 @@ function submitSQLi(level, payload) {
 
   const requests = {
     1: `POST /login HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 Content-Type: application/x-www-form-urlencoded
 
 username=${encodeURIComponent(payload.substring(0, 60))}&password=x`,
     2: `GET /products?id=${encodeURIComponent(payload.substring(0, 60))} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     3: `GET /user?id=${encodeURIComponent(payload.substring(0, 60))} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     4: `GET /search?q=${encodeURIComponent(payload.substring(0, 60))} HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 # Blind / time-based SQLi`,
     5: `GET /items?filter=${encodeURIComponent(payload.substring(0, 60))} HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 # Filtered SQLi bypass`,
   };
 

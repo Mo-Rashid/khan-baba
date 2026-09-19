@@ -6,8 +6,8 @@ function submitGCP(level, payload) {
   const isCorrect = validateGCP(id, payload);
 
   const requests = {
-    1: `gsutil ls gs://khansploit-company-data
-GET https://storage.googleapis.com/khansploit-company-data`,
+    1: `gsutil ls gs://VulnXploit-company-data
+GET https://storage.googleapis.com/VulnXploit-company-data`,
     2: `gcloud projects get-iam-policy PROJECT_ID
 gcloud iam service-accounts add-iam-policy-binding ...`,
     3: `GET http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token
@@ -25,7 +25,7 @@ employee-data.csv
 secrets/
 flag.txt`,
     2: `Role binding updated.
-roles/iam.serviceAccountUser granted to lowpriv@khansploit.lab
+roles/iam.serviceAccountUser granted to lowpriv@VulnXploit.lab
 
 Privilege escalation path available.`,
     3: `HTTP/1.1 200 OK

@@ -6,15 +6,15 @@ function submitAzure(level, payload) {
   const isCorrect = validateAzure(id, payload);
 
   const requests = {
-    1: `az storage blob list --account-name khansploitdata --container-name company-data --auth-mode login
+    1: `az storage blob list --account-name VulnXploit --container-name company-data --auth-mode login
 # or public URL
-https://khansploitdata.blob.core.windows.net/company-data/`,
+https://VulnXploit.blob.core.windows.net/company-data/`,
     2: `az role assignment list
 az ad app permission add ...`,
     3: `GET http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/
 Metadata: true`,
     4: `az network nsg rule list --nsg-name web-nsg`,
-    5: `az keyvault secret show --vault-name khansploit-kv --name prod-db-password`,
+    5: `az keyvault secret show --vault-name VulnXploit-kv --name prod-db-password`,
   };
 
   const successResponses = {
@@ -46,7 +46,7 @@ Destination Port: 22
 Risk: Critical – SSH exposed to the internet.`,
     5: `{
   "value": "Pr0d_S3cr3t_Azure_2026!",
-  "id": "https://khansploit-kv.vault.azure.net/secrets/prod-db-password/..."
+  "id": "https://VulnXploit-kv.vault.azure.net/secrets/prod-db-password/..."
 }
 
 Key Vault secret extracted using Function App identity.`,

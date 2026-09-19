@@ -7,21 +7,21 @@ function submitIDOR(level, payload) {
 
   const requests = {
     1: `GET /api/user?id=${payload.substring(0, 40)} HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 Cookie: session=user_2`,
     2: `GET /api/orders/${payload.substring(0, 40)} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     3: `GET /api/admin/users/${payload.substring(0, 40)} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     4: `GET /api/v2/profile?user_id=${payload.substring(0, 40)} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
     5: `GET /api/docs/${payload.substring(0, 40)} HTTP/1.1
-Host: training.khansploit.local`,
+Host: training.VulnXploit.local`,
   };
 
   const successResponses = {
     1: `HTTP/1.1 200 OK
-{"id":1,"email":"admin@khansploit.lab","role":"admin"}
+{"id":1,"email":"admin@VulnXploit.lab","role":"admin"}
 IDOR — another user's data accessed.`,
     2: `HTTP/1.1 200 OK
 Horizontal IDOR — another user's order retrieved.`,

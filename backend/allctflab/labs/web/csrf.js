@@ -7,30 +7,30 @@ function submitCSRF(level, payload) {
 
   const requests = {
     1: `POST /change-email HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 Content-Type: application/x-www-form-urlencoded
 Cookie: session=victim_session
 Origin: http://attacker.com
 
 email=hacker@evil.com`,
     2: `GET /delete-account HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 Cookie: session=victim_session
 Referer: http://attacker.com`,
     3: `POST /update-profile HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 Content-Type: application/x-www-form-urlencoded
 Cookie: session=victim_session
 
 csrf_token=&email=hacker@evil.com`,
     4: `POST /api/update HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 Content-Type: application/json
 Origin: http://attacker.com
 
 {"email":"hacker@evil.com"}`,
     5: `POST /login HTTP/1.1
-Host: training.khansploit.local
+Host: training.VulnXploit.local
 Content-Type: application/x-www-form-urlencoded
 Cookie: session=victim_session
 

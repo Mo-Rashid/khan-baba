@@ -12,12 +12,12 @@ defaults read <bundleid>
 security dump-keychain`,
     2: `# Common checks
 ls /Applications/Cydia.app
-frida -U -f com.khansploit.app -l bypass.js`,
-    3: `xcrun simctl openurl booted "khansploit://reset?user=admin&token=evil"`,
-    4: `strings Payload/Khansploit.app/Khansploit | grep -i "api\\|key\\|secret\\|password"
+frida -U -f com.VulnXploit.app -l bypass.js`,
+    3: `xcrun simctl openurl booted "VulnXploit://reset?user=admin&token=evil"`,
+    4: `strings Payload/VulnXploit.app/VulnXploit | grep -i "api\\|key\\|secret\\|password"
 class-dump -H ...`,
     5: `# Anti-debug / SSL Pinning checks
-frida -U -f com.khansploit.app -l ssl-bypass.js`,
+frida -U -f com.VulnXploit.app -l ssl-bypass.js`,
   };
 
   const successResponses = {
@@ -36,7 +36,7 @@ Sensitive data extracted.`,
 Bypass successful with Frida / tweak / binary patch.
 App now runs on jailbroken device.`,
     3: `URL Scheme handled:
-Scheme: khansploit
+Scheme: VulnXploit
 Action: reset
 Params: user=admin&token=evil
 

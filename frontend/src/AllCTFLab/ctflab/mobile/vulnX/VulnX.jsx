@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../../../components/Navbar/Navbar";
+import Feedback from "../../../../components/Feedback/Feedback";
 import "./VulnX.css";
 
 /*
@@ -164,39 +165,6 @@ const VulnX = () => {
     setElapsed(0);
   };
 
-  const submitExperience = () => {
-    const name = expName.trim();
-    const message = expMessage.trim();
-
-    if (!name) {
-      alert("Please enter your name.");
-      return;
-    }
-    if (!message) {
-      alert("Please write a short message.");
-      return;
-    }
-    if (message.length > 50) {
-      alert("Message max 50 characters.");
-      return;
-    }
-
-    const entry = {
-      id: Date.now(),
-      name: name.slice(0, 24),
-      message: message.slice(0, 50),
-      lab: LAB_KEY,
-      date: "Just now",
-    };
-
-    setExperiences((previous) => [entry, ...previous].slice(0, 100));
-    setExpName("");
-    setExpMessage("");
-  };
-
-  const visibleExperiences = experiences.filter(
-    (experience) => experience.lab === LAB_KEY
-  );
 
   return (
     <div className="apk-lab-page">
@@ -518,173 +486,9 @@ const VulnX = () => {
           </div>
         </div>
       )}
+      <Feedback section="all-ctf-lab" />
 
-      <section className="exp-section">
-        <div className="exp-community-head">
-          <div className="exp-community-title">
-            <div className="exp-community-icon">💬</div>
-            <div>
-              <span className="exp-kicker">COMMUNITY FEEDBACK</span>
-              <h3>Hacker Experiences</h3>
-              <p>See what other researchers think about this lab.</p>
-            </div>
-          </div>
-
-          <div className="exp-stats">
-            <div className="exp-stat">
-              <strong>{visibleExperiences.length}</strong>
-              <span>Reviews</span>
-            </div>
-            <div className="exp-stat-line" />
-            <div className="exp-stat">
-              <strong>★</strong>
-              <span>Community</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="exp-ticker-wrap">
-          {visibleExperiences.length > 0 ? (
-            <div className="exp-ticker">
-              <div className="exp-ticker-track">
-                {[...visibleExperiences, ...visibleExperiences].map(
-                  (item, i) => (
-                    <article className="exp-card" key={`${item.id}-${i}`}>
-                      <div className="exp-card-top">
-                        <div className="exp-user">
-                          <div className="exp-avatar">
-                            {item.name?.charAt(0)?.toUpperCase() || "H"}
-                          </div>
-                          <div className="exp-user-info">
-                            <strong>{item.name}</strong>
-                            <span>✓ Lab Completed</span>
-                          </div>
-                        </div>
-                        <div className="exp-quote">“</div>
-                      </div>
-
-                      <div className="exp-stars">★★★★★</div>
-                      <div className="exp-card-msg">{item.message}</div>
-
-                      <div className="exp-card-footer">
-                        <span>🛡️ Security Researcher</span>
-                        <span>{item.date || "Just now"}</span>
-                      </div>
-                    </article>
-                  )
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className="exp-empty">
-              <div className="exp-empty-icon">💬</div>
-              <strong>No experiences yet</strong>
-              <span>Be the first hacker to share your experience.</span>
-            </div>
-          )}
-        </div>
-
-        <div className="exp-form-card">
-          <div className="exp-form-glow" />
-
-          <div className="exp-form-title">
-            <div className="exp-form-icon">✦</div>
-            <div>
-              <span className="exp-form-kicker">LAB COMPLETED?</span>
-              <strong>Share Your Experience</strong>
-              <p>Help other hackers know what to expect.</p>
-            </div>
-          </div>
-
-          <div className="exp-form-fields">
-            <div className="exp-field">
-              <label>Hacker Username</label>
-              <div className="exp-input-wrap">
-                <span className="exp-input-prefix">@</span>
-                <input
-                  className="exp-input name"
-                  type="text"
-                  placeholder="your username"
-                  maxLength={24}
-                  value={expName}
-                  onChange={(e) => setExpName(e.target.value.slice(0, 24))}
-                />
-              </div>
-            </div>
-
-            <div className="exp-field">
-              <div className="exp-message-label">
-                <label>Your Experience</label>
-                <span>{expMessage.length}/50</span>
-              </div>
-              <div className="exp-msg-box">
-                <textarea
-                  className="exp-input msg"
-                  placeholder="Tell hackers what you learned..."
-                  maxLength={50}
-                  rows={3}
-                  value={expMessage}
-                  onChange={(e) => setExpMessage(e.target.value.slice(0, 50))}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      if (expName.trim() && expMessage.trim()) {
-                        submitExperience();
-                      }
-                    }
-                  }}
-                />
-                <span className="exp-msg-icon">✎</span>
-              </div>
-            </div>
-
-            <div className="exp-quick">
-              <span>Quick review:</span>
-              <button
-                type="button"
-                onClick={() =>
-                  setExpMessage("Great lab! Learned something new.")
-                }
-              >
-                🔥 Great Lab
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setExpMessage("Challenging but really enjoyable!")
-                }
-              >
-                🧠 Challenging
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setExpMessage("Perfect lab for beginners!")
-                }
-              >
-                🚀 Beginner Friendly
-              </button>
-            </div>
-
-            <button
-              className="exp-submit"
-              type="button"
-              onClick={submitExperience}
-              disabled={!expName.trim() || !expMessage.trim()}
-            >
-              <span className="exp-submit-icon">✦</span>
-              <span>Publish Experience</span>
-              <span className="exp-submit-arrow">→</span>
-            </button>
-          </div>
-
-          <div className="exp-form-footer">
-            <span>🔒 Community feedback</span>
-            <span>•</span>
-            <span>Max 50 characters</span>
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 };
