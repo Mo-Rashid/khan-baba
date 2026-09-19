@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Navbar from "../components/Navbar/Navbar";
+import Feedback from "../components/Feedback/Feedback";
 import "./Certification.css";
 
 const Certification = () => {
@@ -341,125 +342,6 @@ const Certification = () => {
       </section>
 
 
-{/* ==================== STUDENT FEEDBACK ==================== */}
-<section className="hacker-experiences-section">
-  <div className="hacker-experiences-container">
-
-    {/* Header */}
-    <div className="he-header-card">
-      <div className="he-header-left">
-        <div className="he-header-icon">💬</div>
-        <div>
-          <h2>Student Feedback</h2>
-          <p>What students say about the AI Hacking Workshop at Tula's University</p>
-        </div>
-      </div>
-      <div className="he-header-right">
-        <span>{experiences.length} REVIEWS</span>
-        <span>★ COMMUNITY</span>
-      </div>
-    </div>
-
-    {/* Comments Grid */}
-    <div className="he-comments-grid">
-      {experiences.length === 0 ? (
-        <div className="he-empty">
-          No feedback yet. Be the first student to share your experience!
-        </div>
-      ) : (
-        experiences.map((c) => (
-          <div className="he-comment-card" key={c.id}>
-            <div className="he-comment-top">
-              <div className="he-user-info">
-                <div className="he-avatar">
-                  {c.username.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <div className="he-user-name">{c.username}</div>
-                  <div className="he-lab-badge">✓ WORKSHOP COMPLETED</div>
-                </div>
-              </div>
-              <div className="he-quote">❝</div>
-            </div>
-
-            <div className="he-stars">{"★".repeat(c.stars || 5)}</div>
-            <div className="he-comment-text">{c.text}</div>
-
-            <div className="he-comment-footer">
-              <span className="he-tag">STUDENT</span>
-              <span>{c.time}</span>
-            </div>
-          </div>
-        ))
-      )}
-    </div>
-
-    {/* Share Form */}
-    <div className="he-form-card">
-      <div className="he-form-header">
-        <div className="he-form-icon">✦</div>
-        <div>
-          <h3>Share Your Workshop Experience</h3>
-          <p>Help future students know what to expect from this workshop.</p>
-        </div>
-      </div>
-
-      <div className="he-form-group">
-        <label>Your Name / Username</label>
-        <div className="he-input-wrapper">
-          <span>@</span>
-          <input
-            type="text"
-            placeholder="YOUR NAME"
-            value={expUsername}
-            onChange={(e) => setExpUsername(e.target.value)}
-            maxLength={25}
-          />
-        </div>
-      </div>
-
-      <div className="he-form-group">
-        <label>Your Experience</label>
-        <textarea
-          placeholder="Share what you learned, how the workshop was, and any suggestions..."
-          value={expText}
-          onChange={(e) => setExpText(e.target.value)}
-          maxLength={120}
-        />
-        <div className="he-char-count">{expText.length}/120</div>
-      </div>
-
-      <div className="he-quick-tags">
-        {[
-          "🔥 Excellent Workshop",
-          "🧠 Very Informative",
-          "👨‍🏫 Great Trainer",
-          "💡 Practical Learning",
-        ].map((tag) => (
-          <div
-            key={tag}
-            className={`he-quick-tag ${activeTags.includes(tag) ? "active" : ""}`}
-            onClick={() => toggleTag(tag)}
-          >
-            {tag}
-          </div>
-        ))}
-      </div>
-
-      <button className="he-publish-btn" onClick={publishExperience}>
-        ✦ Submit Feedback →
-      </button>
-
-      <div className="he-form-footer">
-        🔒 Only for students who attended the AI Hacking Workshop • Max 120 characters
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
 
 
 
@@ -564,7 +446,10 @@ const Certification = () => {
           </div>
         </div>
       )}
+      <Feedback section="certifications" />
+
     </div>
+    
   );
 };
 
