@@ -12,6 +12,10 @@ const { Resend } = require("resend");
 const app = express();
 const feedbackRoutes = require("./routes/feedbackRoutes");
 
+
+// ====================== MOBILE LABS ======================
+const mobileRouter = require("./allctflab/labs/mobile/android");
+
 // ======================================================
 // CONFIG
 // ======================================================
@@ -23,14 +27,15 @@ const FRONTEND_URL =
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
+
 const RESEND_FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+
+
 
 // ======================================================
 // RESEND mobile 
 // ======================================================
-app.use("/api/allctflab/mobile/vulnx2", vulnX2Route);
-
 let resend = null;
 
 if (RESEND_API_KEY) {
@@ -48,10 +53,8 @@ connectDB();
 
 
 
-// mobile api 
-app.use("/api/allctflab/mobile/vulnx2", vulnX2Route);
-
-
+// Final path: /api/allctflab/mobile/...
+app.use("/api/allctflab/mobile", mobileRouter);
 
 // ======================================================
 // MIDDLEWARE

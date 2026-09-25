@@ -1,6 +1,8 @@
 const { getFlag } = require("../../utils/flags");
 const { validateAndroid } = require("../../utils/validators");
 
+
+
 function submitAndroid(level, payload) {
   const id = Number(level);
   const isCorrect = validateAndroid(id, payload);
@@ -86,5 +88,25 @@ Password reset triggered for admin without authentication.`,
     response: successResponses[id] || "Vulnerability successfully exploited",
   };
 }
+
+
+
+
+const express = require("express");
+const router = express.Router();
+
+// Import all lab routers
+const vulnX2Router = require("./VulnX2");
+const vulnXRouter = require("./VulnX");
+const vulnApktoolRouter = require("./VulnApktool");
+const hardcodeFlagRouter = require("./HardcodeFlag");
+
+// Mount them
+router.use("/vulnx2", vulnX2Router);
+router.use("/vulnx", vulnXRouter);
+router.use("/vulnapktool", vulnApktoolRouter);
+router.use("/hardcodeflag", hardcodeFlagRouter);
+
+module.exports = router;
 
 module.exports = { submitAndroid };
