@@ -54,7 +54,7 @@ connectDB();
 
 
 // Final path: /api/allctflab/mobile/...
-app.use("/api/allctflab/mobile", mobileRouter);
+app.use("/api/labs/mobile", mobileRouter);   // ← path change
 
 // ======================================================
 // MIDDLEWARE
@@ -66,6 +66,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json());
 
 app.use(
   express.json({

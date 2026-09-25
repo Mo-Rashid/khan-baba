@@ -133,7 +133,7 @@ const VulnX = () => {
   setShowFlag(false);
 
   try {
-    const res = await fetch(`${API_BASE}/api/allctflab/mobile/vulnx/submit`, {
+    const res = await fetch(`${API_BASE}/mobile/vulnx/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ flag: submittedFlag }),

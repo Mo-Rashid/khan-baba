@@ -141,7 +141,7 @@ const HardcodeFlag = () => {
   setShowFlag(false);
 
   try {
-    const res = await fetch(`${API_BASE}/api/allctflab/mobile/hardcodeflag/submit`, {
+    const res = await fetch(`${API_BASE}/mobile/hardcodeflag/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ flag: submittedFlag }),

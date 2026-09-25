@@ -117,7 +117,7 @@ const VulnApktool = () => {
   setShowFlag(false);
 
   try {
-    const res = await fetch(`${API_BASE}/api/allctflab/mobile/vulnapktool/submit`, {
+    const res = await fetch(`${API_BASE}/mobile/vulnapktool/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ flag: submittedFlag }),
