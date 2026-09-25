@@ -6,17 +6,12 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const labRoutes = require("./allctflab/routes/labRoutes");
-
 const { Resend } = require("resend");
 
-const app = express();
 const feedbackRoutes = require("./routes/feedbackRoutes");
 
+const app = express();
 
-// ====================== MOBILE LABS ======================
-const mobileRouter = require("./allctflab/labs/mobile/android");
-
-// ======================================================
 // CONFIG
 // ======================================================
 
@@ -51,15 +46,6 @@ if (RESEND_API_KEY) {
 
 connectDB();
 
-
-
-// Final path: /api/allctflab/mobile/...
-app.use("/api/labs/mobile", mobileRouter);   // ← path change
-
-// ======================================================
-// MIDDLEWARE
-// ======================================================
-
 app.use(
   cors({
     origin: FRONTEND_URL,
@@ -67,14 +53,16 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.json({limit: "1mb", }));
+app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  express.json({
-    limit: "1mb",
-  })
-);
+
+// ====================== ROUTES (middleware ke baad) ======================
+const mobileRouter = require("./allctflab/labs/mobile/android");
+app.use("/api/labs/mobile", mobileRouter);
 
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/labs", labRoutes);
 
 // ======================================================
 // EMAIL FUNCTION
