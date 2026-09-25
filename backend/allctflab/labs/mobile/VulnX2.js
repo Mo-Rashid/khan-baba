@@ -1,125 +1,78 @@
 const express = require("express");
-const path = require("path");
 
 const router = express.Router();
 
 /*
 =========================================================
-VULNX2 — SINGLE APK CHALLENGE
+ VULNX2 ANDROID CTF
+ Backend Flag Validation
 =========================================================
 */
 
-// Keep the real flag ONLY on backend.
-const FLAG =
-  process.env.VULNX2_FLAG ||
-  "KHAN{vulnx2_android_secret}";
-
+// Keep the challenge flag ONLY on backend
+const VULNX2_FLAG = "FLAG{vulnx2_android_advanced_secret}";
 
 /*
 =========================================================
-DOWNLOAD APK
+ POST /api/allctflab/mobile/vulnx2/submit
 =========================================================
 */
 
-router.get("/download", (req, res) => {
-  const apkPath = path.join(
-    __dirname,
-    "files",
-    "vulnX2.apk"
-  );
-
-  res.download(
-    apkPath,
-    "vulnX2.apk",
-    (error) => {
-      if (error) {
-        console.error(
-          "VulnX2 APK download error:",
-          error
-        );
-
-        if (!res.headersSent) {
-          res.status(500).json({
-            success: false,
-            message: "Unable to download APK.",
-          });
-        }
-      }
-    }
-  );
-});
-
-
-/*
-=========================================================
-FLAG SUBMISSION
-=========================================================
-*/
-
-router.post("/submit", (req, res) => {
-
+router.post("/submit", async (req, res) => {
   try {
+    const { flag } = req.body;
 
-    const submittedFlag =
-      String(req.body?.flag || "").trim();
-
-
-    /*
-    ---------------------------------------------
-    Empty flag
-    ---------------------------------------------
-    */
-
-    if (!submittedFlag) {
+    // Basic validation
+    if (!flag || typeof flag !== "string") {
       return res.status(400).json({
         success: false,
         message: "Flag is required.",
       });
     }
 
+    const submittedFlag = flag.trim();
 
-    /*
-    ---------------------------------------------
-    Correct flag
-    ---------------------------------------------
-    */
-
-    if (submittedFlag === FLAG) {
-
-      return res.status(200).json({
-        success: true,
-
-        message:
-          "VulnX2 Android challenge completed successfully!",
-
-        flag: submittedFlag,
-
-        points: 200,
-
-        challenge: "VulnX2",
+    // Prevent extremely large input
+    if (submittedFlag.length > 200) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid flag format.",
       });
     }
 
+    /*
+    =====================================================
+    FLAG CHECK
+    =====================================================
+    */
+
+    if (submittedFlag !== VULNX2_FLAG) {
+      return res.status(200).json({
+        success: false,
+        correct: false,
+        message: "Incorrect flag. Continue analyzing the APK.",
+      });
+    }
 
     /*
-    ---------------------------------------------
-    Incorrect flag
-    ---------------------------------------------
+    =====================================================
+    SUCCESS
+    =====================================================
     */
 
     return res.status(200).json({
-      success: false,
+      success: true,
+      correct: true,
+      completed: true,
+      message: "VulnX2 challenge completed successfully!",
+      points: 200,
 
-      message:
-        "Incorrect flag. Continue analyzing the APK.",
+      // Returned ONLY after successful validation
+      flag: VULNX2_FLAG,
     });
 
   } catch (error) {
-
-    console.error(
-      "VulnX2 submission error:",
-      error
-    );
+    console.error("VULNX2 FLAG ERROR:", error);
 
     return res.status(500).json({
       success: false,
@@ -127,6 +80,5 @@ router.post("/submit", (req, res) => {
     });
   }
 });
-
 
 module.exports = router;

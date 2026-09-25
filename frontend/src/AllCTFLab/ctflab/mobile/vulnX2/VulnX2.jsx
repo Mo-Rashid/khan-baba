@@ -108,7 +108,7 @@ const VulnX2 = () => {
     link.href = downloadURL;
     link.download = LAB.apkName;
     link.target = "_blank";
-// 
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -116,7 +116,10 @@ const VulnX2 = () => {
     setApkDownloaded(true);
   };
 
-  const submitToBackend = () => {
+  // =========================================================
+  // FLAG SUBMISSION → BACKEND VALIDATION
+  // =========================================================
+  const submitToBackend = async () => {
     const submittedFlag = input.trim();
 
     if (!submittedFlag) {
@@ -130,28 +133,46 @@ const VulnX2 = () => {
     setFlag("");
     setShowFlag(false);
 
-    const correctFlag = import.meta.env.VITE_VULNX2_FLAG;
+    try {
+      const res = await fetch(`${API_BASE}/api/allctflab/mobile/vulnx2/submit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ flag: submittedFlag }),
+      });
 
-    if (submittedFlag === correctFlag) {
-      setResult("Challenge solved successfully!");
-      setFlag(submittedFlag);
-      setShowFlag(true);
-      setShowSuccess(true);
-      setCompleted(true);
-      setChallengeMessage("VulnX2 challenge completed successfully.");
-    } else {
-      setResult("Flag validation failed.");
-      setChallengeMessage("Incorrect flag. Continue analyzing the APK.");
+      const data = await res.json();
+
+      if (data.success && data.correct) {
+        // Correct flag → open success popup
+        setResult(data.message || "Challenge solved successfully!");
+        setFlag(data.flag || submittedFlag);
+        setShowFlag(true);
+        setShowSuccess(true);
+        setCompleted(true);
+        setChallengeMessage(data.message || "VulnX2 challenge completed successfully.");
+      } else {
+        // Wrong flag
+        setResult("Flag validation failed.");
+        setChallengeMessage(
+          data.message || "Incorrect flag. Continue analyzing the APK."
+        );
+      }
+    } catch (err) {
+      console.error("VulnX2 submit error:", err);
+      setResult("Error connecting to server.");
+      setChallengeMessage("Could not reach the validation server. Try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   const resetProgress = () => {
     try {
       localStorage.removeItem("VulnXploit-vulnx2-progress");
     } catch {}
-//VulnXploit
+
     setCompleted(false);
     setLabStarted(false);
     setApkDownloaded(false);
@@ -444,7 +465,7 @@ const VulnX2 = () => {
                     <input
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
-                      placeholder="TVX{...}"
+                      placeholder="FLAG{...}"
                       disabled={isSubmitting || completed}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") submitToBackend();
@@ -520,9 +541,6 @@ const VulnX2 = () => {
         </div>
       )}
       <Feedback section="all-ctf-lab" />
-
-     
-
     </div>
   );
 };

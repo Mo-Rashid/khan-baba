@@ -27,8 +27,9 @@ const RESEND_FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 
 // ======================================================
-// RESEND
+// RESEND mobile 
 // ======================================================
+app.use("/api/allctflab/mobile/vulnx2", vulnX2Route);
 
 let resend = null;
 
@@ -44,6 +45,13 @@ if (RESEND_API_KEY) {
 // ======================================================
 
 connectDB();
+
+
+
+// mobile api 
+app.use("/api/allctflab/mobile/vulnx2", vulnX2Route);
+
+
 
 // ======================================================
 // MIDDLEWARE
