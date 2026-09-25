@@ -1,79 +1,58 @@
 const express = require("express");
-
 const router = express.Router();
 
 /*
-|--------------------------------------------------------------------------
-| Hardcode Flag
-|--------------------------------------------------------------------------
-| Change this flag to whatever flag is actually hidden inside your APK.
-|--------------------------------------------------------------------------
+=========================================================
+ HARDCODEFLAG ANDROID CTF
+ Backend Flag Validation
+=========================================================
 */
 
-const FLAG =
-  process.env.HARDCODE_FLAG ||
-  "KHAN{hardcode_android_secret}";
+const HARDCODEFLAG_FLAG = "FLAG{hardcoded_secret_in_strings}";
 
-
-/*
-|--------------------------------------------------------------------------
-| SUBMIT FLAG
-|--------------------------------------------------------------------------
-| Frontend sends:
-| {
-|   "flag": "KHAN{....}"
-| }
-|--------------------------------------------------------------------------
-*/
-
-router.post("/submit", (req, res) => {
+router.post("/submit", async (req, res) => {
   try {
-    const submittedFlag = String(
-      req.body?.flag || ""
-    ).trim();
+    const { flag } = req.body;
 
-    // Empty flag
-    if (!submittedFlag) {
+    if (!flag || typeof flag !== "string") {
       return res.status(400).json({
         success: false,
-        message: "Please enter a flag."
+        message: "Flag is required.",
       });
     }
 
+    const submittedFlag = flag.trim();
 
-    // Flag match
-    if (submittedFlag === FLAG) {
+    if (submittedFlag.length > 200) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid flag format.",
+      });
+    }
+
+    if (submittedFlag !== HARDCODEFLAG_FLAG) {
       return res.status(200).json({
-        success: true,
-        message:
-          "Hardcode Flag challenge completed successfully!",
-        flag: submittedFlag,
-        points: 150,
-        challenge: "Hardcode Flag"
+        success: false,
+        correct: false,
+        message: "Incorrect flag. Continue analyzing the APK.",
       });
     }
 
-
-    // Wrong flag
     return res.status(200).json({
-      success: false,
-      message:
-        "Incorrect flag. Continue analyzing the APK."
+      success: true,
+      correct: true,
+      completed: true,
+      message: "HardcodeFlag challenge completed successfully!",
+      points: 100,
+      flag: HARDCODEFLAG_FLAG,
     });
-
   } catch (error) {
-
-    console.error(
-      "Hardcode Flag submission error:",
-      error
-    );
-
+    console.error("HARDCODEFLAG FLAG ERROR:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error."
+      message: "Internal server error.",
     });
   }
 });
-
 
 module.exports = router;

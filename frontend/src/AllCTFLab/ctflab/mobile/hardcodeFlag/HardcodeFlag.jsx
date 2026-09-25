@@ -126,37 +126,48 @@ const HardcodeFlag = () => {
   };
 
   // Submit Flag (uses VITE_HARDCODE_FLAG from .env)
-  const submitToBackend = () => {
-    const submittedFlag = input.trim();
+  const submitToBackend = async () => {
+  const submittedFlag = input.trim();
 
-    if (!submittedFlag) {
-      setChallengeMessage("Enter the flag you discovered from the APK.");
-      return;
-    }
+  if (!submittedFlag) {
+    setChallengeMessage("Enter the flag you discovered from the APK.");
+    return;
+  }
 
-    setIsSubmitting(true);
-    setChallengeMessage("");
-    setResult("");
-    setFlag("");
-    setShowFlag(false);
+  setIsSubmitting(true);
+  setChallengeMessage("");
+  setResult("");
+  setFlag("");
+  setShowFlag(false);
 
-    const correctFlag = import.meta.env.VITE_HARDCODE_FLAG;
+  try {
+    const res = await fetch(`${API_BASE}/api/allctflab/mobile/hardcodeflag/submit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ flag: submittedFlag }),
+    });
 
-    if (submittedFlag === correctFlag) {
-      setResult("Challenge solved successfully!");
-      setFlag(submittedFlag);
+    const data = await res.json();
+
+    if (data.success && data.correct) {
+      setResult(data.message || "Challenge solved successfully!");
+      setFlag(data.flag || submittedFlag);
       setShowFlag(true);
       setShowSuccess(true);
       setCompleted(true);
-      setChallengeMessage("HardcodeFlag challenge completed successfully.");
+      setChallengeMessage(data.message || "HardcodeFlag challenge completed successfully.");
     } else {
       setResult("Flag validation failed.");
-      setChallengeMessage("Incorrect flag. Continue analyzing the APK.");
+      setChallengeMessage(data.message || "Incorrect flag. Continue analyzing the APK.");
     }
-
+  } catch (err) {
+    console.error("HardcodeFlag submit error:", err);
+    setResult("Error connecting to server.");
+    setChallengeMessage("Could not reach the validation server. Try again.");
+  } finally {
     setIsSubmitting(false);
-  };
-
+  }
+};
   // Reset Progress
   const resetProgress = () => {
     try {

@@ -116,36 +116,54 @@ const VulnX = () => {
     setApkDownloaded(true);
   };
 
-  const submitToBackend = () => {
-    const submittedFlag = input.trim();
 
-    if (!submittedFlag) {
-      setChallengeMessage("Enter the flag you discovered from the APK.");
-      return;
-    }
 
-    setIsSubmitting(true);
-    setChallengeMessage("");
-    setResult("");
-    setFlag("");
-    setShowFlag(false);
+  const submitToBackend = async () => {
+  const submittedFlag = input.trim();
 
-    const correctFlag = import.meta.env.VITE_VULNX_FLAG;
+  if (!submittedFlag) {
+    setChallengeMessage("Enter the flag you discovered from the APK.");
+    return;
+  }
 
-    if (submittedFlag === correctFlag) {
-      setResult("Challenge solved successfully!");
-      setFlag(submittedFlag);
+  setIsSubmitting(true);
+  setChallengeMessage("");
+  setResult("");
+  setFlag("");
+  setShowFlag(false);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/allctflab/mobile/vulnx/submit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ flag: submittedFlag }),
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.correct) {
+      setResult(data.message || "Challenge solved successfully!");
+      setFlag(data.flag || submittedFlag);
       setShowFlag(true);
       setShowSuccess(true);
       setCompleted(true);
-      setChallengeMessage("VulnX challenge completed successfully.");
+      setChallengeMessage(data.message || "VulnX challenge completed successfully.");
     } else {
       setResult("Flag validation failed.");
-      setChallengeMessage("Incorrect flag. Continue analyzing the APK.");
+      setChallengeMessage(data.message || "Incorrect flag. Continue analyzing the APK.");
     }
-
+  } catch (err) {
+    console.error("VulnX submit error:", err);
+    setResult("Error connecting to server.");
+    setChallengeMessage("Could not reach the validation server. Try again.");
+  } finally {
     setIsSubmitting(false);
-  };
+  }
+};
+
+
+
+
 
   const resetProgress = () => {
     try {
