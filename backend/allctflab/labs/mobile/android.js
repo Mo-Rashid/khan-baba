@@ -1,13 +1,32 @@
+const express = require("express");
+const router = express.Router();
+
+// =====================================================
+// Import individual lab routers
+// =====================================================
+const vulnX2Router = require("./VulnX2");
+const vulnXRouter = require("./VulnX");
+const vulnApktoolRouter = require("./VulnApktool");
+const hardcodeFlagRouter = require("./HardcodeFlag");
+
+// =====================================================
+// Mount the lab routers
+// =====================================================
+router.use("/vulnx2", vulnX2Router);         // /api/allctflab/mobile/vulnx2/submit
+router.use("/vulnx", vulnXRouter);           // /api/allctflab/mobile/vulnx/submit
+router.use("/vulnapktool", vulnApktoolRouter); // /api/allctflab/mobile/vulnapktool/submit
+router.use("/hardcodeflag", hardcodeFlagRouter); // /api/allctflab/mobile/hardcodeflag/submit
+
+// =====================================================
+// Old multi-level Android system (agar chahiye to rakh sakte ho)
+// =====================================================
 const { getFlag } = require("../../utils/flags");
 const { validateAndroid } = require("../../utils/validators");
-
-
 
 function submitAndroid(level, payload) {
   const id = Number(level);
   const isCorrect = validateAndroid(id, payload);
 
-  // Realistic request simulation
   const requests = {
     1: `adb shell
 cd /data/data/com.VulnXploit.app/shared_prefs/
@@ -89,24 +108,8 @@ Password reset triggered for admin without authentication.`,
   };
 }
 
-
-
-
-const express = require("express");
-const router = express.Router();
-
-// Import all lab routers
-const vulnX2Router = require("./VulnX2");
-const vulnXRouter = require("./VulnX");
-const vulnApktoolRouter = require("./VulnApktool");
-const hardcodeFlagRouter = require("./HardcodeFlag");
-
-// Mount them
-router.use("/vulnx2", vulnX2Router);
-router.use("/vulnx", vulnXRouter);
-router.use("/vulnapktool", vulnApktoolRouter);
-router.use("/hardcodeflag", hardcodeFlagRouter);
-
-module.exports = router;
-
-module.exports = { submitAndroid };
+// =====================================================
+// Export both
+// =====================================================
+module.exports = router;                 // for Express routes
+module.exports.submitAndroid = submitAndroid;  // for old system
