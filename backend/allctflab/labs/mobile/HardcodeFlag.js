@@ -8,7 +8,7 @@ const router = express.Router();
 =========================================================
 */
 
-const HARDCODEFLAG_FLAG = "FLAG{hardcoded_secret_in_strings}";
+const HARDCODEFLAG_FLAG = "FLAG{j4dx_1s_y0ur_fr13nd}";
 
 router.post("/submit", async (req, res) => {
   try {

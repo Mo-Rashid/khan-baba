@@ -429,7 +429,7 @@ const VulnX = () => {
                     <input
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
-                      placeholder="TVX{...}"
+                      placeholder="FLAG{...}"
                       disabled={isSubmitting || completed}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") submitToBackend();

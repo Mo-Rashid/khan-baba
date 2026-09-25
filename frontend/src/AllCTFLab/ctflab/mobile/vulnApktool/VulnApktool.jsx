@@ -386,7 +386,7 @@ const VulnApktool = () => {
                     <input
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
-                      placeholder="FLAG{...}"
+                      placeholder="TVX{...}"
                       disabled={isSubmitting || completed}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") submitToBackend();

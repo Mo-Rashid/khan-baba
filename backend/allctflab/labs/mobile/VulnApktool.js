@@ -8,7 +8,7 @@ const router = express.Router();
 =========================================================
 */
 
-const VULNAPKTOOL_FLAG = "FLAG{vulnapktool_smali_secret_found}";
+const VULNAPKTOOL_FLAG = "TVX{m4n1f3st_m3t4_d4t4_fl4g}";
 
 router.post("/submit", async (req, res) => {
   try {

@@ -9,7 +9,7 @@ const router = express.Router();
 */
 
 // Keep the challenge flag ONLY on backend
-const VULNX_FLAG = "FLAG{vulnx_android_hardcoded_secret}";
+const VULNX_FLAG = "FLAG{h4rdc0d3d_s3cr3t_1n_j4v4}";
 
 /*
 =========================================================
