@@ -374,15 +374,7 @@ const Certification = () => {
                       <h4>The VulnXploit</h4>
                       <span>CYBER SECURITY PLATFORM</span>
                     </div>
-                    <div className="certificate-community">
-                      <img
-                        src="/images/global.png"
-                        alt="The VulnXploit"
-                        className="certificate-brand-logo"
-                      />
-                      <strong>Global Ai</strong>
-                      <span>COMMUNITY</span>
-                    </div>
+                    
                   </div>
 
                   <div className="certificate-header-divider"></div>
