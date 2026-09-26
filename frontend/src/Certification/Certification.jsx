@@ -50,7 +50,7 @@ const Certification = () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       if (!demoCertificates[cleanSerial]) {
-        setError("Certificate not found. Please check your serial number.");
+        setError("Certificate not found. Please check your Collage ID.");
         return;
       }
 
@@ -380,8 +380,8 @@ const Certification = () => {
                         alt="The VulnXploit"
                         className="certificate-brand-logo"
                       />
-                      <strong>Global Ai</strong>
-                      <span>COMMUNITY</span>
+                      <strong>Tula's University</strong>
+                      <span>DEHRADUN</span>
                     </div>
                   </div>
 

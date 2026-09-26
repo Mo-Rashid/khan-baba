@@ -1620,31 +1620,31 @@
 
   
 
-  gap: 2px;
+  gap: px;
 }
 
 
 .certificate-community strong {
   font-family: Arial, sans-serif;
 
-  font-size: 15px;
+  font-size: 16px;
 
   font-weight: 800;
 
   color: #17204c;
+  position: relative;
+  left: 40px;
 }
 
 
 .certificate-community span {
   font-family: Arial, sans-serif;
-
   font-size: 7px;
-
   font-weight: 700;
-
   letter-spacing: 2px;
-
   color: #7628ec;
+  position: relative;
+  left: 5px;
 }
 
 
