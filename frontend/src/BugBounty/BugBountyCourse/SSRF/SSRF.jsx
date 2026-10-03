@@ -665,7 +665,7 @@ const SSRF = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/ssrf.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/AyOdumL16sagmKDR6yDT/image.png"
           alt="SSRF Guide"
           onError={(e) => {
             e.target.src =

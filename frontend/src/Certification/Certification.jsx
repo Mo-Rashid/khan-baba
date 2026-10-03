@@ -235,7 +235,7 @@ const Certification = () => {
         <div className="cert-hero-right">
           <div className="cert-logo-box">
             <div className="cert-glow"></div>
-            <img src="/images/logo.png" alt="VulnXploit" className="cert-logo" />
+            <img src="https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png" alt="VulnXploit" className="cert-logo" />
           </div>
         </div>
       </section>
@@ -269,11 +269,11 @@ const Certification = () => {
                 <span> University</span>
               </h2>
               <img
-                src="/images/ai-hacking-workshop.png"
+                src="https://plain-apac-prod-public.komododecks.com/202610/03/7NDyflBSAVIF2OGAYMN8/image.png"
                 alt="AI Hacking Workshop"
                 className="workshop-image"
                 onError={(e) => {
-                  e.currentTarget.src = "/images/tulas.png";
+                  e.currentTarget.src = "https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png";
                 }}
               />
               <div className="workshop-details"></div>
@@ -367,7 +367,7 @@ const Certification = () => {
                     </div>
                     <div className="certificate-brand">
                       <img
-                        src="/images/cert.png"
+                        src="https://plain-apac-prod-public.komododecks.com/202610/03/D3j7JIYqmVDZcusZ9JY3/image.png"
                         alt="The VulnXploit"
                         className="certificate-brand-logo"
                       />
@@ -376,7 +376,7 @@ const Certification = () => {
                     </div>
                     <div className="certificate-community">
                       <img
-                        src="/images/global.png"
+                        src="https://plain-apac-prod-public.komododecks.com/202610/03/IF0yX6Wqr5dDZmVjyiLo/image.png"
                         alt="The VulnXploit"
                         className="certificate-brand-logo"
                       />

@@ -600,7 +600,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/red-initial-access.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/8YyafxXg3dGjjADQBdo5/image.png"
 alt="Initial Access Techniques"
 onError={(e) => {
 e.target.src =

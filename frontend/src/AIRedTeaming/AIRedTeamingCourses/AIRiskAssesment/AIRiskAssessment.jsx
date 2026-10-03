@@ -653,7 +653,7 @@ const AIRiskAssessment = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/ai-risk.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/YrhL7562nwhdyH1zFiby/image.png"
           alt="AI Risk Assessment & Governance"
           onError={(e) => {
             e.target.src =

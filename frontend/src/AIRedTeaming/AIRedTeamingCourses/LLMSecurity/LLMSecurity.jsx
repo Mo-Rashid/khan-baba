@@ -697,7 +697,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/ai-llm-security.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/O6TDZTvDfASNz7eRtWNJ/image.png"
 alt="LLM Security & Guardrails"
 onError={(e) => {
 e.target.src =

@@ -850,7 +850,7 @@ const SQLi = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/sqli.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/erUlFWe72AQA16NPyk67/image.png"
           alt="SQL Injection Guide"
           onError={(e) => {
             e.target.src =

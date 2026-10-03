@@ -664,7 +664,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/ai-methodology.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/5m5cXJ6DX9RDGib2GQ9N/image.png"
 alt="AI Red Team Methodology"
 onError={(e) => {
 e.target.src =

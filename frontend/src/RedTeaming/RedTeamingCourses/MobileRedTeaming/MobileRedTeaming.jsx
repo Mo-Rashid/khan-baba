@@ -715,7 +715,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/red-mobile.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/EhtQWpYGl2JcvdRCPJtV/image.png"
 alt="Mobile Red Teaming"
 onError={(e) => {
 e.target.src =

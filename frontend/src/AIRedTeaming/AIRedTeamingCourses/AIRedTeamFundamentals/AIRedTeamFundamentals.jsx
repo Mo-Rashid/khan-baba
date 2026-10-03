@@ -724,7 +724,7 @@ const AIAgentSecurity = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/ai-agents.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/ljCUlblC4PL0KSq9q5fD/image.png"
           alt="AI Agent Security"
           onError={(e) => {
             e.target.src =

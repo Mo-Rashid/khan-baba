@@ -720,7 +720,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/ai-rag.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/IYy1fDiHnwmwACe4Y1AR/image.png"
 alt="RAG & Retrieval Attacks"
 onError={(e) => {
 e.target.src =

@@ -791,7 +791,7 @@ const RedTeamFundamentals = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/red-fundamentals.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/HDOlk1tb2LpPqhq0sKzo/image.png"
           alt="Red Team Fundamentals Guide"
           onError={(e) => {
             e.target.src =

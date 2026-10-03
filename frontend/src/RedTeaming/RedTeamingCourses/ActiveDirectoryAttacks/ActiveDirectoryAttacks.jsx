@@ -628,7 +628,7 @@ const ActiveDirectoryAttacks = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/red-ad.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/pZJ3A7aZyvICVcvdjZLJ/image.png"
           alt="Active Directory Attacks"
           onError={(e) => {
             e.target.src =

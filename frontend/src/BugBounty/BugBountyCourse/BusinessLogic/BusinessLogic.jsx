@@ -630,7 +630,7 @@ const BusinessLogic = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/logic.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/OoPSZSDlvGyeb2ixCrkS/image.png"
           alt="Business Logic Guide"
           onError={(e) => {
             e.target.src =

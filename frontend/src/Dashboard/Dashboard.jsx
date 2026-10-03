@@ -126,7 +126,7 @@ const Dashboard = () => {
       <header className="navbar">
         <div className="logo-area">
           <div className="logo-wrapper">
-            <img src="/images/logo.png" alt="The VulnXploit" className="logo" />
+            <img src="https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png" alt="The VulnXploit" className="logo" />
           </div>
           <div className="logo-content">
             <h1 className="logo-title">The VulnXploit</h1>
@@ -209,7 +209,7 @@ const Dashboard = () => {
 
         
             <img
-              src="/images/logo.png"
+              src="https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png"
               alt="The VulnXploit"
               className="hero-logo"
             />

@@ -674,7 +674,7 @@ const AuthBypass = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/auth.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/f7XsxRyan8LAb2CNqv7Z/image.png"
           alt="Auth Bypass Guide"
           onError={(e) => {
             e.target.src =

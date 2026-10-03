@@ -691,7 +691,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/red-wireless.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/bZ1cv3KbnERSesiLZrWK/image.png"
 alt="Wireless Network Attacks"
 onError={(e) => {
 e.target.src =

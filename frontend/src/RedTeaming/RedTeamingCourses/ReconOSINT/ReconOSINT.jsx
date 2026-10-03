@@ -653,7 +653,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/red-recon.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/0KhptUleuWeXYrGasvoW/image.png"
 alt="Recon & OSINT Guide"
 onError={(e) => {
 e.target.src =

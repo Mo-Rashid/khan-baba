@@ -650,7 +650,7 @@ const PrivilegeEscalation = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/red-privesc.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/dqnBqSxOXoqhQHZifCC0/image.png"
           alt="Privilege Escalation (Windows & Linux)"
           onError={(e) => {
             e.target.src =

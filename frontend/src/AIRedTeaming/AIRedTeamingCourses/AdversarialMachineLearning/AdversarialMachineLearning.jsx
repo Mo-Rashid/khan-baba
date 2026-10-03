@@ -646,7 +646,7 @@ const DataLeakageMemorization = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/ai-data-leakage.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/7Cz5RvDuyx2qOTdx8HN7/image.png"
           alt="Data Leakage & Memorization"
           onError={(e) => {
             e.target.src =

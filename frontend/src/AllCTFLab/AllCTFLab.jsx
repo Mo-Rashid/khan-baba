@@ -78,12 +78,12 @@ const AllCTFLab = () => {
           <div className="bb-profile-wrapper">
             
             <img
-              src="/images/logo.png"
+              src="https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png"
               alt="Mo Rashid"
               className="bb-profile-img"
               onError={(e) => {
                 e.target.src =
-                  "/images/bug-bounty.png";
+                  "https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png";
               }}
             />
           </div>

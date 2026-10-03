@@ -10,7 +10,7 @@ export const aiRedTeamingCourses = [
     title: "AI Red Teaming Fundamentals",
     description:
       "Learn the core concepts of AI Red Teaming, threat models for LLMs, safety alignment, and how to approach AI system assessments.",
-    image: "/images/courses/ai-fundamentals.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/ljCUlblC4PL0KSq9q5fD/image.png",
     level: "Beginner",
   },
   {
@@ -18,7 +18,7 @@ export const aiRedTeamingCourses = [
     title: "Prompt Injection Attacks",
     description:
       "Master direct and indirect prompt injection techniques, system prompt extraction, and defense strategies against injection attacks.",
-    image: "/images/courses/ai-prompt-injection.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/XI2GlXMrrTmAW31JYRV7/image.png",
     level: "Intermediate",
   },
   {
@@ -26,7 +26,7 @@ export const aiRedTeamingCourses = [
     title: "Jailbreaking LLMs",
     description:
       "Explore jailbreak techniques, role-playing attacks, multi-turn manipulation, and methods to bypass safety guardrails.",
-    image: "/images/courses/ai-jailbreak.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/NSW3SLrcus0Gtx9VynjS/image.png",
     level: "Intermediate to Advanced",
   },
   {
@@ -34,7 +34,7 @@ export const aiRedTeamingCourses = [
     title: "LLM Security & Guardrails",
     description:
       "Understand LLM security risks, output filtering, alignment failures, and how to evaluate the effectiveness of safety controls.",
-    image: "/images/courses/ai-llm-security.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/O6TDZTvDfASNz7eRtWNJ/image.png",
     level: "Intermediate",
   },
   {
@@ -42,7 +42,7 @@ export const aiRedTeamingCourses = [
     title: "RAG & Retrieval Attacks",
     description:
       "Learn how to attack Retrieval-Augmented Generation systems through document poisoning, indirect injection, and data leakage.",
-    image: "/images/courses/ai-rag.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/IYy1fDiHnwmwACe4Y1AR/image.png",
     level: "Advanced",
   },
   {
@@ -50,7 +50,7 @@ export const aiRedTeamingCourses = [
     title: "AI Agents & Tool Abuse",
     description:
       "Assess risks in AI agents, tool calling, privilege escalation through tools, and securing agentic workflows.",
-    image: "/images/courses/ai-agents.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/5tjnB62KUzaXGq1Ow64D/image.png",
     level: "Advanced",
   },
   {
@@ -66,7 +66,7 @@ export const aiRedTeamingCourses = [
     title: "Adversarial Machine Learning",
     description:
       "Explore adversarial inputs, evasion techniques, model extraction, and attacks against classifiers and safety filters.",
-    image: "/images/courses/ai-adversarial.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/7Cz5RvDuyx2qOTdx8HN7/image.png",
     level: "Advanced",
   },
   {
@@ -74,7 +74,7 @@ export const aiRedTeamingCourses = [
     title: "AI Risk Assessment & Governance",
     description:
       "Build structured AI risk assessments, evaluate real-world impact, and create actionable recommendations for AI systems.",
-    image: "/images/courses/ai-risk.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/YrhL7562nwhdyH1zFiby/image.png",
     level: "Intermediate to Advanced",
   },
   {
@@ -82,7 +82,7 @@ export const aiRedTeamingCourses = [
     title: "AI Red Team Methodology",
     description:
       "Learn professional methodology for AI Red Teaming engagements, scoping, reporting, and continuous testing programs.",
-    image: "/images/courses/ai-methodology.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/5m5cXJ6DX9RDGib2GQ9N/image.png",
     level: "Advanced",
   },
 ];
@@ -113,11 +113,11 @@ const AIRedTeaming = () => {
           <div className="ai-profile-wrapper">
             
             <img
-              src="/images/logo.png"
+              src="https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png"
               alt="Mo Rashid"
               className="ai-profile-img"
               onError={(e) => {
-                e.target.src = "/images/AIRedTeaming.png";
+                e.target.src = "https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png";
               }}
             />
           </div>

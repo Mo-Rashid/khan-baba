@@ -764,7 +764,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/red-payload.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/8lMDihg0lKldvpdzXYjx/image.png"
 alt="Payload Development Fundamentals"
 onError={(e) => {
 e.target.src =

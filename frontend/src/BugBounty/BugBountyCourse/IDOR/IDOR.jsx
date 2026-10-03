@@ -650,7 +650,7 @@ const IDOR = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/idor.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/xcXx2yoiDKhOUdPvmijF/image.png"
           alt="IDOR Guide"
           onError={(e) => {
             e.target.src =

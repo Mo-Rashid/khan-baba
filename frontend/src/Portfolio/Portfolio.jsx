@@ -41,7 +41,7 @@ const Portfolio = () => {
           <div className="profile-wrapper">
             <div className="profile-glow"></div>
             <img
-              src="/images/rashid.png"
+              src="https://plain-apac-prod-public.komododecks.com/202610/03/ZHFZVyutYpFQh0Z7syZI/image.png"
               alt="Mo Rashid"
               className="profile-img"
               onError={(e) => {

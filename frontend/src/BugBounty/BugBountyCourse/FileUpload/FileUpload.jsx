@@ -645,7 +645,7 @@ const FileUpload = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/upload.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/ORFAi1XPZwYA1yEp7zza/image.png"
           alt="File Upload Guide"
           onError={(e) => {
             e.target.src =

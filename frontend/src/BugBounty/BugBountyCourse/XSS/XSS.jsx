@@ -1218,7 +1218,7 @@ const XSS = () => {
       {/* ===== BIG IMAGE ===== */}
       <section className="article-banner">
         <img
-          src="/images/courses/xss.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/JLWspp1BwpVFXPBeITBr/image.png"
           alt="XSS Guide"
           onError={(e) => {
             e.target.src =

@@ -726,7 +726,7 @@ const APISecurity = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/api-security.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/hPSeChyOesXZ7lQ5bXYs/image.png"
           alt="API Security Course"
           onError={(e) => {
             e.target.src =

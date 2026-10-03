@@ -504,7 +504,7 @@ const XXE = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/xxe.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/3JD3CxPEffWdlS4ozIF3/image.png"
           alt="XXE Guide"
           onError={(e) => {
             e.target.src =

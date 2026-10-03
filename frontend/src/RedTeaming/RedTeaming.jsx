@@ -10,7 +10,7 @@ export const redTeamingCourses = [
     title: "Red Team Fundamentals",
     description:
       "Learn red team concepts, objectives, rules of engagement, attack lifecycle, and professional adversary simulation methodology.",
-    image: "/images/courses/red-fundamentals.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/HDOlk1tb2LpPqhq0sKzo/image.png",
     level: "Beginner",
   },
 
@@ -19,7 +19,7 @@ export const redTeamingCourses = [
     title: "Recon & OSINT",
     description:
       "Master passive and active reconnaissance, OSINT frameworks, target profiling, and attack surface discovery.",
-    image: "/images/courses/red-recon.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/0KhptUleuWeXYrGasvoW/image.png",
     level: "Beginner to Intermediate",
   },
 
@@ -28,7 +28,7 @@ export const redTeamingCourses = [
     title: "Initial Access Techniques",
     description:
       "Understand how red teams gain initial footholds through phishing simulations, exposed services, and entry vectors.",
-    image: "/images/courses/red-initial-access.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/8YyafxXg3dGjjADQBdo5/image.png",
     level: "Intermediate",
   },
 
@@ -37,7 +37,7 @@ export const redTeamingCourses = [
     title: "Payload Development Fundamentals",
     description:
       "Learn payload concepts, delivery methods, execution flow, and payload analysis for authorized security assessments.",
-    image: "/images/courses/red-payload.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/8lMDihg0lKldvpdzXYjx/image.png",
     level: "Intermediate to Advanced",
   },
 
@@ -46,7 +46,7 @@ export const redTeamingCourses = [
     title: "Privilege Escalation (Windows & Linux)",
     description:
       "Explore Windows and Linux privilege escalation concepts, misconfigurations, permissions, and security controls.",
-    image: "/images/courses/red-privesc.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/dqnBqSxOXoqhQHZifCC0/image.png",
     level: "Intermediate to Advanced",
   },
 
@@ -55,7 +55,7 @@ export const redTeamingCourses = [
     title: "Cloud Red Teaming",
     description:
       "Learn cloud security assessment concepts across AWS, Azure, and GCP environments with identity and access focus.",
-    image: "/images/courses/red-cloud.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/smQfTpv5E5BCChJm5QyU/image.png",
     level: "Advanced",
   },
 
@@ -64,7 +64,7 @@ export const redTeamingCourses = [
     title: "External Network Penetration Testing",
     description:
       "Assess internet-facing infrastructure, services, vulnerabilities, and external attack surfaces.",
-    image: "/images/courses/red-external-network.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/iNi91S1UWhSuhegphKCo/image.png",
     level: "Intermediate",
   },
 
@@ -73,7 +73,7 @@ export const redTeamingCourses = [
     title: "Mobile Red Teaming",
     description:
       "Understand mobile application security testing, Android/iOS attack surfaces, and mobile threat simulation.",
-    image: "/images/courses/red-mobile.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/EhtQWpYGl2JcvdRCPJtV/image.png",
     level: "Advanced",
   },
 
@@ -82,7 +82,7 @@ export const redTeamingCourses = [
     title: "Wireless Network Attacks",
     description:
       "Learn wireless security fundamentals, WiFi assessment techniques, encryption weaknesses, and defense strategies.",
-    image: "/images/courses/red-wireless.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/bZ1cv3KbnERSesiLZrWK/image.png",
     level: "Intermediate",
   },
 
@@ -91,7 +91,7 @@ export const redTeamingCourses = [
     title: "Active Directory Attacks",
     description:
       "Master Active Directory security concepts including authentication, trust relationships, identity attacks, and enterprise security testing.",
-    image: "/images/courses/red-ad.png",
+    image: "https://plain-apac-prod-public.komododecks.com/202610/03/pZJ3A7aZyvICVcvdjZLJ/image.png",
     level: "Advanced",
   },
 ];
@@ -121,11 +121,11 @@ const RedTeaming = () => {
           <div className="bb-profile-wrapper">
             
             <img
-              src="/images/logo.png"
+              src="https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png"
               alt="Mo Rashid"
               className="bb-profile-img"
               onError={(e) => {
-                e.target.src = "/images/logo.png";
+                e.target.src = "https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png";
               }}
             />
           </div>

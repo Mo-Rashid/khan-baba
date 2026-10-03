@@ -661,7 +661,7 @@ const CloudRedTeaming = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/red-cloud.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/smQfTpv5E5BCChJm5QyU/image.png"
           alt="Cloud Red Teaming"
           onError={(e) => {
             e.target.src =

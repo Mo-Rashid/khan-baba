@@ -641,7 +641,7 @@ const JailbreakingLLMs = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/ai-jailbreak.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/NSW3SLrcus0Gtx9VynjS/image.png"
           alt="Jailbreaking LLMs"
           onError={(e) => {
             e.target.src =

@@ -745,7 +745,7 @@ const RCE = () => {
       {/* ===== BIG IMAGE ===== */}
       <section className="article-banner">
         <img
-          src="/images/courses/rce.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/CzGI9ssKrxmNtimPFLzG/image.png"
           alt="RCE Guide"
           onError={(e) => {
             e.target.src =

@@ -679,7 +679,7 @@ const PromptInjection = () => {
 
       <section className="article-banner">
         <img
-          src="/images/courses/ai-prompt-injection.png"
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/XI2GlXMrrTmAW31JYRV7/image.png"
           alt="Prompt Injection Attacks"
           onError={(e) => {
             e.target.src =

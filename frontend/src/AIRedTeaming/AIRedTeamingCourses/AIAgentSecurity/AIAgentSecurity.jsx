@@ -704,7 +704,7 @@ return (
 
 <section className="article-banner">
 <img
-src="/images/courses/ai-agents.png"
+src="https://plain-apac-prod-public.komododecks.com/202610/03/5tjnB62KUzaXGq1Ow64D/image.png"
 alt="AI Agents & Tool Abuse"
 onError={(e) => {
 e.target.src =
