@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../../components/Navbar/Navbar";
 import "./AIRedTeamFundamentals.css";
+
+const STORAGE_KEY = "VulnXploit_ai_agent_security_course_completed";
 
 const chapters = [
   // ====================== 01 What is AI Agent Security? ======================

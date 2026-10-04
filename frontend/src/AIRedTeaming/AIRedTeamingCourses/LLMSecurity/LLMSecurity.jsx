@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../../components/Navbar/Navbar";
 import "./LLMSecurity.css";
 
+const STORAGE_KEY = "VulnXploit_llm_security_course_completed";
 
 const chapters = [
   // ====================== 01 What is LLM Security? ======================
@@ -647,137 +648,113 @@ correct: "Map the full system architecture and data flows",
   },
 ];
 
-
 const LLMSecurity = () => {
-const [activeChapter, setActiveChapter] = useState(chapters[0]);
-const [selectedOption, setSelectedOption] = useState("");
-const [showCongrats, setShowCongrats] = useState(false);
-const [completedChapters, setCompletedChapters] = useState([]);
+  const [activeChapter, setActiveChapter] = useState(chapters[0]);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [completedChapters, setCompletedChapters] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(completedChapters));
+  }, [completedChapters]);
 
-const handleSubmit = () => {
-if (!activeChapter.quiz) return;
+  const completedCount = completedChapters.length;
+  const totalChapters = chapters.length;
+  const progress = Math.round((completedCount / totalChapters) * 100);
 
-
-if (selectedOption === activeChapter.quiz.correct) {
-setShowCongrats(true);
-if (!completedChapters.includes(activeChapter.id)) {
-setCompletedChapters([...completedChapters, activeChapter.id]);
+  const handleSubmit = () => {
+    if (!activeChapter.quiz) return;
+    if (selectedOption === activeChapter.quiz.correct) {
+      setShowCongrats(true);
+      if (!completedChapters.includes(activeChapter.id)) {
+        setCompletedChapters([...completedChapters, activeChapter.id]);
       }
     } else {
-alert("❌ Wrong answer. Try again!");
+      alert("❌ Wrong answer. Try again!");
     }
   };
 
-
-const closeCongrats = () => {
-setShowCongrats(false);
-setSelectedOption("");
+  const closeCongrats = () => {
+    setShowCongrats(false);
+    setSelectedOption("");
   };
 
-
-return (
-<div className="article-page">
-<Navbar />
-
-
-<section className="article-header">
-<div className="article-header-content">
-<Link to="/ai-red-teaming" className="back-link">
-            ← Back to AI Red Teaming Courses
-</Link>
-<h1>
-            The ultimate guide to{" "}
-<span className="gradient-text">LLM Security & Guardrails</span>
-</h1>
-<p className="article-date">Interactive Deep Course • 2026</p>
-</div>
-</section>
-
-
-<section className="article-banner">
-<img
-src="https://plain-apac-prod-public.komododecks.com/202610/03/O6TDZTvDfASNz7eRtWNJ/image.png"
-alt="LLM Security & Guardrails"
-onError={(e) => {
-e.target.src =
-"https://via.placeholder.com/1200x420/1a0b2e/ec4899?text=LLM+Security+%26+Guardrails";
-          }}
-/>
-</section>
-
-
-<section className="article-body">
-<div className="article-container">
-<aside className="article-sidebar">
-<h3>Course Content</h3>
-<ul>
-{chapters.map((chapter) => (
-<li
-key={chapter.id}
-className={`${activeChapter.id === chapter.id ? "active" : ""} ${
-completedChapters.includes(chapter.id) ? "completed" : ""
-}`}
-onClick={() => {
-setActiveChapter(chapter);
-setSelectedOption("");
-                  }}
->
-{chapter.title}
-{completedChapters.includes(chapter.id) && (
-<span className="check-mark">✓</span>
-                  )}
-</li>
+  return (
+    <div className="article-page">
+      <Navbar />
+      <section className="article-header">
+        <div className="article-header-content">
+          <Link to="/ai-red-teaming" className="back-link">← Back to AI Red Teaming Courses</Link>
+          <h1>The ultimate guide to <span className="gradient-text">LLM Security & Guardrails</span></h1>
+          <p className="article-date">Interactive Deep Course • 2026</p>
+          <p className="article-date" style={{ marginTop: 8 }}>
+            Progress: {completedCount}/{totalChapters} chapters · {progress}%
+          </p>
+        </div>
+      </section>
+      <section className="article-banner">
+        <img
+          src="https://plain-apac-prod-public.komododecks.com/202610/03/O6TDZTvDfASNz7eRtWNJ/image.png"
+          alt="LLM Security & Guardrails"
+          onError={(e) => { e.target.src = "https://via.placeholder.com/1200x420/1a0b2e/ec4899?text=LLM+Security+%26+Guardrails"; }}
+        />
+      </section>
+      <section className="article-body">
+        <div className="article-container">
+          <aside className="article-sidebar">
+            <h3>Course Content</h3>
+            <ul>
+              {chapters.map((chapter) => (
+                <li
+                  key={chapter.id}
+                  className={`${activeChapter.id === chapter.id ? "active" : ""} ${completedChapters.includes(chapter.id) ? "completed" : ""}`}
+                  onClick={() => { setActiveChapter(chapter); setSelectedOption(""); }}
+                >
+                  {chapter.title}
+                  {completedChapters.includes(chapter.id) && <span className="check-mark">✓</span>}
+                </li>
               ))}
-</ul>
-</aside>
-
-
-<div className="article-content">
-{activeChapter.content}
-
-
-{activeChapter.quiz && (
-<div className="quiz-box">
-<h3>Quick Check</h3>
-<p className="quiz-question">{activeChapter.quiz.question}</p>
-<div className="quiz-options">
-{activeChapter.quiz.options.map((opt) => (
-<label key={opt} className="quiz-option">
-<input
-type="radio"
-name="quiz"
-value={opt}
-checked={selectedOption === opt}
-onChange={(e) => setSelectedOption(e.target.value)}
-/>
-<span>{opt}</span>
-</label>
+            </ul>
+          </aside>
+          <div className="article-content">
+            {activeChapter.content}
+            {activeChapter.quiz && (
+              <div className="quiz-box">
+                <h3>Quick Check</h3>
+                <p className="quiz-question">{activeChapter.quiz.question}</p>
+                <div className="quiz-options">
+                  {activeChapter.quiz.options.map((opt) => (
+                    <label key={opt} className="quiz-option">
+                      <input type="radio" name="quiz" value={opt} checked={selectedOption === opt} onChange={(e) => setSelectedOption(e.target.value)} />
+                      <span>{opt}</span>
+                    </label>
                   ))}
-</div>
-<button className="quiz-submit" onClick={handleSubmit}>
-                  Submit Answer
-</button>
-</div>
+                </div>
+                <button className="quiz-submit" onClick={handleSubmit}>Submit Answer</button>
+              </div>
             )}
-</div>
-</div>
-</section>
-
-
-{showCongrats && (
-<div className="congrats-overlay">
-<div className="congrats-modal">
-<div className="congrats-icon">🎉</div>
-<h2>Congratulations!</h2>
-<p>You completed this step successfully.</p>
-<button onClick={closeCongrats}>Continue Learning</button>
-</div>
-</div>
+          </div>
+        </div>
+      </section>
+      {showCongrats && (
+        <div className="congrats-overlay">
+          <div className="congrats-modal">
+            <div className="congrats-icon">🎉</div>
+            <h2>Congratulations!</h2>
+            <p>You completed this step successfully.</p>
+            <button onClick={closeCongrats}>Continue Learning</button>
+          </div>
+        </div>
       )}
-</div>
+    </div>
   );
 };
-
 
 export default LLMSecurity;

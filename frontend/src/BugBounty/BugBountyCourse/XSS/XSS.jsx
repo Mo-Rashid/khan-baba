@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../../components/Navbar/Navbar";
 import "./XSS.css";
+
+const STORAGE_KEY = "VulnXploit_xss_course_completed";
+
 
 const chapters = [
   // ====================== What is XSS? ======================
@@ -1177,7 +1180,22 @@ const XSS = () => {
   const [activeChapter, setActiveChapter] = useState(chapters[0]);
   const [selectedOption, setSelectedOption] = useState("");
   const [showCongrats, setShowCongrats] = useState(false);
-  const [completedChapters, setCompletedChapters] = useState([]);
+  const [completedChapters, setCompletedChapters] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(completedChapters));
+  }, [completedChapters]);
+
+  const completedCount = completedChapters.length;
+  const totalChapters = chapters.length;
+  const progress = Math.round((completedCount / totalChapters) * 100);
 
   const handleSubmit = () => {
     if (!activeChapter.quiz) return;
@@ -1212,8 +1230,14 @@ const XSS = () => {
             <span className="gradient-text">Cross-Site Scripting (XSS)</span>
           </h1>
           <p className="article-date">Interactive Deep Course • 2026</p>
+          {/* ===== PROGRESS POINT (top) ===== */}
+          <p className="article-date" style={{ marginTop: 8 }}>
+            Progress: {completedCount}/{totalChapters} chapters · {progress}%
+          </p>
         </div>
       </section>
+
+      {/* baaki sab same rahega — banner, body, sidebar, content, quiz, congrats */}
 
       {/* ===== BIG IMAGE ===== */}
       <section className="article-banner">

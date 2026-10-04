@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../../components/Navbar/Navbar";
 import "./AdversarialMachineLearning.css";
+
+
+const STORAGE_KEY = "VulnXploit_adversarial_machine_learning_course_completed";
 
 const chapters = [
   // ====================== 01 What is Data Leakage in LLMs? ======================
@@ -608,7 +611,22 @@ const DataLeakageMemorization = () => {
   const [activeChapter, setActiveChapter] = useState(chapters[0]);
   const [selectedOption, setSelectedOption] = useState("");
   const [showCongrats, setShowCongrats] = useState(false);
-  const [completedChapters, setCompletedChapters] = useState([]);
+  const [completedChapters, setCompletedChapters] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(completedChapters));
+  }, [completedChapters]);
+
+  const completedCount = completedChapters.length;
+  const totalChapters = chapters.length;
+  const progress = Math.round((completedCount / totalChapters) * 100);
 
   const handleSubmit = () => {
     if (!activeChapter.quiz) return;
@@ -641,6 +659,9 @@ const DataLeakageMemorization = () => {
             <span className="gradient-text">Data Leakage & Memorization</span>
           </h1>
           <p className="article-date">Updated • 2026</p>
+          <p className="article-date" style={{ marginTop: 8 }}>
+            Progress: {completedCount}/{totalChapters} chapters · {progress}%
+          </p>
         </div>
       </section>
 

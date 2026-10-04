@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../../components/Navbar/Navbar";
 import "./FileUpload.css";
+
+const STORAGE_KEY = "VulnXploit_file_upload_course_completed";
 
 const chapters = [
   // ====================== 01 What is File Upload Vuln? ======================
@@ -606,11 +608,25 @@ const FileUpload = () => {
   const [activeChapter, setActiveChapter] = useState(chapters[0]);
   const [selectedOption, setSelectedOption] = useState("");
   const [showCongrats, setShowCongrats] = useState(false);
-  const [completedChapters, setCompletedChapters] = useState([]);
+  const [completedChapters, setCompletedChapters] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(completedChapters));
+  }, [completedChapters]);
+
+  const completedCount = completedChapters.length;
+  const totalChapters = chapters.length;
+  const progress = Math.round((completedCount / totalChapters) * 100);
 
   const handleSubmit = () => {
     if (!activeChapter.quiz) return;
-
     if (selectedOption === activeChapter.quiz.correct) {
       setShowCongrats(true);
       if (!completedChapters.includes(activeChapter.id)) {
@@ -629,7 +645,6 @@ const FileUpload = () => {
   return (
     <div className="article-page">
       <Navbar />
-
       <section className="article-header">
         <div className="article-header-content">
           <Link to="/bug-bounty" className="back-link">
@@ -640,6 +655,9 @@ const FileUpload = () => {
             <span className="gradient-text">File Upload</span>
           </h1>
           <p className="article-date">Interactive Deep Course • 2026</p>
+          <p className="article-date" style={{ marginTop: 8 }}>
+            Progress: {completedCount}/{totalChapters} chapters · {progress}%
+          </p>
         </div>
       </section>
 

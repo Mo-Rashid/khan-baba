@@ -247,3 +247,11 @@
   overflow-x: auto;
   line-height: 1.5;
 }
+
+
+
+.article-header-content .article-date:last-of-type {
+  margin-top: 0.5rem;
+  color: var(--accent-light);
+  font-weight: 600;
+}
