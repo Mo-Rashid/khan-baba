@@ -15,6 +15,8 @@ import AIRedTeaming from "./AIRedTeaming/AIRedTeaming";
 import AllCTFLab from "./AllCTFLab/AllCTFLab";
 import Certification from "./Certification/Certification";
 
+import NotFound from "./pages/NotFound";
+
 
 
 
@@ -232,6 +234,8 @@ function App() {
                 
                 
                 </Route>
+
+              <Route path="*" element={<NotFound />} />  
 
 
               <Route  path="/ctf-lab/redteam-reverse-engineering"  element={<ReverseEngineeringLab />}/>
