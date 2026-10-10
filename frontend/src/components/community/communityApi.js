@@ -1,9 +1,8 @@
 
-const API_BASE = (import.meta.env.VITE_API_URL || "")
-  .replace(/\/+$/, "")
-  .replace(/\/api$/, "");
-
-const COMMUNITY_BASE = `${API_BASE}/api/community`;
+const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+const COMMUNITY_BASE = API_BASE.endsWith("/api")
+  ? `${API_BASE}/community`
+  : `${API_BASE}/api/community`;
 
 function readToken() {
   const keys = ["token", "authToken", "jwt", "accessToken"];
