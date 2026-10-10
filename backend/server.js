@@ -56,10 +56,13 @@ app.use(express.json());
 app.use(express.json({limit: "1mb", }));
 app.use(express.urlencoded({ extended: true }));
 
+const communityRoutes = require("./routes/communityRoutes");
+
 
 // ====================== ROUTES (middleware ke baad) ======================
 const mobileRouter = require("./allctflab/labs/mobile/android");
 app.use("/api/labs/mobile", mobileRouter);
+app.use("/api/community", communityRoutes);
 
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/labs", labRoutes);
