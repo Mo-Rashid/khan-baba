@@ -15,6 +15,9 @@ import AllCTFLab from "./AllCTFLab/AllCTFLab";
 import Certification from "./Certification/Certification";
 import NotFound from "./pages/NotFound";
 
+// Community Widget
+import CommunityPanel from "./components/community/CommunityPanel";
+
 // Bug Bounty Courses
 import XSS from "./BugBounty/BugBountyCourse/XSS/XSS";
 import SQLi from "./BugBounty/BugBountyCourse/SQLi/SQLi";
@@ -217,7 +220,8 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-   
+      {/* Community Widget - Always visible on all pages */}
+      <CommunityPanel />
     </>
   );
 }
