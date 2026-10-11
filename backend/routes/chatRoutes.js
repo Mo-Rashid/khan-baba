@@ -1,12 +1,15 @@
+
 const express = require("express");
 const mongoose = require("mongoose");
+
 const ChatMessage = require("../models/ChatMessage");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Read recent messages
+// GET /api/chat/messages
+// Read the latest 100 messages
 router.get("/messages", async (req, res) => {
   try {
     const messages = await ChatMessage.find()
@@ -14,23 +17,28 @@ router.get("/messages", async (req, res) => {
       .limit(100)
       .lean();
 
-    res.json({
+    return res.status(200).json({
       success: true,
       messages: messages.reverse(),
     });
   } catch (error) {
     console.error("Chat read error:", error);
-    res.status(500).json({
+
+    return res.status(500).json({
       success: false,
       message: "Could not load messages.",
     });
   }
 });
 
-// Send a message: login required
+// POST /api/chat/messages
+// Authenticated users only
 router.post("/messages", authMiddleware, async (req, res) => {
   try {
-    const message = String(req.body.message || "").trim();
+    const message =
+      typeof req.body?.message === "string"
+        ? req.body.message.trim()
+        : "";
 
     if (!message) {
       return res.status(400).json({
@@ -47,42 +55,61 @@ router.post("/messages", authMiddleware, async (req, res) => {
     }
 
     const user = req.user || {};
-    const senderId = String(
-      user._id || user.id || user.userId || ""
-    );
 
-    if (!senderId) {
+    const rawUserId = user._id || user.id || user.userId;
+
+    if (!rawUserId) {
       return res.status(401).json({
         success: false,
         message: "Please sign in again to send messages.",
       });
     }
 
+    const senderId = String(rawUserId);
+
     let senderName = [
       user.firstName,
-      user.lastName
-    ].filter(Boolean).join(" ").trim();
+      user.lastName,
+    ]
+      .filter((part) => typeof part === "string" && part.trim())
+      .join(" ")
+      .trim();
 
-    if (!senderName) {
-      const userId = user._id || user.id || user.userId;
+    // Look up the database user if the token has no usable name.
+    if (
+      !senderName &&
+      mongoose.Types.ObjectId.isValid(senderId)
+    ) {
+      const dbUser = await User.findById(senderId)
+        .select("firstName lastName name username email")
+        .lean();
 
-      if (mongoose.Types.ObjectId.isValid(userId)) {
-        const dbUser = await User.findById(userId)
-          .select("firstName lastName")
-          .lean();
+      if (dbUser) {
+        senderName = [
+          dbUser.firstName,
+          dbUser.lastName,
+        ]
+          .filter((part) => typeof part === "string" && part.trim())
+          .join(" ")
+          .trim();
 
-        if (dbUser) {
-          senderName = [
-            dbUser.firstName,
-            dbUser.lastName
-          ].filter(Boolean).join(" ").trim();
-        }
+        senderName =
+          senderName ||
+          dbUser.name ||
+          dbUser.username ||
+          dbUser.email ||
+          "";
       }
     }
 
-    senderName = (senderName || user.username || "Community User")
-      .trim()
-      .slice(0, 80);
+    senderName =
+      senderName ||
+      user.name ||
+      user.username ||
+      user.email ||
+      "Community User";
+
+    senderName = String(senderName).trim().slice(0, 80);
 
     const savedMessage = await ChatMessage.create({
       senderId,
@@ -90,13 +117,14 @@ router.post("/messages", authMiddleware, async (req, res) => {
       message,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: savedMessage,
     });
   } catch (error) {
     console.error("Chat send error:", error);
-    res.status(500).json({
+
+    return res.status(500).json({
       success: false,
       message: "Could not send message.",
     });
