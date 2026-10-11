@@ -1,7 +1,24 @@
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send, Users, Minimize2 } from "lucide-react";
-import { chatApi, isChatLoggedIn } from "./chatApi";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  MessageCircle,
+  X,
+  Send,
+  Users,
+  Minimize2,
+} from "lucide-react";
+
+import {
+  chatApi,
+  isChatLoggedIn,
+} from "./chatApi";
+
 import "./community.css";
 
 export default function CommunityPanel() {
@@ -11,6 +28,7 @@ export default function CommunityPanel() {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+
   const bottomRef = useRef(null);
 
   const loadMessages = useCallback(async (showLoading = false) => {
@@ -18,10 +36,18 @@ export default function CommunityPanel() {
 
     try {
       const result = await chatApi.list();
-      setMessages(Array.isArray(result.messages) ? result.messages : []);
+
+      setMessages(
+        Array.isArray(result.messages)
+          ? result.messages
+          : []
+      );
+
       setError("");
     } catch (err) {
-      setError(err.message || "Unable to load community messages.");
+      setError(
+        err.message || "Unable to load community messages."
+      );
     } finally {
       if (showLoading) setLoading(false);
     }
@@ -29,18 +55,26 @@ export default function CommunityPanel() {
 
   useEffect(() => {
     loadMessages(true);
-    const timer = window.setInterval(() => loadMessages(false), 5000);
+
+    const timer = window.setInterval(
+      () => loadMessages(false),
+      5000
+    );
+
     return () => window.clearInterval(timer);
   }, [loadMessages]);
 
   useEffect(() => {
     if (isOpen) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      bottomRef.current?.scrollIntoView({
+        behavior: "smooth",
+      });
     }
   }, [messages, isOpen]);
 
   async function handleSend(event) {
     event.preventDefault();
+
     const message = text.trim();
 
     if (!message || sending) return;
@@ -66,7 +100,9 @@ export default function CommunityPanel() {
       setText("");
       await loadMessages(false);
     } catch (err) {
-      setError(err.message || "Message could not be sent.");
+      setError(
+        err.message || "Message could not be sent."
+      );
     } finally {
       setSending(false);
     }
@@ -74,6 +110,7 @@ export default function CommunityPanel() {
 
   function formatTime(value) {
     if (!value) return "";
+
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) return "";
@@ -87,7 +124,10 @@ export default function CommunityPanel() {
   return (
     <div className="vx-chat-widget">
       {isOpen && (
-        <section className="vx-chat-window" aria-label="VulnXploit Community chat">
+        <section
+          className="vx-chat-window"
+          aria-label="VulnXploit Community chat"
+        >
           <header className="vx-chat-header">
             <div className="vx-chat-avatar">
               <Users size={22} />
@@ -126,7 +166,9 @@ export default function CommunityPanel() {
 
           <div className="vx-chat-messages">
             {loading ? (
-              <div className="vx-chat-placeholder">Loading messages...</div>
+              <div className="vx-chat-placeholder">
+                Loading messages...
+              </div>
             ) : messages.length === 0 ? (
               <div className="vx-chat-placeholder">
                 <MessageCircle size={34} />
@@ -137,7 +179,10 @@ export default function CommunityPanel() {
               messages.map((item) => (
                 <article
                   className="vx-chat-message"
-                  key={item._id || `${item.senderId}-${item.createdAt}`}
+                  key={
+                    item._id ||
+                    `${item.senderId}-${item.createdAt}`
+                  }
                 >
                   <div className="vx-chat-message-name">
                     {item.senderName || "Community User"}
@@ -163,7 +208,10 @@ export default function CommunityPanel() {
             </div>
           )}
 
-          <form className="vx-chat-composer" onSubmit={handleSend}>
+          <form
+            className="vx-chat-composer"
+            onSubmit={handleSend}
+          >
             <input
               type="text"
               value={text}
@@ -198,11 +246,20 @@ export default function CommunityPanel() {
         type="button"
         className={`vx-chat-launcher ${isOpen ? "is-open" : ""}`}
         onClick={() => setIsOpen((current) => !current)}
-        aria-label={isOpen ? "Close community chat" : "Open community chat"}
+        aria-label={
+          isOpen ? "Close community chat" : "Open community chat"
+        }
         title="VulnXploit Community"
       >
-        {isOpen ? <X size={25} /> : <MessageCircle size={27} />}
-        {!isOpen && <span className="vx-chat-launcher-dot" />}
+        {isOpen ? (
+          <X size={25} />
+        ) : (
+          <MessageCircle size={27} />
+        )}
+
+        {!isOpen && (
+          <span className="vx-chat-launcher-dot" />
+        )}
       </button>
     </div>
   );
