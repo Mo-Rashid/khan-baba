@@ -9,7 +9,6 @@ const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // GET /api/chat/messages
-// Read the latest 100 messages
 router.get("/messages", async (req, res) => {
   try {
     const messages = await ChatMessage.find()
@@ -32,7 +31,6 @@ router.get("/messages", async (req, res) => {
 });
 
 // POST /api/chat/messages
-// Authenticated users only
 router.post("/messages", authMiddleware, async (req, res) => {
   try {
     const message =
@@ -55,7 +53,6 @@ router.post("/messages", authMiddleware, async (req, res) => {
     }
 
     const user = req.user || {};
-
     const rawUserId = user._id || user.id || user.userId;
 
     if (!rawUserId) {
@@ -75,7 +72,6 @@ router.post("/messages", authMiddleware, async (req, res) => {
       .join(" ")
       .trim();
 
-    // Look up the database user if the token has no usable name.
     if (
       !senderName &&
       mongoose.Types.ObjectId.isValid(senderId)
@@ -102,14 +98,13 @@ router.post("/messages", authMiddleware, async (req, res) => {
       }
     }
 
-    senderName =
+    senderName = String(
       senderName ||
       user.name ||
       user.username ||
       user.email ||
-      "Community User";
-
-    senderName = String(senderName).trim().slice(0, 80);
+      "Community User"
+    ).trim().slice(0, 80);
 
     const savedMessage = await ChatMessage.create({
       senderId,
