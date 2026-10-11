@@ -15,9 +15,6 @@ import AllCTFLab from "./AllCTFLab/AllCTFLab";
 import Certification from "./Certification/Certification";
 import NotFound from "./pages/NotFound";
 
-// Community Widget
-import CommunityWidget from "./components/community/CommunityWidget";
-
 // Bug Bounty Courses
 import XSS from "./BugBounty/BugBountyCourse/XSS/XSS";
 import SQLi from "./BugBounty/BugBountyCourse/SQLi/SQLi";
