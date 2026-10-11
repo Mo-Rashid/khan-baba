@@ -168,14 +168,14 @@ const AllCTFLab = () => {
 
     <div className="lab-art-symbol">
       {lab.category === "web"
-        ? "</Labs>"
+        ? "🌐"
         : lab.category === "ai"
         ? "AI"
         : lab.category === "mobile"
-        ? "APK"
+        ? "📲"
         : lab.category === "cloud"
         ? "☁"
-        : "ROOT"}
+        : "🎯"}
     </div>
 
     <span className="lab-art-title">{lab.title}</span>
