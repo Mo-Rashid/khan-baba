@@ -1,7 +1,7 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const ChatMessage = require("../models/ChatMessage");
+const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -51,16 +51,38 @@ router.post("/messages", authMiddleware, async (req, res) => {
       user._id || user.id || user.userId || ""
     );
 
-    const senderName = String(
-      user.name || user.username || user.email || "Community User"
-    ).trim().slice(0, 80);
-
     if (!senderId) {
       return res.status(401).json({
         success: false,
         message: "Please sign in again to send messages.",
       });
     }
+
+    let senderName = [
+      user.firstName,
+      user.lastName
+    ].filter(Boolean).join(" ").trim();
+
+    if (!senderName) {
+      const userId = user._id || user.id || user.userId;
+
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        const dbUser = await User.findById(userId)
+          .select("firstName lastName")
+          .lean();
+
+        if (dbUser) {
+          senderName = [
+            dbUser.firstName,
+            dbUser.lastName
+          ].filter(Boolean).join(" ").trim();
+        }
+      }
+    }
+
+    senderName = (senderName || user.username || "Community User")
+      .trim()
+      .slice(0, 80);
 
     const savedMessage = await ChatMessage.create({
       senderId,
