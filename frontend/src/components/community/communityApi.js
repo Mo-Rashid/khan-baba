@@ -1,14 +1,10 @@
 
-const API_BASE = (import.meta.env.VITE_API_URL || "/api").replace(/\/+$/, "");
-
-const COMMUNITY_BASE = API_BASE.endsWith("/api")
-  ? `${API_BASE}/community`
-  : `${API_BASE}/api/community`;
+const API_BASE = (
+  import.meta.env.VITE_API_URL || "/api"
+).replace(/\/+$/, "");
 
 function readToken() {
-  const keys = ["token", "authToken", "jwt", "accessToken"];
-
-  for (const key of keys) {
+  for (const key of ["token", "authToken", "jwt", "accessToken"]) {
     const value = localStorage.getItem(key);
 
     if (value && value !== "undefined" && value !== "null") {
@@ -17,13 +13,13 @@ function readToken() {
   }
 
   try {
-    const auth = JSON.parse(localStorage.getItem("auth") || "null");
-    if (auth?.token) return auth.token;
-
     const user = JSON.parse(localStorage.getItem("user") || "null");
     if (user?.token) return user.token;
+
+    const auth = JSON.parse(localStorage.getItem("auth") || "null");
+    if (auth?.token) return auth.token;
   } catch {
-    // Ignore invalid local storage data.
+    // Ignore invalid localStorage JSON.
   }
 
   return null;
@@ -32,82 +28,37 @@ function readToken() {
 async function request(path, options = {}) {
   const token = readToken();
 
-  const headers = {
-    ...(options.body ? { "Content-Type": "application/json" } : {}),
-    ...(options.headers || {}),
-  };
-
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const response = await fetch(`${COMMUNITY_BASE}${path}`, {
+  const response = await fetch(`${API_BASE}/chat${path}`, {
     ...options,
-    headers,
+    headers: {
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
   });
 
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(
-      data.message || data.error || `Request failed (${response.status})`
-    );
+    throw new Error(data.message || `Request failed (${response.status})`);
   }
 
   return data;
 }
 
-export const communityApi = {
-  list(params = {}) {
-    const query = new URLSearchParams(params).toString();
-    return request(`/posts${query ? `?${query}` : ""}`);
+export const chatApi = {
+  list() {
+    return request("/messages");
   },
 
-  get(id) {
-    return request(`/posts/${encodeURIComponent(id)}`);
-  },
-
-  create(payload) {
-    return request("/posts", {
+  send(message) {
+    return request("/messages", {
       method: "POST",
-      body: JSON.stringify(payload),
-    });
-  },
-
-  reply(id, body) {
-    return request(`/posts/${encodeURIComponent(id)}/replies`, {
-      method: "POST",
-      body: JSON.stringify({ body }),
-    });
-  },
-
-  toggleLike(id) {
-    return request(`/posts/${encodeURIComponent(id)}/like`, {
-      method: "POST",
-    });
-  },
-
-  markSolved(id, replyId) {
-    return request(`/posts/${encodeURIComponent(id)}/solved`, {
-      method: "PATCH",
-      body: JSON.stringify({ replyId }),
-    });
-  },
-
-  remove(id) {
-    return request(`/posts/${encodeURIComponent(id)}`, {
-      method: "DELETE",
-    });
-  },
-
-  report(id, reason) {
-    return request(`/posts/${encodeURIComponent(id)}/report`, {
-      method: "POST",
-      body: JSON.stringify({ reason }),
+      body: JSON.stringify({ message }),
     });
   },
 };
 
-export function hasCommunityToken() {
+export function isChatLoggedIn() {
   return Boolean(readToken());
 }

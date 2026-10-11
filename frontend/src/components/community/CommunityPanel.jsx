@@ -1,155 +1,209 @@
 
-import { useCallback, useEffect, useState } from "react";
-import {
-  Users,
-  MessageCircle,
-  Plus,
-  RefreshCw,
-} from "lucide-react";
-import { communityApi, hasCommunityToken } from "./communityApi";
-import CreatePost from "./CreatePost";
-import CommunityPost from "./CommunityPost";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { MessageCircle, X, Send, Users, Minimize2 } from "lucide-react";
+import { chatApi, isChatLoggedIn } from "./chatApi";
 import "./community.css";
 
 export default function CommunityPanel() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showCreate, setShowCreate] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [text, setText] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const bottomRef = useRef(null);
 
-  const loadPosts = useCallback(async () => {
-    setLoading(true);
-    setError("");
+  const loadMessages = useCallback(async (showLoading = false) => {
+    if (showLoading) setLoading(true);
 
     try {
-      const result = await communityApi.list();
-      setPosts(Array.isArray(result.posts) ? result.posts : []);
+      const result = await chatApi.list();
+      setMessages(Array.isArray(result.messages) ? result.messages : []);
+      setError("");
     } catch (err) {
-      setError(err.message || "Unable to load community posts.");
+      setError(err.message || "Unable to load community messages.");
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    loadPosts();
-  }, [loadPosts]);
+    loadMessages(true);
+    const timer = window.setInterval(() => loadMessages(false), 5000);
+    return () => window.clearInterval(timer);
+  }, [loadMessages]);
 
-  async function handleCreated(post) {
-    setShowCreate(false);
+  useEffect(() => {
+    if (isOpen) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isOpen]);
 
-    if (post) {
-      setPosts((current) => [
-        post,
-        ...current.filter(
-          (item) =>
-            String(item._id || item.id) !==
-            String(post._id || post.id)
-        ),
-      ]);
-    } else {
-      await loadPosts();
+  async function handleSend(event) {
+    event.preventDefault();
+    const message = text.trim();
+
+    if (!message || sending) return;
+
+    if (!isChatLoggedIn()) {
+      setError("Please sign in before sending a message.");
+      return;
+    }
+
+    setSending(true);
+    setError("");
+
+    try {
+      const result = await chatApi.send(message);
+
+      if (result.message) {
+        setMessages((current) => [
+          ...current,
+          result.message,
+        ]);
+      }
+
+      setText("");
+      await loadMessages(false);
+    } catch (err) {
+      setError(err.message || "Message could not be sent.");
+    } finally {
+      setSending(false);
     }
   }
 
+  function formatTime(value) {
+    if (!value) return "";
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "";
+
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
   return (
-    <section className="vx-community">
-      <header className="vx-community-header">
-        <div className="vx-community-brand">
-          <div className="vx-community-logo">
-            <Users size={25} />
+    <div className="vx-chat-widget">
+      {isOpen && (
+        <section className="vx-chat-window" aria-label="VulnXploit Community chat">
+          <header className="vx-chat-header">
+            <div className="vx-chat-avatar">
+              <Users size={22} />
+            </div>
+
+            <div className="vx-chat-heading">
+              <strong>VulnXploit Community</strong>
+              <span>Share experiences with everyone</span>
+            </div>
+
+            <button
+              type="button"
+              className="vx-chat-icon-btn"
+              onClick={() => setIsOpen(false)}
+              aria-label="Minimize chat"
+              title="Minimize"
+            >
+              <Minimize2 size={18} />
+            </button>
+
+            <button
+              type="button"
+              className="vx-chat-icon-btn"
+              onClick={() => setIsOpen(false)}
+              aria-label="Close chat"
+              title="Close"
+            >
+              <X size={19} />
+            </button>
+          </header>
+
+          <div className="vx-chat-status">
+            <MessageCircle size={15} />
+            Community group chat
           </div>
 
-          <div>
-            <h2>VulnXploit Community</h2>
-            <p>
-              Ask questions, share knowledge, and solve security challenges.
-            </p>
+          <div className="vx-chat-messages">
+            {loading ? (
+              <div className="vx-chat-placeholder">Loading messages...</div>
+            ) : messages.length === 0 ? (
+              <div className="vx-chat-placeholder">
+                <MessageCircle size={34} />
+                <strong>No messages yet</strong>
+                <span>Start the conversation!</span>
+              </div>
+            ) : (
+              messages.map((item) => (
+                <article
+                  className="vx-chat-message"
+                  key={item._id || `${item.senderId}-${item.createdAt}`}
+                >
+                  <div className="vx-chat-message-name">
+                    {item.senderName || "Community User"}
+                  </div>
+
+                  <div className="vx-chat-message-text">
+                    {item.message}
+                  </div>
+
+                  <time className="vx-chat-time">
+                    {formatTime(item.createdAt)}
+                  </time>
+                </article>
+              ))
+            )}
+
+            <div ref={bottomRef} />
           </div>
-        </div>
 
-        <button
-          className="vx-community-primary"
-          type="button"
-          onClick={() => setShowCreate((value) => !value)}
-        >
-          <Plus size={17} />
-          {showCreate ? "Close" : "Create Post"}
-        </button>
-      </header>
+          {error && (
+            <div className="vx-chat-error" role="alert">
+              {error}
+            </div>
+          )}
 
-      <div className="vx-community-stats">
-        <div className="vx-community-stat-item">
-          <MessageCircle size={20} />
-          <div>
-            <strong>{posts.length}</strong>
-            <span>Posts loaded</span>
-          </div>
-        </div>
-
-        <button
-          className="vx-community-refresh"
-          type="button"
-          onClick={loadPosts}
-          disabled={loading}
-        >
-          <RefreshCw size={15} />
-          Refresh
-        </button>
-      </div>
-
-      {showCreate && (
-        <CreatePost
-          onCreated={handleCreated}
-          onCancel={() => setShowCreate(false)}
-        />
-      )}
-
-      {!hasCommunityToken() && (
-        <div className="vx-community-note">
-          Sign in to publish posts, reply to discussions, and like posts.
-        </div>
-      )}
-
-      {error && (
-        <div className="vx-community-error" role="alert">
-          <span>{error}</span>
-          <button type="button" onClick={loadPosts}>
-            Try again
-          </button>
-        </div>
-      )}
-
-      {loading ? (
-        <div className="vx-community-empty">
-          Loading community discussions...
-        </div>
-      ) : posts.length === 0 && !error ? (
-        <div className="vx-community-empty">
-          <MessageCircle size={36} />
-          <h3>No discussions yet</h3>
-          <p>Be the first to start a security discussion.</p>
-
-          <button
-            className="vx-community-primary"
-            type="button"
-            onClick={() => setShowCreate(true)}
-          >
-            <Plus size={16} />
-            Create first post
-          </button>
-        </div>
-      ) : (
-        <div className="vx-community-feed">
-          {posts.map((post) => (
-            <CommunityPost
-              key={post._id || post.id}
-              post={post}
-              onChanged={loadPosts}
+          <form className="vx-chat-composer" onSubmit={handleSend}>
+            <input
+              type="text"
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+              placeholder={
+                isChatLoggedIn()
+                  ? "Type a message..."
+                  : "Sign in to send a message"
+              }
+              maxLength={2000}
+              aria-label="Your message"
+              disabled={sending}
             />
-          ))}
-        </div>
+
+            <button
+              type="submit"
+              disabled={!text.trim() || sending}
+              aria-label="Send message"
+              title="Send message"
+            >
+              <Send size={18} />
+            </button>
+          </form>
+
+          <footer className="vx-chat-footer">
+            Be respectful. Never share passwords or secret keys.
+          </footer>
+        </section>
       )}
-    </section>
+
+      <button
+        type="button"
+        className={`vx-chat-launcher ${isOpen ? "is-open" : ""}`}
+        onClick={() => setIsOpen((current) => !current)}
+        aria-label={isOpen ? "Close community chat" : "Open community chat"}
+        title="VulnXploit Community"
+      >
+        {isOpen ? <X size={25} /> : <MessageCircle size={27} />}
+        {!isOpen && <span className="vx-chat-launcher-dot" />}
+      </button>
+    </div>
   );
 }

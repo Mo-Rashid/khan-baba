@@ -218,6 +218,7 @@ function App() {
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
+        <Route  path="/community"  element={<CommunityPanel />}/>
       </Routes>
 
       {/* Community Widget - Always visible on all pages */}

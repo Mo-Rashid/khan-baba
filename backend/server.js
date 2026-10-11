@@ -56,6 +56,7 @@ app.use(express.json());
 app.use(express.json({limit: "1mb", }));
 app.use(express.urlencoded({ extended: true }));
 
+const chatRoutes = require("./routes/chatRoutes");
 
 
 // ====================== ROUTES (middleware ke baad) ======================
@@ -65,6 +66,7 @@ app.use("/api/labs/mobile", mobileRouter);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/labs", labRoutes);
 
+app.use("/api/chat", chatRoutes);
 // ======================================================
 // EMAIL FUNCTION
 // ======================================================
