@@ -220,8 +220,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {/* Community Widget - Always visible on all pages */}
-      <CommunityWidget />
+   
     </>
   );
 }
