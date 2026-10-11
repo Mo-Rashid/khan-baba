@@ -971,3 +971,73 @@
     padding: 15px;
   }
 }
+
+
+/* Code-generated course artwork — replaces external images */
+
+.bugbounty-page .course-image.code-art {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 80% 20%, #471477 0%, transparent 48%),
+    linear-gradient(135deg, #10091c, #08050e 75%);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.code-art-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+.code-art-content {
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.code-art-label {
+  color: #c084fc;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.code-art-symbol {
+  color: #d8b4fe;
+  font-size: clamp(42px, 6vw, 64px);
+  font-weight: 800;
+  line-height: 1.2;
+  text-shadow: 0 0 24px rgba(168, 85, 247, 0.55);
+}
+
+.code-art-title {
+  color: #f3e8ff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.code-art-line {
+  color: #a78bfa;
+  font-family: monospace;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.bugbounty-page .course-image.code-art .course-level {
+  z-index: 2;
+}

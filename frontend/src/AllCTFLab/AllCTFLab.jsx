@@ -20,6 +20,12 @@ const AllCTFLab = () => {
     "redteam-ad-lab": false,
   };
 
+
+
+  // in this section change the img 
+
+  
+
   const totalLabs = allCTFLabs.length;
   const solvedCount = Object.values(solvedLabs).filter(Boolean).length;
   const overallPercent = Math.round((solvedCount / totalLabs) * 100) || 0;
@@ -147,19 +153,38 @@ const AllCTFLab = () => {
                           className="course-card"
                           key={lab.id}
                         >
-                          <div className="course-image">
-                            <img
-                              src={lab.image}
-                              alt={lab.title}
-                              onError={(e) => {
-                                e.target.src =
-                                  "https://via.placeholder.com/400x220/1a0b2e/a855f7?text=" +
-                                  encodeURIComponent(lab.title);
-                              }}
-                            />
-                            <span className="course-level">{lab.level}</span>
-                            
-                          </div>
+                          
+<div className={`course-image lab-code-art lab-art-${lab.category}`}>
+  <span className="course-level">{lab.level}</span>
+
+  {solvedLabs[lab.id] && (
+    <span className="solved-badge">✓ Solved</span>
+  )}
+
+  <div className="lab-art-grid" />
+
+  <div className="lab-art-content">
+    <span className="lab-art-label">VULNXploit / CTF LAB</span>
+
+    <div className="lab-art-symbol">
+      {lab.category === "web"
+        ? "</Labs>"
+        : lab.category === "ai"
+        ? "AI"
+        : lab.category === "mobile"
+        ? "APK"
+        : lab.category === "cloud"
+        ? "☁"
+        : "ROOT"}
+    </div>
+
+    <span className="lab-art-title">{lab.title}</span>
+    <span className="lab-art-terminal">
+      {">"} challenge.initialize()
+    </span>
+  </div>
+</div>
+
                           <div className="course-content">
                             <h3>{lab.title}</h3>
                             <p>{lab.description}</p>

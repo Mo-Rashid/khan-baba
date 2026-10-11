@@ -1090,3 +1090,79 @@
     padding: 15px;
   }
 }
+
+
+/* CSS-generated Red Teaming course artwork */
+.redteaming-page .course-image.rt-code-art {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 80% 20%,
+      #471477 0%,
+      transparent 48%
+    ),
+    linear-gradient(135deg, #10091c, #08050e 75%);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.redteaming-page .rt-art-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+.redteaming-page .rt-art-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.redteaming-page .rt-art-label {
+  color: #c084fc;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.redteaming-page .rt-art-symbol {
+  color: #d8b4fe;
+  font-size: clamp(42px, 6vw, 64px);
+  font-weight: 800;
+  line-height: 1.2;
+  text-shadow: 0 0 24px rgba(168, 85, 247, 0.55);
+}
+
+.redteaming-page .rt-art-title {
+  color: #f3e8ff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.redteaming-page .rt-art-line {
+  color: #a78bfa;
+  font-family: monospace;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.redteaming-page .course-image.rt-code-art .course-level {
+  z-index: 2;
+}

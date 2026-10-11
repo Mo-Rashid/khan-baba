@@ -15,7 +15,7 @@ export const allCTFLabs = [
     description: "Practice reflected, stored and DOM-based XSS in realistic apps.",
     category: "web",
     level: "Beginner",
-    image: "/images/labs/web-xss.png",
+    
 
     path: "/ctf-lab/web-xss-lab"
 },
@@ -30,8 +30,7 @@ export const allCTFLabs = [
 
     level: "Intermediate",
 
-    image: "/images/labs/web-sqli.png",
-
+    
     path: "/ctf-lab/web-sqli-lab"
 },
   {
@@ -45,7 +44,7 @@ export const allCTFLabs = [
 
     level: "Advanced",
 
-    image: "/images/labs/web-ssrf.png",
+   
 
     path: "/ctf-lab/web-ssrf-lab"
 },
@@ -60,7 +59,7 @@ export const allCTFLabs = [
 
     level: "Intermediate",
 
-    image: "/images/labs/web-csrf.png",
+    
 
     path: "/ctf-lab/web-csrf-lab"
 },
@@ -77,7 +76,7 @@ export const allCTFLabs = [
 
     level: "Advanced",
 
-    image: "/images/labs/web-xxe.png",
+   
 
     path: "/ctf-lab/web-xxe-lab"
 },
@@ -94,8 +93,7 @@ export const allCTFLabs = [
 
     level: "Intermediate",
 
-    image: "/images/labs/web-idor.png",
-
+   
     path: "/ctf-lab/web-idor-lab"
 },
 
@@ -111,7 +109,7 @@ export const allCTFLabs = [
 
     level: "Advanced",
 
-    image: "/images/labs/web-file-upload.png",
+  
 
     path: "/ctf-lab/web-file-upload-lab"
 },
@@ -135,7 +133,7 @@ export const allCTFLabs = [
   "Analyze an AI assistant, test prompt manipulation techniques, identify instruction weaknesses, and discover the hidden flag.",
   category: "ai",
   level: "Intermediate",
-  image: "/images/labs/prompt-injection.png",
+ 
   path: "/ctf-lab/prompt-injection-lab",
 },
 
@@ -146,7 +144,7 @@ export const allCTFLabs = [
    "Interact with a controlled LLM environment, explore safety-boundary weaknesses, and discover the hidden flag.",
   category: "ai",
   level: "Advanced",
-  image: "/images/labs/llm-jailbreak.png",
+  
   path: "/ctf-lab/llm-jailbreak-lab",
 },
 
@@ -158,7 +156,7 @@ export const allCTFLabs = [
 
   category: "ai",
   level: "Advanced",
-  image: "/images/labs/rag-security.png",
+
   path: "/ctf-lab/rag-security-lab",
 },
 
@@ -169,7 +167,7 @@ export const allCTFLabs = [
       "Analyze an AI customer-support application and identify weaknesses in its instruction handling.",
     category: "ai",
     level: "Intermediate",
-    image: "/images/labs/customer-support-ai.png",
+    
     path: "/ctf-lab/customer-support-ai-lab",
   },
 
@@ -180,7 +178,7 @@ export const allCTFLabs = [
       "Analyze how hidden system instructions can be exposed through unsafe instruction handling.",
     category: "ai",
     level: "Intermediate",
-    image: "/images/labs/system-prompt-leak.png",
+    
     path: "/ctf-lab/system-prompt-leak",
   },
 
@@ -191,7 +189,7 @@ export const allCTFLabs = [
       "Investigate malicious instructions embedded inside external content processed by an AI application.",
     category: "ai",
     level: "Intermediate",
-    image: "/images/labs/indirect-injection.png",
+  
     path: "/ctf-lab/indirect-injection",
   },
 
@@ -202,7 +200,7 @@ export const allCTFLabs = [
       "Analyze an AI application's tool-calling workflow and identify authorization weaknesses.",
     category: "ai",
     level: "Advanced",
-    image: "/images/labs/tool-abuse.png",
+   
     path: "/ctf-lab/tool-abuse",
   },
 
@@ -213,7 +211,7 @@ export const allCTFLabs = [
       "Analyze how multiple conversation turns can gradually influence an AI application's behavior.",
     category: "ai",
     level: "Advanced",
-    image: "/images/labs/multi-turn-jailbreak.png",
+   
     path: "/ctf-lab/multi-turn-jailbreak",
   },
 
@@ -224,7 +222,7 @@ export const allCTFLabs = [
       "Evaluate weaknesses in AI safety controls and understand how applications should enforce guardrails.",
     category: "ai",
     level: "Advanced",
-    image: "/images/labs/guardrail-bypass.png",
+    
     path: "/ctf-lab/guardrail-bypass",
   },
 
@@ -239,7 +237,7 @@ export const allCTFLabs = [
     "Analyze an intentionally vulnerable Android application, inspect the APK, identify security weaknesses, and discover the hidden flag.",
   category: "mobile",
   level: "Intermediate",
-  image: "/images/labs/mobile-android.png",
+ 
   path: "/ctf-lab/mobile-android-lab",
 },
 
@@ -250,7 +248,7 @@ export const allCTFLabs = [
     "Analyze an intentionally vulnerable iOS application and discover the hidden flag.",
   category: "mobile",
   level: "Advanced",
-  image: "/images/labs/mobile-ios.png",
+
   path: "/ctf-lab/mobile-ios-lab",
 },
 
@@ -261,7 +259,7 @@ export const allCTFLabs = [
     "Download an intentionally vulnerable APK, perform static analysis, and discover the hidden flag.",
   category: "mobile",
   level: "Intermediate",
-  image: "/images/labs/mobile-apk.png",
+  
   path: "/ctf-lab/mobile-apk-analysis",
 },
 {
@@ -271,7 +269,7 @@ export const allCTFLabs = [
     "Analyze an intentionally vulnerable Android application and discover the hardcoded flag.",
   category: "mobile",
   level: "Beginner",
-  image: "/images/labs/mobile-hardcode.png",
+  
   path: "/ctf-lab/mobile-hardcode-flag",
 },
 
@@ -282,7 +280,7 @@ export const allCTFLabs = [
     "Decompile an intentionally vulnerable APK using Apktool, analyze the application files, and discover the hidden flag.",
   category: "mobile",
   level: "Intermediate",
-  image: "/images/labs/mobile-apktool.png",
+
   path: "/ctf-lab/mobile-vuln-apktool",
 },
 
@@ -293,7 +291,7 @@ export const allCTFLabs = [
     "Analyze an intentionally vulnerable Android application and identify the security weakness to discover the hidden flag.",
   category: "mobile",
   level: "Intermediate",
-  image: "/images/labs/mobile-vulnx.png",
+  
   path: "/ctf-lab/mobile-vulnx",
 },
 
@@ -304,7 +302,7 @@ export const allCTFLabs = [
     "Complete an advanced Android security challenge by analyzing the vulnerable application and discovering the hidden flag.",
   category: "mobile",
   level: "Advanced",
-  image: "/images/labs/mobile-vulnx2.png",
+  
   path: "/ctf-lab/mobile-vulnx2",
 },
   // CLOUD
@@ -317,7 +315,7 @@ export const allCTFLabs = [
     "Learn AWS security fundamentals through simulated cloud environments, IAM configuration, S3 security, and secure cloud practices.",
   category: "cloud",
   level: "Easy",
-  image: "/images/labs/cloud-aws.png",
+  
   path: "/cloud/aws",
 },
 
@@ -328,7 +326,7 @@ export const allCTFLabs = [
     "Practice service principal abuse, RBAC misconfigurations, and simulated Azure AD privilege escalation.",
   category: "cloud",
   level: "Advanced",
-  image: "/images/labs/cloud-azure.png",
+  
   path: "/cloud/azure",
 },
 
@@ -339,7 +337,7 @@ export const allCTFLabs = [
     "Practice IAM misconfigurations, service-account abuse, storage exposure, and cloud privilege escalation.",
   category: "cloud",
   level: "Advanced",
-  image: "/images/labs/cloud-gcp.png",
+ 
   path: "/cloud/google",
 },
 
@@ -354,7 +352,7 @@ export const allCTFLabs = [
       "Explore a controlled system environment and discover the hidden flag.",
     category: "redteam",
     level: "Intermediate",
-    image: "/images/labs/system-hacking.png",
+    
     path: "/ctf-lab/redteam-system-hacking",
   },
 
@@ -365,7 +363,7 @@ export const allCTFLabs = [
       "Analyze a controlled application and discover the hidden flag.",
     category: "redteam",
     level: "Advanced",
-    image: "/images/labs/reverse-engineering.png",
+   
     path: "/ctf-lab/redteam-reverse-engineering",
   },
 
@@ -376,7 +374,7 @@ export const allCTFLabs = [
       "Assess a controlled network environment and identify security weaknesses.",
     category: "redteam",
     level: "Advanced",
-    image: "/images/labs/network-pentesting.png",
+   
     path: "/ctf-lab/redteam-network-pentesting",
   },
 
@@ -387,7 +385,7 @@ export const allCTFLabs = [
       "Analyze a controlled web application and discover the hidden flag.",
     category: "redteam",
     level: "Advanced",
-    image: "/images/labs/web-redteam.png",
+    
     path: "/ctf-lab/redteam-web",
   },
 
@@ -398,7 +396,7 @@ export const allCTFLabs = [
       "Analyze a controlled social-engineering scenario and discover the hidden flag.",
     category: "redteam",
     level: "Intermediate",
-    image: "/images/labs/social-engineering.png",
+   
     path: "/ctf-lab/redteam-social-engineering",
   },
 

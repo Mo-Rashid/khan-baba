@@ -10,48 +10,42 @@ export const aiRedTeamingCourses = [
     title: "AI Red Teaming Fundamentals",
     description:
       "Learn the core concepts of AI Red Teaming, threat models for LLMs, safety alignment, and how to approach AI system assessments.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/ljCUlblC4PL0KSq9q5fD/image.png",
-    level: "Beginner",
+       level: "Beginner",
   },
   {
     id: "prompt-injection",
     title: "Prompt Injection Attacks",
     description:
       "Master direct and indirect prompt injection techniques, system prompt extraction, and defense strategies against injection attacks.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/XI2GlXMrrTmAW31JYRV7/image.png",
-    level: "Intermediate",
+        level: "Intermediate",
   },
   {
     id: "jailbreaking-llms",
     title: "Jailbreaking LLMs",
     description:
       "Explore jailbreak techniques, role-playing attacks, multi-turn manipulation, and methods to bypass safety guardrails.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/NSW3SLrcus0Gtx9VynjS/image.png",
-    level: "Intermediate to Advanced",
+        level: "Intermediate to Advanced",
   },
   {
     id: "llm-security",
     title: "LLM Security & Guardrails",
     description:
       "Understand LLM security risks, output filtering, alignment failures, and how to evaluate the effectiveness of safety controls.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/O6TDZTvDfASNz7eRtWNJ/image.png",
-    level: "Intermediate",
+      level: "Intermediate",
   },
   {
     id: "rag-attacks",
     title: "RAG & Retrieval Attacks",
     description:
       "Learn how to attack Retrieval-Augmented Generation systems through document poisoning, indirect injection, and data leakage.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/IYy1fDiHnwmwACe4Y1AR/image.png",
-    level: "Advanced",
+     level: "Advanced",
   },
   {
     id: "ai-agents-tools",
     title: "AI Agents & Tool Abuse",
     description:
       "Assess risks in AI agents, tool calling, privilege escalation through tools, and securing agentic workflows.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/5tjnB62KUzaXGq1Ow64D/image.png",
-    level: "Advanced",
+     level: "Advanced",
   },
   {
     id: "data-leakage-memorization",
@@ -66,7 +60,6 @@ export const aiRedTeamingCourses = [
     title: "Adversarial Machine Learning",
     description:
       "Explore adversarial inputs, evasion techniques, model extraction, and attacks against classifiers and safety filters.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/7Cz5RvDuyx2qOTdx8HN7/image.png",
     level: "Advanced",
   },
   {
@@ -74,15 +67,13 @@ export const aiRedTeamingCourses = [
     title: "AI Risk Assessment & Governance",
     description:
       "Build structured AI risk assessments, evaluate real-world impact, and create actionable recommendations for AI systems.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/YrhL7562nwhdyH1zFiby/image.png",
-    level: "Intermediate to Advanced",
+     level: "Intermediate to Advanced",
   },
   {
     id: "ai-red-team-methodology",
     title: "AI Red Team Methodology",
     description:
       "Learn professional methodology for AI Red Teaming engagements, scoping, reporting, and continuous testing programs.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/5m5cXJ6DX9RDGib2GQ9N/image.png",
     level: "Advanced",
   },
 ];
@@ -137,18 +128,25 @@ const AIRedTeaming = () => {
               className="course-card"
               key={course.id}
             >
-              <div className="course-image">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/400x220/1a0b2e/a855f7?text=" +
-                      encodeURIComponent(course.title);
-                  }}
-                />
-                <span className="course-level">{course.level}</span>
-              </div>
+              
+<div className={`course-image ai-code-art ai-art-${course.id}`}>
+  <span className="course-level">{course.level}</span>
+
+  <div className="ai-art-grid" />
+
+  <div className="ai-art-content">
+    <span className="ai-art-label">VULNXploit / AI RED TEAMING</span>
+
+    <div className="ai-art-symbol">{"</>"}</div>
+
+    <span className="ai-art-title">{course.title}</span>
+
+    <span className="ai-art-line">
+      {">"} ai_security.test()
+    </span>
+  </div>
+</div>
+
               <div className="course-content">
                 <h3>{course.title}</h3>
                 <p>{course.description}</p>

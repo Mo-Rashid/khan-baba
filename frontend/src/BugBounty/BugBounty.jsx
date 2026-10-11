@@ -57,19 +57,22 @@ const BugBounty = () => {
               className="course-card"
               key={course.id}
             >
-              <div className="course-image">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/400x220/1a0b2e/a855f7?text=" +
-                      course.title.replace(/\s/g, "+");
-                  }}
-                />
-                <span className="course-level">{course.level}</span>
-              </div>
+              <div className={`course-image code-art code-art-${course.id}`}>
+  <span className="course-level">{course.level}</span>
 
+  <div className="code-art-content">
+    <span className="code-art-label">VULNXploit / BUG BOUNTY</span>
+    <div className="code-art-symbol">
+      {"</>"}
+    </div>
+    <span className="code-art-title">{course.title}</span>
+    <span className="code-art-line">
+      {'>'} vulnerability.research()
+    </span>
+  </div>
+
+  <div className="code-art-grid" />
+</div>
               <div className="course-content">
                 <h3>{course.title}</h3>
                 <p>{course.description}</p>

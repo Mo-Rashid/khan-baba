@@ -10,7 +10,7 @@ export const ethicalHackingCourses = [
     title: "Introduction to Ethical Hacking",
     description:
       "Understand ethical hacking fundamentals, types of hackers, hacking phases, legal frameworks, and the role of ethical hackers in cybersecurity.",
-    image: "/images/courses/eh-introduction.png",
+    
     level: "Beginner",
   },
   {
@@ -18,7 +18,7 @@ export const ethicalHackingCourses = [
     title: "Linux Basics for Hackers",
     description:
       "Master essential Linux commands, file system navigation, permissions, scripting basics, and the terminal skills every ethical hacker needs.",
-    image: "/images/courses/eh-linux.png",
+   
     level: "Beginner",
   },
   {
@@ -26,7 +26,7 @@ export const ethicalHackingCourses = [
     title: "Networking Fundamentals",
     description:
       "Learn TCP/IP, OSI model, ports, protocols, subnetting, and network architecture concepts critical for security assessments.",
-    image: "/images/courses/eh-networking.png",
+    
     level: "Beginner to Intermediate",
   },
   {
@@ -34,7 +34,7 @@ export const ethicalHackingCourses = [
     title: "Footprinting and Reconnaissance",
     description:
       "Explore passive and active information gathering techniques, OSINT tools, Google hacking, and target profiling methods.",
-    image: "/images/courses/eh-footprinting.png",
+    
     level: "Beginner to Intermediate",
   },
   {
@@ -42,7 +42,7 @@ export const ethicalHackingCourses = [
     title: "Scanning Techniques",
     description:
       "Understand network scanning, port scanning, vulnerability scanning, and how to identify live hosts and open services.",
-    image: "/images/courses/eh-scanning.png",
+    
     level: "Intermediate",
   },
   {
@@ -50,7 +50,7 @@ export const ethicalHackingCourses = [
     title: "Enumeration Techniques",
     description:
       "Learn service enumeration, user and share discovery, SNMP, LDAP, NetBIOS, and extracting valuable target information.",
-    image: "/images/courses/eh-enumeration.png",
+    
     level: "Intermediate",
   },
   {
@@ -58,7 +58,7 @@ export const ethicalHackingCourses = [
     title: "Social Engineering",
     description:
       "Study human-based attack vectors, phishing, pretexting, baiting, and defense strategies against social engineering.",
-    image: "/images/courses/eh-social-engineering.png",
+   
     level: "Intermediate",
   },
   {
@@ -66,7 +66,7 @@ export const ethicalHackingCourses = [
     title: "Sniffing and Spoofing",
     description:
       "Understand packet sniffing, ARP spoofing, MAC spoofing, man-in-the-middle concepts, and network traffic analysis.",
-    image: "/images/courses/eh-sniffing.png",
+   
     level: "Intermediate",
   },
   {
@@ -74,7 +74,7 @@ export const ethicalHackingCourses = [
     title: "Session Hijacking",
     description:
       "Learn session management flaws, cookie hijacking, TCP session hijacking, and methods to detect and prevent session attacks.",
-    image: "/images/courses/eh-session-hijacking.png",
+   
     level: "Intermediate to Advanced",
   },
   {
@@ -82,7 +82,7 @@ export const ethicalHackingCourses = [
     title: "Password Attacks",
     description:
       "Explore password cracking techniques, dictionary attacks, brute force, rainbow tables, and password security best practices.",
-    image: "/images/courses/eh-password.png",
+    
     level: "Intermediate",
   },
   {
@@ -90,7 +90,7 @@ export const ethicalHackingCourses = [
     title: "Vulnerability Assessment",
     description:
       "Learn systematic vulnerability identification, scanning tools, risk rating, and reporting findings for authorized assessments.",
-    image: "/images/courses/eh-vulnerability.png",
+
     level: "Intermediate to Advanced",
   },
   {
@@ -98,7 +98,7 @@ export const ethicalHackingCourses = [
     title: "Network Penetration Testing",
     description:
       "Apply end-to-end network penetration testing methodology: recon, scanning, exploitation concepts, and professional reporting.",
-    image: "/images/courses/eh-network-pentest.png",
+    
     level: "Advanced",
   },
 ];
@@ -153,18 +153,25 @@ const EthicalHacking = () => {
               className="course-card"
               key={course.id}
             >
-              <div className="course-image">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/400x220/1a0b2e/a855f7?text=" +
-                      encodeURIComponent(course.title);
-                  }}
-                />
-                <span className="course-level">{course.level}</span>
-              </div>
+              
+<div className={`course-image eh-code-art eh-art-${course.id}`}>
+  <span className="course-level">{course.level}</span>
+
+  <div className="eh-art-grid" />
+
+  <div className="eh-art-content">
+    <span className="eh-art-label">VULNXploit / ETHICAL HACKING</span>
+
+    <div className="eh-art-symbol">{"</>"}</div>
+
+    <span className="eh-art-title">{course.title}</span>
+
+    <span className="eh-art-line">
+      {">"} security.assessment()
+    </span>
+  </div>
+</div>
+
 
               <div className="course-content">
                 <h3>{course.title}</h3>

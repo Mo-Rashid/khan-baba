@@ -10,8 +10,7 @@ export const redTeamingCourses = [
     title: "Red Team Fundamentals",
     description:
       "Learn red team concepts, objectives, rules of engagement, attack lifecycle, and professional adversary simulation methodology.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/HDOlk1tb2LpPqhq0sKzo/image.png",
-    level: "Beginner",
+     level: "Beginner",
   },
 
   {
@@ -19,7 +18,6 @@ export const redTeamingCourses = [
     title: "Recon & OSINT",
     description:
       "Master passive and active reconnaissance, OSINT frameworks, target profiling, and attack surface discovery.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/0KhptUleuWeXYrGasvoW/image.png",
     level: "Beginner to Intermediate",
   },
 
@@ -28,8 +26,7 @@ export const redTeamingCourses = [
     title: "Initial Access Techniques",
     description:
       "Understand how red teams gain initial footholds through phishing simulations, exposed services, and entry vectors.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/8YyafxXg3dGjjADQBdo5/image.png",
-    level: "Intermediate",
+     level: "Intermediate",
   },
 
   {
@@ -37,8 +34,7 @@ export const redTeamingCourses = [
     title: "Payload Development Fundamentals",
     description:
       "Learn payload concepts, delivery methods, execution flow, and payload analysis for authorized security assessments.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/8lMDihg0lKldvpdzXYjx/image.png",
-    level: "Intermediate to Advanced",
+     level: "Intermediate to Advanced",
   },
 
   {
@@ -46,8 +42,7 @@ export const redTeamingCourses = [
     title: "Privilege Escalation (Windows & Linux)",
     description:
       "Explore Windows and Linux privilege escalation concepts, misconfigurations, permissions, and security controls.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/dqnBqSxOXoqhQHZifCC0/image.png",
-    level: "Intermediate to Advanced",
+     level: "Intermediate to Advanced",
   },
 
   {
@@ -55,8 +50,7 @@ export const redTeamingCourses = [
     title: "Cloud Red Teaming",
     description:
       "Learn cloud security assessment concepts across AWS, Azure, and GCP environments with identity and access focus.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/smQfTpv5E5BCChJm5QyU/image.png",
-    level: "Advanced",
+     level: "Advanced",
   },
 
   {
@@ -64,8 +58,7 @@ export const redTeamingCourses = [
     title: "External Network Penetration Testing",
     description:
       "Assess internet-facing infrastructure, services, vulnerabilities, and external attack surfaces.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/iNi91S1UWhSuhegphKCo/image.png",
-    level: "Intermediate",
+     level: "Intermediate",
   },
 
   {
@@ -73,8 +66,7 @@ export const redTeamingCourses = [
     title: "Mobile Red Teaming",
     description:
       "Understand mobile application security testing, Android/iOS attack surfaces, and mobile threat simulation.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/EhtQWpYGl2JcvdRCPJtV/image.png",
-    level: "Advanced",
+      level: "Advanced",
   },
 
   {
@@ -82,8 +74,7 @@ export const redTeamingCourses = [
     title: "Wireless Network Attacks",
     description:
       "Learn wireless security fundamentals, WiFi assessment techniques, encryption weaknesses, and defense strategies.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/bZ1cv3KbnERSesiLZrWK/image.png",
-    level: "Intermediate",
+      level: "Intermediate",
   },
 
   {
@@ -91,8 +82,7 @@ export const redTeamingCourses = [
     title: "Active Directory Attacks",
     description:
       "Master Active Directory security concepts including authentication, trust relationships, identity attacks, and enterprise security testing.",
-    image: "https://plain-apac-prod-public.komododecks.com/202610/03/pZJ3A7aZyvICVcvdjZLJ/image.png",
-    level: "Advanced",
+     level: "Advanced",
   },
 ];
 const RedTeaming = () => {
@@ -145,18 +135,25 @@ const RedTeaming = () => {
               className="course-card"
               key={course.id}
             >
-              <div className="course-image">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/400x220/1a0b2e/a855f7?text=" +
-                      encodeURIComponent(course.title);
-                  }}
-                />
-                <span className="course-level">{course.level}</span>
-              </div>
+              
+<div className={`course-image rt-code-art rt-art-${course.id}`}>
+  <span className="course-level">{course.level}</span>
+
+  <div className="rt-art-grid" />
+
+  <div className="rt-art-content">
+    <span className="rt-art-label">VULNXploit / RED TEAMING</span>
+
+    <div className="rt-art-symbol">{"</>"}</div>
+
+    <span className="rt-art-title">{course.title}</span>
+
+    <span className="rt-art-line">
+      {">"} adversary.simulation()
+    </span>
+  </div>
+</div>
+
 
               <div className="course-content">
                 <h3>{course.title}</h3>

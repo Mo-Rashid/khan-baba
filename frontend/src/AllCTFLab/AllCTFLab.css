@@ -1049,3 +1049,101 @@
     padding: 13px;
   }
 }
+
+/* CSS-generated artwork for CTF lab cards */
+.ctflab-page .course-image.lab-code-art {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 75% 25%,
+      rgba(126, 34, 206, 0.42),
+      transparent 52%
+    ),
+    linear-gradient(135deg, #10091c, #050309 80%);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.ctflab-page .lab-art-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(168, 85, 247, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+.ctflab-page .lab-art-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  text-align: center;
+}
+
+.ctflab-page .lab-art-label {
+  color: #c084fc;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.ctflab-page .lab-art-symbol {
+  color: #f3e8ff;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 1.15;
+  font-weight: 900;
+  text-shadow: 0 0 22px rgba(168, 85, 247, 0.65);
+}
+
+.ctflab-page .lab-art-title {
+  max-width: 95%;
+  color: #e9d5ff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ctflab-page .lab-art-terminal {
+  color: #a78bfa;
+  font-family: monospace;
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+.ctflab-page .course-image.lab-code-art .course-level,
+.ctflab-page .course-image.lab-code-art .solved-badge {
+  z-index: 2;
+}
+
+.ctflab-page .lab-art-web .lab-art-symbol {
+  color: #c084fc;
+}
+
+.ctflab-page .lab-art-ai .lab-art-symbol {
+  color: #e9d5ff;
+}
+
+.ctflab-page .lab-art-mobile .lab-art-symbol {
+  color: #d8b4fe;
+}
+
+.ctflab-page .lab-art-cloud .lab-art-symbol {
+  color: #a78bfa;
+}
+
+.ctflab-page .lab-art-redteam .lab-art-symbol {
+  color: #f5d0fe;
+}
