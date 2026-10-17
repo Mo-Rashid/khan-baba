@@ -1,7 +1,5 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
+const express = require("express");
 const User = require("../models/User");
 
 const router = express.Router();
@@ -11,173 +9,111 @@ const router = express.Router();
 ========================================= */
 
 function normalizeEmail(email) {
-  return String(email || "")
-    .trim()
-    .toLowerCase();
+  return String(email || "").trim().toLowerCase();
 }
 
-function createToken(user) {
-  return jwt.sign(
-    {
-      id: user._id.toString(),
-      email: user.email,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
+function normalizeUsername(username) {
+  return String(username || "").trim().toLowerCase();
 }
 
 function publicUser(user) {
   return {
     id: user._id.toString(),
-    firstName: user.firstName,
-    lastName: user.lastName,
+    username: user.username,
     email: user.email,
     isVerified: user.isVerified,
   };
 }
 
 /* =========================================
-   SIGNUP
+   SIGNUP — USERNAME + EMAIL ONLY
+   POST /api/auth/signup
 ========================================= */
 
 router.post("/signup", async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-    } = req.body;
+    const username = normalizeUsername(req.body?.username);
+    const email = normalizeEmail(req.body?.email);
 
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !password
-    ) {
+    // Validate required fields
+    if (!username || !email) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "Username and email are required.",
       });
     }
 
-    if (password.length < 8) {
+    // Validate username
+    if (!/^[a-z0-9_.-]{3,30}$/.test(username)) {
       return res.status(400).json({
         success: false,
         message:
-          "Password must be at least 8 characters",
+          "Username must be 3–30 characters and contain only letters, numbers, dots, underscores or hyphens.",
       });
     }
 
-    const normalizedEmail =
-      normalizeEmail(email);
-
-    const existingUser =
-      await User.findOne({
-        email: normalizedEmail,
-      });
-
-    if (existingUser) {
-      return res.status(409).json({
+    // Validate email
+    if (
+      email.length > 254 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ) {
+      return res.status(400).json({
         success: false,
-        message: "Email already registered",
+        message: "Please enter a valid email address.",
       });
     }
 
-    const hashedPassword =
-      await bcrypt.hash(password, 12);
-
-    const user = await User.create({
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email: normalizedEmail,
-      password: hashedPassword,
-      isVerified: true,
+    // Check username and email uniqueness
+    const existingUser = await User.findOne({
+      $or: [{ username }, { email }],
     });
 
-    const token = createToken(user);
+    if (existingUser) {
+      if (existingUser.username === username) {
+        return res.status(409).json({
+          success: false,
+          message: "Username is already taken.",
+        });
+      }
+
+      return res.status(409).json({
+        success: false,
+        message: "Email is already registered.",
+      });
+    }
+
+    // Create an unverified account.
+    // Login is completed later through email OTP.
+    const user = await User.create({
+      username,
+      email,
+      isVerified: false,
+    });
 
     return res.status(201).json({
       success: true,
-      message: "Account created successfully",
+      message: "Account created successfully. Please login and verify your email OTP.",
       user: publicUser(user),
-      token,
     });
-
   } catch (error) {
+    // Handle duplicate-key errors caused by concurrent requests
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern || {})[0];
+
+      return res.status(409).json({
+        success: false,
+        message:
+          field === "username"
+            ? "Username is already taken."
+            : "Email is already registered.",
+      });
+    }
+
     console.error("SIGNUP ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Unable to create account",
-    });
-  }
-});
-
-/* =========================================
-   LOGIN
-========================================= */
-
-router.post("/login", async (req, res) => {
-  try {
-    const {
-      email,
-      password,
-    } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Email and password are required",
-      });
-    }
-
-    const normalizedEmail =
-      normalizeEmail(email);
-
-    const user = await User.findOne({
-      email: normalizedEmail,
-    });
-
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password",
-      });
-    }
-
-    const passwordValid =
-      await bcrypt.compare(
-        password,
-        user.password
-      );
-
-    if (!passwordValid) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password",
-      });
-    }
-
-    const token = createToken(user);
-
-    return res.status(200).json({
-      success: true,
-      message: "Login successful",
-      user: publicUser(user),
-      token,
-    });
-
-  } catch (error) {
-    console.error("LOGIN ERROR:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Unable to login",
+      message: "Unable to create account. Please try again.",
     });
   }
 });

@@ -69,8 +69,7 @@ const Signup = () => {
         method: "POST",
         body: JSON.stringify({
           username,
-          firstName,
-          lastName,
+          
           email,
         }),
       });
@@ -128,40 +127,7 @@ const Signup = () => {
               />
             </div>
 
-            {/* Name Row */}
-            <div className="name-row">
-              <div>
-                <label>First Name</label>
-                <div className="signup-input">
-                  <FaUser />
-                  <input
-                    type="text"
-                    name="firstName"
-                    placeholder="First name"
-                    value={form.firstName}
-                    onChange={handleChange}
-                    disabled={loading}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label>Last Name</label>
-                <div className="signup-input">
-                  <FaUser />
-                  <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Last name"
-                    value={form.lastName}
-                    onChange={handleChange}
-                    disabled={loading}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
+            
 
             {/* Email */}
             <label>Email Address</label>
