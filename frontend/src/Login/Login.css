@@ -1,130 +1,63 @@
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 0 14px;
+  margin-bottom: 16px;
+}
 
-.otp-login-page {
-  min-height: 100vh;
+.input-with-icon svg {
+  color: #888;
+  flex-shrink: 0;
+}
+
+.input-with-icon input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  width: 100%;
+  padding: 14px 0;
+  font-size: 15px;
+}
+
+.secondary-button {
+  margin-top: 12px;
+  background: transparent;
+  border: 1px solid #444;
+  color: #ccc;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background: #08080d;
-  color: #f5f5f7;
-  font-family: Arial, sans-serif;
+  gap: 8px;
 }
 
-.otp-login-card {
-  width: 100%;
-  max-width: 420px;
-  padding: 32px;
-  background: #12121b;
-  border: 1px solid #333044;
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-}
-
-.otp-login-brand {
-  color: #b68cff;
-  font-size: 25px;
-  font-weight: 800;
-  text-align: center;
-  margin-bottom: 22px;
-}
-
-.otp-login-card h1 {
-  text-align: center;
-  font-size: 27px;
-  margin: 0 0 10px;
-}
-
-.otp-login-subtitle {
-  color: #aaa8bb;
-  font-size: 14px;
-  line-height: 1.6;
-  text-align: center;
-  margin-bottom: 28px;
-}
-
-.otp-login-card form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.otp-login-card label {
-  color: #e4e0f0;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.otp-login-card input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px;
+.secondary-button:hover {
+  border-color: #666;
   color: #fff;
-  background: #090910;
-  border: 1px solid #3c3850;
-  border-radius: 9px;
-  outline: none;
-  font-size: 15px;
 }
 
-.otp-login-card input:focus {
-  border-color: #a875ff;
-  box-shadow: 0 0 0 3px rgba(168, 117, 255, 0.15);
-}
-
-.otp-login-card button {
-  padding: 14px;
-  border: 0;
-  border-radius: 9px;
-  background: #9455ee;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 8px;
-}
-
-.otp-login-card button:hover {
-  background: #a66df8;
-}
-
-.otp-login-card button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.otp-login-card .otp-secondary-button {
-  margin-top: 0;
-  background: transparent;
-  border: 1px solid #454055;
-}
-
-.otp-destination {
+.login-message {
+  background: #0f5132;
+  color: #d1e7dd;
   padding: 12px;
   border-radius: 8px;
-  background: #1c1929;
-  color: #d8c6ff;
-  font-size: 13px;
-  line-height: 1.8;
-  overflow-wrap: anywhere;
-}
-
-.otp-error,
-.otp-success {
+  margin-bottom: 16px;
   font-size: 14px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
 }
 
-.otp-error {
-  color: #ff8585;
-}
-
-.otp-success {
-  color: #7de0a5;
-}
-
-@media (max-width: 480px) {
-  .otp-login-card {
-    padding: 24px 20px;
-  }
+.login-error {
+  background: #58151c;
+  color: #f8d7da;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
 }

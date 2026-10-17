@@ -1,210 +1,214 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaEnvelope, FaLock, FaShieldAlt, FaArrowLeft } from "react-icons/fa";
+import API, { apiRequest } from "./LoginData";
 import "./Login.css";
-
-const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
 
 export default function Login() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState("details"); // "details" | "otp"
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  async function sendOtp(event) {
-    event.preventDefault();
+  // ─── Step 1: Request OTP ───────────────────────────────
+  async function requestOtp(e) {
+    e.preventDefault();
     setError("");
     setMessage("");
 
     const cleanUsername = username.trim().toLowerCase();
     const cleanEmail = email.trim().toLowerCase();
 
-    if (!/^[a-z0-9_]{3,30}$/.test(cleanUsername)) {
-      setError("Username must be 3–30 characters (letters, numbers, underscores).");
+    if (!cleanUsername || cleanUsername.length < 3) {
+      setError("Enter a valid username (min 3 characters).");
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       setError("Enter a valid email address.");
       return;
     }
 
-    setBusy(true);
+    setLoading(true);
 
     try {
-      const response = await fetch(
-        `${API_BASE}/api/auth/otp/request`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            username: cleanUsername,
-            email: cleanEmail,
-          }),
-        }
-      );
+      const result = await apiRequest(API.OTP_REQUEST, {
+        method: "POST",
+        body: JSON.stringify({
+          username: cleanUsername,
+          email: cleanEmail,
+        }),
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Could not send OTP.");
-      }
-
-      setUsername(cleanUsername);
-      setEmail(cleanEmail);
-      setOtpSent(true);
-      setMessage("OTP sent. Check your registered email.");
+      setStep("otp");
+      setMessage(result.message || "OTP sent to your registered email.");
     } catch (err) {
-      setError(err.message || "Something went wrong.");
+      setError(err.message || "Unable to request OTP.");
     } finally {
-      setBusy(false);
+      setLoading(false);
     }
   }
 
-  async function verifyOtp(event) {
-    event.preventDefault();
+  // ─── Step 2: Verify OTP ────────────────────────────────
+  async function verifyOtp(e) {
+    e.preventDefault();
     setError("");
     setMessage("");
 
-    if (!/^\d{6}$/.test(code.trim())) {
+    if (!/^\d{6}$/.test(otp)) {
       setError("Enter the 6-digit OTP.");
       return;
     }
 
-    setBusy(true);
+    setLoading(true);
 
     try {
-      const response = await fetch(
-        `${API_BASE}/api/auth/otp/verify`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            username: username.trim().toLowerCase(),
-            email: email.trim().toLowerCase(),
-            code: code.trim(),
-          }),
-        }
-      );
+      const result = await apiRequest(API.OTP_VERIFY, {
+        method: "POST",
+        body: JSON.stringify({
+          username: username.trim().toLowerCase(),
+          email: email.trim().toLowerCase(),
+          code: otp,
+        }),
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "OTP verification failed.");
+      if (!result.token) {
+        throw new Error("Server did not return a token.");
       }
 
-      if (!data.token || !data.user) {
-        throw new Error("Server did not return a valid login session.");
-      }
+      localStorage.setItem("token", result.token);
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      if (result.user) {
+        localStorage.setItem("user", JSON.stringify(result.user));
+      }
 
       navigate("/");
     } catch (err) {
-      setError(err.message || "Something went wrong.");
+      setError(err.message || "OTP verification failed.");
     } finally {
-      setBusy(false);
+      setLoading(false);
     }
   }
 
-  function changeDetails() {
-    setOtpSent(false);
-    setCode("");
+  function goBack() {
+    setStep("details");
+    setOtp("");
     setError("");
     setMessage("");
   }
 
   return (
-    <main className="otp-login-page">
-      <section className="otp-login-card">
-        <div className="otp-login-brand">VulnXploit</div>
+    <main className="login-page">
+      <section className="login-card">
+        <div className="login-brand">
+          Vuln<span>Xploit</span>
+        </div>
 
-        <h1>{otpSent ? "Verify Your Email" : "Welcome Back"}</h1>
+        <div className="login-symbol">
+          {step === "details" ? <FaShieldAlt /> : <FaLock />}
+        </div>
 
-        <p className="otp-login-subtitle">
-          {otpSent
-            ? "Enter the 6-digit code sent to your email."
-            : "Login securely using your username and registered email."}
+        <h1>{step === "details" ? "Welcome back" : "Enter OTP"}</h1>
+
+        <p className="login-subtitle">
+          {step === "details"
+            ? "Login with your username and registered email"
+            : `We sent a 6-digit code to ${email}`}
         </p>
 
-        {!otpSent ? (
-          <form onSubmit={sendOtp}>
+        {error && (
+          <div className="login-error" role="alert">
+            {error}
+          </div>
+        )}
+        {message && (
+          <div className="login-message" role="status">
+            {message}
+          </div>
+        )}
+
+        {/* ─── DETAILS STEP ─── */}
+        {step === "details" && (
+          <form onSubmit={requestOtp}>
             <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              autoComplete="username"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              maxLength={30}
-              required
-            />
-
-            <label htmlFor="email">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="Enter your registered email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              maxLength={254}
-              required
-            />
-
-            <button type="submit" disabled={busy}>
-              {busy ? "Sending..." : "Send OTP"}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={verifyOtp}>
-            <div className="otp-destination">
-              Username: {username}
-              <br />
-              Email: {email}
+            <div className="input-with-icon">
+              <FaUser />
+              <input
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter username"
+                autoComplete="username"
+                minLength={3}
+                maxLength={30}
+                disabled={loading}
+                required
+              />
             </div>
 
-            <label htmlFor="otp-code">6-Digit OTP</label>
-            <input
-              id="otp-code"
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              placeholder="Enter OTP"
-              value={code}
-              onChange={(e) =>
-                setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
-              }
-              maxLength={6}
-              required
-            />
+            <label htmlFor="email">Email Address</label>
+            <div className="input-with-icon">
+              <FaEnvelope />
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your registered email"
+                autoComplete="email"
+                disabled={loading}
+                required
+              />
+            </div>
 
-            <button type="submit" disabled={busy}>
-              {busy ? "Verifying..." : "Verify OTP & Login"}
-            </button>
-
-            <button
-              type="button"
-              className="otp-secondary-button"
-              onClick={changeDetails}
-              disabled={busy}
-            >
-              Go Back
+            <button type="submit" disabled={loading}>
+              {loading ? "Sending OTP..." : "Send OTP"}
             </button>
           </form>
         )}
 
-        {error && <p className="otp-error" role="alert">{error}</p>}
-        {message && <p className="otp-success" role="status">{message}</p>}
+        {/* ─── OTP STEP ─── */}
+        {step === "otp" && (
+          <form onSubmit={verifyOtp}>
+            <label htmlFor="otp">6-digit OTP</label>
+            <div className="input-with-icon">
+              <FaLock />
+              <input
+                id="otp"
+                value={otp}
+                onChange={(e) =>
+                  setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+                }
+                placeholder="Enter 6-digit OTP"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                disabled={loading}
+                required
+              />
+            </div>
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Verifying..." : "Verify & Login"}
+            </button>
+
+            <button
+              type="button"
+              className="secondary-button"
+              disabled={loading}
+              onClick={goBack}
+            >
+              <FaArrowLeft /> Change details
+            </button>
+          </form>
+        )}
+
+        <p className="login-footer">Secure passwordless authentication</p>
       </section>
     </main>
   );

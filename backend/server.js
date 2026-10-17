@@ -122,8 +122,10 @@ global.sendEmail = async function (to, subject, htmlContent) {
     };
   }
 };
+const authRoutes = require("./routes/authRoutes"); // ya jo file banayi
+app.use("/api/auth", authRoutes);
 
-// ======================================================
+// OTP routes already hain:================
 // API ROUTES
 // ======================================================
 
