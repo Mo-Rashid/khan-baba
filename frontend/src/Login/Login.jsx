@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaUser, FaEnvelope, FaLock, FaShieldAlt, FaArrowLeft } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";import { FaUser, FaEnvelope, FaLock, FaShieldAlt, FaArrowLeft } from "react-icons/fa";
 import API, { apiRequest } from "./LoginData";
 import "./Login.css";
 
@@ -132,6 +131,8 @@ export default function Login() {
           </div>
         )}
 
+        
+
         {/* ─── DETAILS STEP ─── */}
         {step === "details" && (
           <form onSubmit={requestOtp}>
@@ -171,6 +172,8 @@ export default function Login() {
             </button>
           </form>
         )}
+        
+        
 
         {/* ─── OTP STEP ─── */}
         {step === "otp" && (
@@ -207,8 +210,12 @@ export default function Login() {
             </button>
           </form>
         )}
-
-        <p className="login-footer">Secure passwordless authentication</p>
+        <p className="login-footer">
+  Secure passwordless authentication
+  <br />
+  Don't have an account?{" "}
+  <Link to="/signup">Create Account</Link>
+</p>
       </section>
     </main>
   );

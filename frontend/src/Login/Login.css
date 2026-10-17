@@ -1,63 +1,408 @@
-.input-with-icon {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 0 14px;
-  margin-bottom: 16px;
-}
 
-.input-with-icon svg {
-  color: #888;
-  flex-shrink: 0;
-}
+/* =========================================================
+   LOGIN PAGE — VULNXploit
+========================================================= */
 
-.input-with-icon input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff;
+.login-page {
+  min-height: 100vh;
   width: 100%;
-  padding: 14px 0;
-  font-size: 15px;
-}
-
-.secondary-button {
-  margin-top: 12px;
-  background: transparent;
-  border: 1px solid #444;
-  color: #ccc;
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  padding: 40px 20px;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(126, 34, 206, 0.12),
+      transparent 42%
+    ),
+    #05020a;
+
+  color: #ffffff;
+  overflow-x: hidden;
+  font-family: inherit;
 }
 
-.secondary-button:hover {
-  border-color: #666;
-  color: #fff;
+/* =========================================================
+   LOGIN CARD
+========================================================= */
+
+.login-card {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 38px 35px;
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25, 10, 40, 0.98),
+      rgba(8, 3, 15, 0.98)
+    );
+
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 18px;
+
+  box-shadow:
+    0 0 35px rgba(126, 34, 206, 0.16),
+    0 20px 60px rgba(0, 0, 0, 0.45);
+
+  animation: loginFadeIn 0.4s ease;
 }
 
-.login-message {
-  background: #0f5132;
-  color: #d1e7dd;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 16px;
+/* =========================================================
+   BRAND
+========================================================= */
+
+.login-brand {
+  margin-bottom: 25px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 29px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.login-brand span {
+  color: #b56cff;
+}
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.login-symbol {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+  background: rgba(126, 34, 206, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.40);
+
+  color: #b56cff;
+  font-size: 25px;
+
+  box-shadow: 0 0 25px rgba(126, 34, 206, 0.15);
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.login-card h1 {
+  margin: 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* =========================================================
+   SUBTITLE
+========================================================= */
+
+.login-subtitle {
+  margin: 9px 0 28px;
+  text-align: center;
+  color: #a49bab;
   font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
 
 .login-error {
-  background: #58151c;
-  color: #f8d7da;
-  padding: 12px;
-  border-radius: 8px;
   margin-bottom: 16px;
+  padding: 12px 14px;
+
+  border-radius: 9px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+
+  color: #fca5a5;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   SUCCESS / STATUS MESSAGE
+========================================================= */
+
+.login-message {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+
+  border-radius: 9px;
+  background: rgba(15, 81, 50, 0.35);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+
+  color: #d1e7dd;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.login-card form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.login-card label {
+  display: block;
+  margin: 0 0 8px;
+
+  color: #ddd6e5;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   INPUT CONTAINER
+========================================================= */
+
+.input-with-icon {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: 18px;
+  padding: 0 13px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  border-radius: 9px;
+
+  transition: 0.2s ease;
+}
+
+.input-with-icon:focus-within {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.05);
+
+  box-shadow:
+    0 0 0 3px rgba(168, 85, 247, 0.09);
+}
+
+/* INPUT ICON */
+
+.input-with-icon > svg {
+  flex-shrink: 0;
+  color: #a855f7;
+  font-size: 15px;
+}
+
+/* INPUT FIELD */
+
+.input-with-icon input {
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  padding: 0;
+
+  border: none;
+  outline: none;
+  background: transparent;
+
+  color: #ffffff;
   font-size: 14px;
+  font-family: inherit;
+}
+
+.input-with-icon input::placeholder {
+  color: #706878;
+}
+
+.input-with-icon input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.login-card form > button {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 2px;
+  padding: 12px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  border: none;
+  border-radius: 9px;
+
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 25px rgba(126, 34, 206, 0.25);
+  transition: all 0.2s ease;
+}
+
+.login-card form > button:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 12px 30px rgba(126, 34, 206, 0.38);
+}
+
+.login-card form > button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-card form > button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* CHANGE DETAILS BUTTON */
+
+.login-card form > button.secondary-button {
+  margin-top: 12px;
+
+  background: transparent;
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: none;
+}
+
+.login-card form > button.secondary-button:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: none;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.login-footer {
+  margin: 24px 0 0;
+
+  text-align: center;
+  color: #8f8798;
+
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.login-footer a {
+  color: #c084fc;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.login-footer a:hover {
+  color: #d8b4fe;
+  text-decoration: underline;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes loginFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .login-page {
+    padding: 30px 15px;
+  }
+
+  .login-card {
+    max-width: 100%;
+    padding: 30px 22px;
+  }
+
+  .login-card h1 {
+    font-size: 26px;
+  }
+
+  .login-brand {
+    font-size: 26px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+  .login-page {
+    padding: 20px 12px;
+  }
+
+  .login-card {
+    padding: 26px 18px;
+  }
+
+  .login-card h1 {
+    font-size: 24px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .login-card {
+    animation: none;
+  }
+
+  .input-with-icon,
+  .login-card form > button,
+  .login-footer a {
+    transition: none;
+  }
 }
