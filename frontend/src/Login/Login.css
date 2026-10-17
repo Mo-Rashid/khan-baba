@@ -1,317 +1,318 @@
 /* =========================================================
-   LOGIN PAGE
+   RETRO LOGIN PAGE - VulnXploit
 ========================================================= */
 
-.login-page {
+.retro-page {
   min-height: 100vh;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  background:
-    radial-gradient(
-      circle at 50% 30%,
-      rgba(126, 34, 206, 0.12),
-      transparent 42%
-    ),
-    #05020a;
-  color: #ffffff;
-  overflow-x: hidden;
-}
-
-/* =========================================================
-   MAIN CENTER AREA
-========================================================= */
-
-.login-main {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 50px 20px;
+  justify-content: center;
+  padding: 40px 20px;
   box-sizing: border-box;
+  background: #05020a;
+  color: #e8e0f0;
+  position: relative;
+  overflow: hidden;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
-/* =========================================================
-   LOGIN CARD
-========================================================= */
+/* Scanline overlay */
+.retro-scanlines {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  z-index: 1;
+  opacity: 0.35;
+}
 
-.login-card {
+/* Form card */
+.retro-form {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 38px 35px;
+  max-width: 420px;
+  padding: 36px 32px;
   box-sizing: border-box;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(25, 10, 40, 0.98),
-      rgba(8, 3, 15, 0.98)
-    );
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  border-radius: 18px;
+  background: linear-gradient(
+    160deg,
+    rgba(28, 12, 48, 0.97),
+    rgba(10, 4, 18, 0.98)
+  );
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 4px;
   box-shadow:
-    0 0 35px rgba(126, 34, 206, 0.16),
-    0 20px 60px rgba(0, 0, 0, 0.45);
+    0 0 0 1px rgba(168, 85, 247, 0.1),
+    0 0 40px rgba(126, 34, 206, 0.2),
+    0 25px 50px rgba(0, 0, 0, 0.5);
 }
 
-/* =========================================================
-   ICON
-========================================================= */
-
-.login-icon {
-  width: 62px;
-  height: 62px;
-  margin: 0 auto 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 15px;
-  background: rgba(126, 34, 206, 0.14);
-  border: 1px solid rgba(168, 85, 247, 0.40);
-  color: #b56cff;
-  font-size: 25px;
-  box-shadow: 0 0 25px rgba(126, 34, 206, 0.15);
-}
-
-/* =========================================================
-   TITLE
-========================================================= */
-
-.login-card h1 {
-  margin: 0;
-  text-align: center;
-  font-size: 30px;
+/* Kicker / top label */
+.retro-kicker {
+  margin: 0 0 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a855f7;
+  text-align: center;
 }
 
-/* =========================================================
-   SUBTITLE
-========================================================= */
-
-.login-subtitle {
-  margin: 9px 0 28px;
+/* Title */
+.retro-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
   text-align: center;
-  color: #a49bab;
-  font-size: 14px;
+  color: #ffffff;
+}
+
+/* Subtitle */
+.retro-subtitle {
+  margin: 0 0 28px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #8b7f9a;
+}
+
+/* Description (OTP step) */
+.retro-description {
+  margin: 0 0 20px;
+  font-size: 13px;
+  text-align: center;
+  color: #b5a8c4;
   line-height: 1.5;
 }
 
-/* =========================================================
-   ERROR
-========================================================= */
-
-.login-error {
-  margin-bottom: 20px;
-  padding: 12px 14px;
-  border-radius: 9px;
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #fca5a5;
-  font-size: 13px;
-  text-align: center;
+.retro-description strong {
+  color: #e9d5ff;
 }
 
-/* =========================================================
-   SUCCESS MESSAGE
-========================================================= */
-
-.login-message {
-  margin-bottom: 20px;
-  padding: 12px 14px;
-  border-radius: 9px;
-  background: rgba(15, 81, 50, 0.25);
-  border: 1px solid rgba(34, 197, 94, 0.35);
-  color: #d1e7dd;
-  font-size: 13px;
-  text-align: center;
-}
-
-/* =========================================================
-   FORM
-========================================================= */
-
-.login-card form {
-  width: 100%;
-}
-
-/* =========================================================
-   LABEL
-========================================================= */
-
-.login-card label {
-  display: block;
-  margin-bottom: 8px;
-  color: #ddd6e5;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-/* =========================================================
-   INPUT
-========================================================= */
-
-.login-input {
-  width: 100%;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Field */
+.retro-field {
   margin-bottom: 18px;
-  padding: 0 13px;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(168, 85, 247, 0.28);
-  border-radius: 9px;
-  transition: 0.2s ease;
 }
 
-.login-input:focus-within {
-  border-color: #a855f7;
-  background: rgba(168, 85, 247, 0.05);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.09);
+.retro-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #c4b5d4;
 }
 
-.login-input > svg {
-  flex-shrink: 0;
-  color: #a855f7;
-  font-size: 15px;
-}
-
-.login-input input {
+.retro-field input {
   width: 100%;
   height: 46px;
-  border: none;
-  outline: none;
-  background: transparent;
+  padding: 0 14px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 3px;
   color: #ffffff;
   font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
-.login-input input::placeholder {
-  color: #706878;
+.retro-field input::placeholder {
+  color: #6b6178;
 }
 
-/* =========================================================
-   LOGIN BUTTON
-========================================================= */
+.retro-field input:focus {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.06);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+}
 
-.login-button {
-  width: 100%;
-  height: 50px;
-  margin-top: 2px;
+.retro-field small {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #7a7088;
+}
+
+/* Alerts */
+.retro-alert {
+  margin: 0 0 16px;
+  padding: 11px 13px;
+  border-radius: 3px;
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.retro-alert.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+}
+
+.retro-alert.success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #86efac;
+}
+
+/* Actions row */
+.retro-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.otp-actions {
+  margin-bottom: 12px;
+}
+
+/* Primary button */
+.retro-button {
+  flex-shrink: 0;
+  min-width: 130px;
+  height: 44px;
+  padding: 0 20px;
   border: none;
-  border-radius: 9px;
+  border-radius: 3px;
   background: linear-gradient(135deg, #7c3aed, #9333ea);
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  box-shadow: 0 8px 25px rgba(126, 34, 206, 0.25);
-  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(126, 34, 206, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
 }
 
-.login-button:hover:not(:disabled) {
+.retro-button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 12px 30px rgba(126, 34, 206, 0.38);
+  box-shadow: 0 10px 28px rgba(126, 34, 206, 0.4);
 }
 
-.login-button:active:not(:disabled) {
+.retro-button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.login-button:disabled {
-  opacity: 0.65;
+.retro-button:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-/* =========================================================
-   RESEND + BACK BUTTONS
-========================================================= */
+/* Link (Create account) */
+.retro-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c084fc;
+  text-decoration: none;
+  transition: color 0.15s;
+}
 
-.resend-button,
-.back-button {
-  width: 100%;
-  height: 46px;
-  margin-top: 12px;
-  border-radius: 9px;
+.retro-link:hover {
+  color: #e9d5ff;
+  text-decoration: underline;
+}
+
+/* Text / Back button */
+.retro-text-button {
   background: transparent;
-  border: 1px solid rgba(168, 85, 247, 0.30);
-  color: #c4b5d4;
+  border: none;
+  color: #a89bb8;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.2s ease;
+  padding: 8px 0;
+  transition: color 0.15s;
 }
 
-.resend-button:hover:not(:disabled),
-.back-button:hover:not(:disabled) {
+.retro-text-button:hover:not(:disabled) {
+  color: #e9d5ff;
+}
+
+.retro-text-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Resend OTP */
+.retro-resend {
+  width: 100%;
+  margin-top: 4px;
+  height: 42px;
+  background: transparent;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 3px;
+  color: #c4b5d4;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.retro-resend:hover:not(:disabled) {
   border-color: #a855f7;
   color: #e9d5ff;
   background: rgba(168, 85, 247, 0.08);
 }
 
-.resend-button:disabled {
+.retro-resend:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* =========================================================
-   FOOTER
-========================================================= */
-
-.login-footer {
-  margin: 24px 0 0;
+/* Footer */
+.retro-footer {
+  margin: 28px 0 0;
   text-align: center;
-  color: #8f8798;
-  font-size: 13px;
-}
-
-.login-footer a {
-  color: #c084fc;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.login-footer a:hover {
-  color: #d8b4fe;
-  text-decoration: underline;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #5c5368;
 }
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 600px) {
-  .login-main {
-    padding: 30px 15px;
+@media (max-width: 480px) {
+  .retro-page {
+    padding: 24px 14px;
   }
 
-  .login-card {
-    max-width: 100%;
-    padding: 30px 22px;
+  .retro-form {
+    padding: 28px 20px;
   }
 
-  .login-card h1 {
-    font-size: 26px;
-  }
-}
-
-@media (max-width: 400px) {
-  .login-main {
-    padding: 20px 12px;
-  }
-
-  .login-card {
-    padding: 26px 18px;
-  }
-
-  .login-card h1 {
+  .retro-title {
     font-size: 24px;
+  }
+
+  .retro-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .retro-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .retro-link,
+  .retro-text-button {
+    text-align: center;
   }
 }

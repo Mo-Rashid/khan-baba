@@ -1,14 +1,5 @@
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  FaUser,
-  FaEnvelope,
-  FaLock,
-  FaShieldAlt,
-  FaArrowLeft,
-} from "react-icons/fa";
-
 import { API, apiRequest } from "./LoginData";
 import "./Login.css";
 
@@ -19,7 +10,6 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -28,80 +18,57 @@ export default function Login() {
   useEffect(() => {
     if (resendTimer <= 0) return;
 
-    const timer = setTimeout(() => {
-      setResendTimer((value) => Math.max(0, value - 1));
-    }, 1000);
+    const timer = window.setTimeout(
+      () => setResendTimer((value) => value - 1),
+      1000
+    );
 
-    return () => clearTimeout(timer);
+    return () => window.clearTimeout(timer);
   }, [resendTimer]);
 
-  const requestOtp = async (event) => {
-    event?.preventDefault();
-
+  async function requestOtp(event) {
+    event.preventDefault();
     setError("");
     setMessage("");
-
-    const cleanUsername = username.trim().toLowerCase();
-    const cleanEmail = email.trim().toLowerCase();
-
-    if (!/^[a-z0-9_.-]{3,30}$/.test(cleanUsername)) {
-      setError("Username must be 3–30 valid characters.");
-      return;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-      setError("Enter a valid email address.");
-      return;
-    }
-
     setLoading(true);
 
     try {
       const data = await apiRequest(API.OTP_REQUEST, {
         method: "POST",
         body: JSON.stringify({
-          username: cleanUsername,
-          email: cleanEmail,
+          username: username.trim(),
+          email: email.trim(),
         }),
       });
 
-      setUsername(cleanUsername);
-      setEmail(cleanEmail);
-      setOtp("");
       setStep("otp");
       setMessage(data.message || "OTP sent. Check your email.");
       setResendTimer(60);
     } catch (err) {
-      setError(err.message || "Could not send OTP.");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const verifyOtp = async (event) => {
+  async function verifyOtp(event) {
     event.preventDefault();
     setError("");
     setMessage("");
-
-    if (!/^\d{6}$/.test(otp)) {
-      setError("Enter the complete 6-digit OTP.");
-      return;
-    }
-
     setLoading(true);
 
     try {
       const data = await apiRequest(API.OTP_VERIFY, {
         method: "POST",
         body: JSON.stringify({
-          username: username.trim().toLowerCase(),
-          email: email.trim().toLowerCase(),
-          code: otp,
+          username: username.trim(),
+          email: email.trim(),
+          code: otp.trim(),
         }),
       });
 
       if (!data.token) {
-        throw new Error("Server did not return a login token.");
+        throw new Error("Login succeeded without a token.");
       }
 
       localStorage.setItem("token", data.token);
@@ -112,169 +79,164 @@ export default function Login() {
 
       navigate("/");
     } catch (err) {
-      setError(err.message || "OTP verification failed.");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const resendOtp = async () => {
+  async function resendOtp() {
     if (resendTimer > 0 || loading) return;
-    await requestOtp();
-  };
 
-  const changeDetails = () => {
-    setStep("details");
-    setOtp("");
     setError("");
     setMessage("");
-  };
+    setLoading(true);
+
+    try {
+      const data = await apiRequest(API.OTP_REQUEST, {
+        method: "POST",
+        body: JSON.stringify({
+          username: username.trim(),
+          email: email.trim(),
+        }),
+      });
+
+      setMessage(data.message || "A new OTP has been sent.");
+      setResendTimer(60);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <div className="login-page">
-      <main className="login-main">
-        <div className="login-card">
-          <h2 className="login-brand">
-            Vuln<span>Xploit</span>
-          </h2>
+    <main className="retro-page">
+      <div className="retro-scanlines" aria-hidden="true" />
 
-          <div className="login-icon">
-            <FaShieldAlt />
-          </div>
+      <section className="retro-form login-form">
+        <p className="retro-kicker">VULNX PLOIT // AUTH SYSTEM</p>
 
-          <h1>
-            {step === "details" ? "Welcome Back" : "Enter OTP"}
-          </h1>
+        <h1 className="retro-title">
+          {step === "details" ? "Log in" : "Verify OTP"}
+        </h1>
 
-          <p className="login-subtitle">
-            {step === "details"
-              ? "Login with your username and registered email"
-              : `Enter the 6-digit code sent to ${email}`}
-          </p>
+        <p className="retro-subtitle">
+          {step === "details"
+            ? "ENTER YOUR ACCOUNT DETAILS"
+            : "CHECK YOUR EMAIL FOR THE CODE"}
+        </p>
 
-          {error && (
-            <div className="login-error" role="alert">
-              {error}
+        {step === "details" ? (
+          <form onSubmit={requestOtp}>
+            <div className="retro-field">
+              <label htmlFor="login-username">User Name</label>
+              <input
+                id="login-username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                minLength={3}
+                maxLength={30}
+                required
+                placeholder="Enter username"
+              />
             </div>
-          )}
 
-          {message && (
-            <div className="login-message" role="status">
-              {message}
+            <div className="retro-field">
+              <label htmlFor="login-email">Email</label>
+              <input
+                id="login-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+                maxLength={254}
+                placeholder="you@example.com"
+              />
+              <small>OTP will be sent to this registered email.</small>
             </div>
-          )}
 
-          {step === "details" && (
-            <form onSubmit={requestOtp}>
-              <label htmlFor="username">Username</label>
+            {error && <p className="retro-alert error">{error}</p>}
+            {message && <p className="retro-alert success">{message}</p>}
 
-              <div className="login-input">
-                <FaUser />
-                <input
-                  id="username"
-                  name="username"
-                  autoComplete="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter username"
-                  disabled={loading}
-                  required
-                />
-              </div>
+            <div className="retro-actions">
+              <Link className="retro-link" to="/signup">
+                Create an account
+              </Link>
 
-              <label htmlFor="email">Email Address</label>
-
-              <div className="login-input">
-                <FaEnvelope />
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter registered email"
-                  disabled={loading}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="login-button"
-                disabled={loading}
-              >
-                {loading ? "Sending OTP..." : "Send OTP"}
+              <button className="retro-button" disabled={loading} type="submit">
+                {loading ? "SENDING..." : "SEND OTP"}
               </button>
-            </form>
-          )}
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={verifyOtp}>
+            <p className="retro-description">
+              OTP requested for <strong>{email}</strong>
+            </p>
 
-          {step === "otp" && (
-            <form onSubmit={verifyOtp}>
-              <label htmlFor="otp">6-digit OTP</label>
+            <div className="retro-field">
+              <label htmlFor="login-otp">6-Digit OTP</label>
+              <input
+                id="login-otp"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                value={otp}
+                onChange={(e) =>
+                  setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+                }
+                required
+                placeholder="000000"
+              />
+              <small>OTP expires according to server policy.</small>
+            </div>
 
-              <div className="login-input">
-                <FaLock />
-                <input
-                  id="otp"
-                  name="otp"
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  pattern="[0-9]{6}"
-                  maxLength={6}
-                  value={otp}
-                  onChange={(e) =>
-                    setOtp(
-                      e.target.value.replace(/\D/g, "").slice(0, 6)
-                    )
-                  }
-                  placeholder="Enter 6-digit OTP"
-                  disabled={loading}
-                  required
-                />
-              </div>
+            {error && <p className="retro-alert error">{error}</p>}
+            {message && <p className="retro-alert success">{message}</p>}
 
+            <div className="retro-actions otp-actions">
               <button
-                type="submit"
-                className="login-button"
-                disabled={loading}
-              >
-                {loading ? "Verifying..." : "Verify & Login"}
-              </button>
-
-              <button
+                className="retro-text-button"
                 type="button"
-                className="resend-button"
-                onClick={resendOtp}
-                disabled={loading || resendTimer > 0}
+                onClick={() => {
+                  setStep("details");
+                  setOtp("");
+                  setError("");
+                  setMessage("");
+                }}
               >
-                {resendTimer > 0
-                  ? `Resend OTP in ${resendTimer}s`
-                  : "Resend OTP"}
+                ← BACK
               </button>
 
               <button
-                type="button"
-                className="back-button"
-                onClick={changeDetails}
-                disabled={loading}
+                className="retro-button"
+                disabled={loading || otp.length !== 6}
+                type="submit"
               >
-                <FaArrowLeft /> Change details
+                {loading ? "VERIFYING..." : "VERIFY OTP"}
               </button>
-            </form>
-          )}
+            </div>
 
-          <p className="login-footer">
-            Don&apos;t have an account?{" "}
-            <Link to="/signup">Create Account</Link>
-          </p>
+            <button
+              className="retro-resend"
+              type="button"
+              onClick={resendOtp}
+              disabled={loading || resendTimer > 0}
+            >
+              {resendTimer > 0
+                ? `RESEND OTP IN ${resendTimer}s`
+                : "RESEND OTP"}
+            </button>
+          </form>
+        )}
 
-          <p className="login-security">
-            Secure passwordless authentication
-          </p>
-        </div>
-      </main>
-    </div>
+        <p className="retro-footer">SECURE ACCESS // VULNX PLOIT</p>
+      </section>
+    </main>
   );
 }

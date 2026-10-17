@@ -1,4 +1,3 @@
-
 const API_BASE_URL = "/api";
 
 export const API = {
@@ -8,35 +7,25 @@ export const API = {
 };
 
 export async function apiRequest(url, options = {}) {
-  let response;
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+
+  let data;
 
   try {
-    response = await fetch(url, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-      },
-    });
+    data = await response.json();
   } catch {
-    throw new Error(
-      "Cannot connect to server. Please try again later."
-    );
+    throw new Error("Server returned an invalid response.");
   }
-
-  const contentType = response.headers.get("content-type") || "";
-
-  if (!contentType.includes("application/json")) {
-    throw new Error(
-      `Server returned an invalid response (HTTP ${response.status}). Check backend and Nginx configuration.`
-    );
-  }
-
-  const data = await response.json();
 
   if (!response.ok) {
     throw new Error(
-      data.message || `Request failed (${response.status})`
+      data.message || `Request failed with status ${response.status}`
     );
   }
 
