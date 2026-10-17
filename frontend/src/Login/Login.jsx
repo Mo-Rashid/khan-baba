@@ -1,303 +1,184 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 
-import {
-  FaEnvelope,
-  FaLock,
-  FaEye,
-  FaEyeSlash,
-  FaSignInAlt,
-  FaShieldAlt,
-} from "react-icons/fa";
-
-import Navbar from "../components/Navbar/Navbar";
-
-import { API, apiRequest } from "./LoginData";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const Login = () => {
+const API_BASE = (
+  import.meta.env.VITE_API_URL || ""
+).replace(/\/$/, "");
+
+export default function Login() {
   const navigate = useNavigate();
-
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [loading, setLoading] = useState(false);
-
+  const [identifier, setIdentifier] = useState("");
+  const [code, setCode] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [channel, setChannel] = useState("");
 
-  /* =====================================================
-     INPUT CHANGE
-  ===================================================== */
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-
+  async function requestOtp(event) {
+    event.preventDefault();
     setError("");
-  };
+    setMessage("");
 
-  /* =====================================================
-     LOGIN
-  ===================================================== */
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setError("");
-
-    const email = form.email.trim().toLowerCase();
-
-    if (!email || !form.password) {
-      setError("Please enter email and password.");
+    if (!identifier.trim()) {
+      setError("Enter your email or phone number.");
       return;
     }
 
+    setBusy(true);
+
     try {
-      setLoading(true);
-
-      const data = await apiRequest(API.LOGIN, {
-        method: "POST",
-
-        body: JSON.stringify({
-          email,
-          password: form.password,
-        }),
-      });
-
-      /* =================================================
-         SAVE TOKEN
-      ================================================= */
-
-      if (data.token) {
-        localStorage.setItem(
-          "token",
-          data.token
-        );
-      }
-
-      /* =================================================
-         SAVE USER
-      ================================================= */
-
-      if (data.user) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify(data.user)
-        );
-      }
-
-      /* =================================================
-         REDIRECT
-      ================================================= */
-
-      navigate("/");
-
-    } catch (error) {
-      console.error("Login error:", error);
-
-      setError(
-        error.message || "Unable to login"
+      const response = await fetch(
+        `${API_BASE}/api/auth/otp/request`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ identifier: identifier.trim() }),
+        }
       );
 
-    } finally {
-      setLoading(false);
-    }
-  };
+      const data = await response.json();
 
-  /* =====================================================
-     PAGE
-  ===================================================== */
+      if (!response.ok) {
+        throw new Error(data.message || "Could not request OTP.");
+      }
+
+      setChannel(data.channel);
+      setOtpSent(true);
+      setMessage(
+        data.channel === "email"
+          ? "Check your registered email for the OTP."
+          : "Check your registered phone for the SMS OTP."
+      );
+    } catch (err) {
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function verifyOtp(event) {
+    event.preventDefault();
+    setError("");
+    setMessage("");
+
+    if (!/^\d{4,10}$/.test(code.trim())) {
+      setError("Enter the OTP you received.");
+      return;
+    }
+
+    setBusy(true);
+
+    try {
+      const response = await fetch(
+        `${API_BASE}/api/auth/otp/verify`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            identifier: identifier.trim(),
+            code: code.trim(),
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "OTP verification failed.");
+      }
+
+      // Update these to match your existing AuthContext
+      // if your application stores authentication differently.
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/");
+    } catch (err) {
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function changeIdentifier() {
+    setOtpSent(false);
+    setCode("");
+    setError("");
+    setMessage("");
+  }
 
   return (
-    <div className="login-page">
+    <main className="otp-login-page">
+      <section className="otp-login-card">
+        <div className="otp-login-brand">VulnXploit</div>
+        <h1>Welcome back</h1>
+        <p className="otp-login-subtitle">
+          Sign in securely with your registered email or phone.
+        </p>
 
-      {/* =================================================
-          TOP NAVBAR
-      ================================================= */}
+        {!otpSent ? (
+          <form onSubmit={requestOtp}>
+            <label htmlFor="identifier">Email or phone number</label>
+            <input
+              id="identifier"
+              type="text"
+              autoComplete="username"
+              placeholder="Email or +919876543210"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              required
+            />
 
-      <div className="login-navbar">
-        <Navbar />
-      </div>
-
-
-      {/* =================================================
-          LOGIN AREA
-      ================================================= */}
-
-      <main className="login-main">
-
-        <div className="auth-card">
-
-          {/* =================================================
-              SECURITY ICON
-          ================================================= */}
-
-          <div className="auth-icon">
-            <FaShieldAlt />
-          </div>
-
-
-          {/* =================================================
-              TITLE
-          ================================================= */}
-
-          <h1>
-            Welcome Back
-          </h1>
-
-          <p className="auth-subtitle">
-            Login to your The VulnXploit account
-          </p>
-
-
-          {/* =================================================
-              ERROR MESSAGE
-          ================================================= */}
-
-          {error && (
-            <div className="auth-error">
-              {error}
-            </div>
-          )}
-
-
-          {/* =================================================
-              LOGIN FORM
-          ================================================= */}
-
-          <form onSubmit={handleSubmit}>
-
-            {/* ================= EMAIL ================= */}
-
-            <label htmlFor="email">
-              Email Address
-            </label>
-
-            <div className="auth-input">
-
-              <FaEnvelope />
-
-              <input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                value={form.email}
-                onChange={handleChange}
-                disabled={loading}
-                autoComplete="email"
-                required
-              />
-
+            <button type="submit" disabled={busy}>
+              {busy ? "Sending..." : "Send OTP"}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={verifyOtp}>
+            <div className="otp-destination">
+              OTP requested via{" "}
+              <strong>
+                {channel === "email" ? "Email" : "SMS"}
+              </strong>
+              <br />
+              <span>{identifier}</span>
             </div>
 
+            <label htmlFor="otp-code">Verification code</label>
+            <input
+              id="otp-code"
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              placeholder="Enter OTP"
+              value={code}
+              onChange={(e) =>
+                setCode(e.target.value.replace(/\D/g, "").slice(0, 10))
+              }
+              required
+            />
 
-            {/* ================= PASSWORD ================= */}
-
-            <label htmlFor="password">
-              Password
-            </label>
-
-            <div className="auth-input">
-
-              <FaLock />
-
-              <input
-                id="password"
-                type={
-                  showPassword
-                    ? "text"
-                    : "password"
-                }
-                name="password"
-                placeholder="Enter your password"
-                value={form.password}
-                onChange={handleChange}
-                disabled={loading}
-                autoComplete="current-password"
-                required
-              />
-
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() =>
-                  setShowPassword(
-                    (previous) => !previous
-                  )
-                }
-                disabled={loading}
-                aria-label={
-                  showPassword
-                    ? "Hide password"
-                    : "Show password"
-                }
-              >
-                {showPassword ? (
-                  <FaEyeSlash />
-                ) : (
-                  <FaEye />
-                )}
-              </button>
-
-            </div>
-
-
-            {/* =================================================
-                LOGIN BUTTON
-            ================================================= */}
-
-            <button
-              type="submit"
-              className="auth-button"
-              disabled={loading}
-            >
-
-              {loading ? (
-                <span>
-                  Logging in...
-                </span>
-              ) : (
-                <>
-                  <FaSignInAlt />
-
-                  <span>
-                    Login
-                  </span>
-                </>
-              )}
-
+            <button type="submit" disabled={busy}>
+              {busy ? "Verifying..." : "Verify & Login"}
             </button>
 
+            <button
+              type="button"
+              className="otp-secondary-button"
+              onClick={changeIdentifier}
+              disabled={busy}
+            >
+              Change email or phone
+            </button>
           </form>
+        )}
 
-
-          {/* =================================================
-              SIGNUP
-          ================================================= */}
-
-          <p className="auth-footer">
-
-            Don't have an account?{" "}
-
-            <Link to="/signup">
-              Create Account
-            </Link>
-
-          </p>
-
-        </div>
-
-      </main>
-
-    </div>
+        {error && <p className="otp-error" role="alert">{error}</p>}
+        {message && <p className="otp-success" role="status">{message}</p>}
+      </section>
+    </main>
   );
-};
-
-export default Login;
+}

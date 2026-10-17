@@ -1,514 +1,130 @@
-/* =====================================================
-   LOGIN PAGE
-===================================================== */
 
-.login-page {
-  width: 100%;
+.otp-login-page {
   min-height: 100vh;
-
-  background:
-    radial-gradient(
-      circle at 50% 20%,
-      rgba(125, 39, 255, 0.08),
-      transparent 35%
-    ),
-    #05030a;
-
-  color: #ffffff;
-
-  position: relative;
-
-  overflow-x: hidden;
-}
-
-
-/* =====================================================
-   NAVBAR
-===================================================== */
-
-.login-navbar {
-  width: 100%;
-
-  position: relative;
-
-  top: 0;
-  left: 0;
-
-  z-index: 1000;
-
-  display: block;
-}
-
-
-/*
-   Make sure Navbar itself isn't being affected
-   by login page centering.
-*/
-
-.login-navbar > * {
-  width: 100%;
-}
-
-
-/* =====================================================
-   LOGIN MAIN AREA
-===================================================== */
-
-.login-main {
-  width: 100%;
-
-  min-height: calc(100vh - 90px);
-
   display: flex;
-
-  justify-content: center;
-
   align-items: center;
-
-  box-sizing: border-box;
-
-  padding: 60px 20px;
+  justify-content: center;
+  padding: 24px;
+  background: #08080d;
+  color: #f5f5f7;
+  font-family: Arial, sans-serif;
 }
 
-
-/* =====================================================
-   LOGIN CARD
-===================================================== */
-
-.auth-card {
+.otp-login-card {
   width: 100%;
-
-  max-width: 370px;
-
-  box-sizing: border-box;
-
-  padding: 30px;
-
+  max-width: 420px;
+  padding: 32px;
+  background: #12121b;
+  border: 1px solid #333044;
   border-radius: 18px;
-
-  border: 1px solid
-    rgba(168, 85, 247, 0.45);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(21, 12, 35, 0.98),
-      rgba(9, 5, 17, 0.98)
-    );
-
-  box-shadow:
-    0 0 30px
-      rgba(139, 92, 246, 0.10),
-    inset 0 0 30px
-      rgba(139, 92, 246, 0.025);
-
-  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
-
-/* =====================================================
-   SECURITY ICON
-===================================================== */
-
-.auth-icon {
-  width: 54px;
-
-  height: 54px;
-
-  margin: 0 auto 20px;
-
-  border-radius: 50%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background:
-    linear-gradient(
-      135deg,
-      #7c3aed,
-      #c026d3
-    );
-
-  color: white;
-
-  font-size: 24px;
-
-  box-shadow:
-    0 0 25px
-      rgba(168, 85, 247, 0.35);
-}
-
-
-/* =====================================================
-   TITLE
-===================================================== */
-
-.auth-card h1 {
-  margin: 0;
-
+.otp-login-brand {
+  color: #b68cff;
+  font-size: 25px;
+  font-weight: 800;
   text-align: center;
-
-  font-size: 30px;
-
-  font-weight: 700;
-
-  color: #ffffff;
+  margin-bottom: 22px;
 }
 
-
-/* =====================================================
-   SUBTITLE
-===================================================== */
-
-.auth-subtitle {
-  margin: 10px 0 25px;
-
+.otp-login-card h1 {
   text-align: center;
+  font-size: 27px;
+  margin: 0 0 10px;
+}
 
-  color: #a9a0b8;
-
+.otp-login-subtitle {
+  color: #aaa8bb;
   font-size: 14px;
-
-  line-height: 1.5;
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 28px;
 }
 
-
-/* =====================================================
-   ERROR
-===================================================== */
-
-.auth-error {
-  width: 100%;
-
-  box-sizing: border-box;
-
-  margin-bottom: 20px;
-
-  padding: 11px 13px;
-
-  border-radius: 8px;
-
-  border: 1px solid
-    rgba(239, 68, 68, 0.4);
-
-  background:
-    rgba(239, 68, 68, 0.08);
-
-  color: #fca5a5;
-
-  font-size: 13px;
-
-  line-height: 1.4;
+.otp-login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-
-/* =====================================================
-   FORM
-===================================================== */
-
-.auth-card form {
-  width: 100%;
-}
-
-
-/* =====================================================
-   LABEL
-===================================================== */
-
-.auth-card label {
-  display: block;
-
-  margin: 0 0 8px;
-
-  color: #c9bfd6;
-
-  font-size: 13px;
-
+.otp-login-card label {
+  color: #e4e0f0;
+  font-size: 14px;
   font-weight: 600;
 }
 
-
-/* =====================================================
-   INPUT WRAPPER
-===================================================== */
-
-.auth-input {
+.otp-login-card input {
   width: 100%;
-
-  height: 48px;
-
-  margin-bottom: 20px;
-
-  padding: 0 13px;
-
   box-sizing: border-box;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  border: 1px solid
-    rgba(168, 85, 247, 0.45);
-
-  border-radius: 8px;
-
-  background:
-    rgba(21, 12, 35, 0.85);
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-
-/* =====================================================
-   INPUT ICON
-===================================================== */
-
-.auth-input > svg {
-  flex-shrink: 0;
-
-  color: #a855f7;
-
+  padding: 14px;
+  color: #fff;
+  background: #090910;
+  border: 1px solid #3c3850;
+  border-radius: 9px;
+  outline: none;
   font-size: 15px;
 }
 
-
-/* =====================================================
-   INPUT
-===================================================== */
-
-.auth-input input {
-  width: 100%;
-
-  height: 100%;
-
-  border: none;
-
-  outline: none;
-
-  background: transparent;
-
-  color: #ffffff;
-
-  font-size: 14px;
-
-  min-width: 0;
+.otp-login-card input:focus {
+  border-color: #a875ff;
+  box-shadow: 0 0 0 3px rgba(168, 117, 255, 0.15);
 }
 
-
-/* =====================================================
-   PLACEHOLDER
-===================================================== */
-
-.auth-input input::placeholder {
-  color: #766b82;
-}
-
-
-/* =====================================================
-   INPUT FOCUS
-===================================================== */
-
-.auth-input:focus-within {
-  border-color: #a855f7;
-
-  box-shadow:
-    0 0 0 2px
-      rgba(168, 85, 247, 0.08),
-    0 0 18px
-      rgba(168, 85, 247, 0.10);
-}
-
-
-/* =====================================================
-   PASSWORD TOGGLE
-===================================================== */
-
-.password-toggle {
-  flex-shrink: 0;
-
-  width: 30px;
-
-  height: 30px;
-
-  padding: 0;
-
-  border: none;
-
-  background: transparent;
-
-  color: #a855f7;
-
-  cursor: pointer;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-}
-
-
-.password-toggle:hover {
-  color: #d8b4fe;
-}
-
-
-/* =====================================================
-   LOGIN BUTTON
-===================================================== */
-
-.auth-button {
-  width: 100%;
-
-  height: 48px;
-
-  margin-top: 4px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #7c3aed,
-      #c026d3
-    );
-
-  color: #ffffff;
-
-  font-size: 14px;
-
+.otp-login-card button {
+  padding: 14px;
+  border: 0;
+  border-radius: 9px;
+  background: #9455ee;
+  color: white;
+  font-size: 15px;
   font-weight: 700;
-
   cursor: pointer;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 9px;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    opacity 0.2s ease;
+  margin-top: 8px;
 }
 
-
-/* =====================================================
-   BUTTON HOVER
-===================================================== */
-
-.auth-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 8px 25px
-      rgba(168, 85, 247, 0.25);
+.otp-login-card button:hover {
+  background: #a66df8;
 }
 
-
-/* =====================================================
-   BUTTON DISABLED
-===================================================== */
-
-.auth-button:disabled {
-  opacity: 0.65;
-
+.otp-login-card button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
+.otp-login-card .otp-secondary-button {
+  margin-top: 0;
+  background: transparent;
+  border: 1px solid #454055;
+}
 
-/* =====================================================
-   FOOTER
-===================================================== */
-
-.auth-footer {
-  margin: 24px 0 0;
-
-  text-align: center;
-
-  color: #91879d;
-
+.otp-destination {
+  padding: 12px;
+  border-radius: 8px;
+  background: #1c1929;
+  color: #d8c6ff;
   font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
 }
 
-
-/* =====================================================
-   SIGNUP LINK
-===================================================== */
-
-.auth-footer a {
-  color: #c084fc;
-
-  font-weight: 600;
-
-  text-decoration: none;
-
-  transition: color 0.2s ease;
+.otp-error,
+.otp-success {
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
-
-.auth-footer a:hover {
-  color: #e9d5ff;
-
-  text-decoration: underline;
+.otp-error {
+  color: #ff8585;
 }
 
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media (max-width: 768px) {
-
-  .login-main {
-    min-height: auto;
-
-    padding: 40px 16px 60px;
-  }
-
-  .auth-card {
-    max-width: 400px;
-
-    padding: 26px 22px;
-  }
-
+.otp-success {
+  color: #7de0a5;
 }
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media (max-width: 480px) {
-
-  .login-main {
-    padding: 30px 14px 50px;
+  .otp-login-card {
+    padding: 24px 20px;
   }
-
-  .auth-card {
-    padding: 24px 18px;
-
-    border-radius: 14px;
-  }
-
-  .auth-card h1 {
-    font-size: 26px;
-  }
-
-  .auth-subtitle {
-    font-size: 13px;
-  }
-
 }

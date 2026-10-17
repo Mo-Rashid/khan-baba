@@ -57,6 +57,7 @@ app.use(express.json({limit: "1mb", }));
 app.use(express.urlencoded({ extended: true }));
 
 const chatRoutes = require("./routes/chatRoutes");
+const otpLoginRoutes = require("./routes/otpLoginRoutes");
 
 
 // ====================== ROUTES (middleware ke baad) ======================
@@ -67,6 +68,9 @@ app.use("/api/feedback", feedbackRoutes);
 app.use("/api/labs", labRoutes);
 
 app.use("/api/chat", chatRoutes);
+
+app.use("/api/auth/otp", otpLoginRoutes);
+
 // ======================================================
 // EMAIL FUNCTION
 // ======================================================
