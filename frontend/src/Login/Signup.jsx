@@ -1,115 +1,177 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaShieldAlt,
+} from "react-icons/fa";
 import { API, apiRequest } from "./LoginData";
-import "./Login.css";
 import "./Signup.css";
 
 export default function Signup() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
 
-  async function handleSignup(event) {
-    event.preventDefault();
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
     setError("");
-    setMessage("");
-    setLoading(true);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const username = form.username.trim().toLowerCase();
+    const email = form.email.trim().toLowerCase();
+
+    if (!username || username.length < 3) {
+      setError("Username must be at least 3 characters.");
+      return;
+    }
+    if (!email) {
+      setError("Email is required.");
+      return;
+    }
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     try {
+      setLoading(true);
+
       const data = await apiRequest(API.SIGNUP, {
         method: "POST",
         body: JSON.stringify({
-          username: username.trim(),
-          email: email.trim(),
+          username,
+          email,
+          password: form.password,
+          confirmPassword: form.confirmPassword,
         }),
       });
 
-      setMessage(data.message || "Account created successfully.");
+      if (data.token) localStorage.setItem("token", data.token);
+      if (data.user) localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Move to login after a short readable success state.
-      window.setTimeout(() => {
-        navigate("/login", {
-          state: {
-            username: username.trim(),
-            email: email.trim(),
-          },
-        });
-      }, 900);
+      navigate("/");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Could not create account.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <main className="retro-page">
-      <div className="retro-scanlines" aria-hidden="true" />
-
-      <section className="retro-form signup-form">
-        <p className="retro-kicker">VULNX PLOIT // NEW USER</p>
-
-        <h1 className="retro-title">Register</h1>
-
-        <p className="retro-subtitle">CREATE YOUR ACCOUNT</p>
-
-        <form onSubmit={handleSignup}>
-          <div className="retro-field">
-            <label htmlFor="signup-username">User Name</label>
-            <input
-              id="signup-username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoComplete="username"
-              minLength={3}
-              maxLength={30}
-              pattern="[a-zA-Z0-9_.-]{3,30}"
-              title="Use 3–30 letters, numbers, underscores, dots or hyphens."
-              required
-              placeholder="Choose a username"
-            />
-            <small>Your username on the site.</small>
+    <div className="signup-page">
+      <main className="signup-main">
+        <div className="signup-card">
+          <div className="signup-icon">
+            <FaShieldAlt />
           </div>
 
-          <div className="retro-field">
-            <label htmlFor="signup-email">Email</label>
-            <input
-              id="signup-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              maxLength={254}
-              required
-              placeholder="you@example.com"
-            />
-            <small>Use an email address you can access.</small>
-          </div>
+          <h1>Create Account</h1>
+          <p className="signup-subtitle">Join the VulnXploit community</p>
 
-          {error && <p className="retro-alert error">{error}</p>}
-          {message && <p className="retro-alert success">{message}</p>}
+          {error && <div className="signup-error">{error}</div>}
 
-          <div className="retro-actions">
-            <Link className="retro-link" to="/login">
-              Already registered?
-            </Link>
+          <form onSubmit={handleSubmit}>
+            <label>Username</label>
+            <div className="signup-input">
+              <FaUser />
+              <input
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                placeholder="Choose a username"
+                disabled={loading}
+                required
+              />
+            </div>
 
-            <button
-              className="retro-button"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? "CREATING..." : "SUBMIT"}
+            <label>Email Address</label>
+            <div className="signup-input">
+              <FaEnvelope />
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                disabled={loading}
+                required
+              />
+            </div>
+
+            <label>Password</label>
+            <div className="signup-input">
+              <FaLock />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Minimum 8 characters"
+                disabled={loading}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword((p) => !p)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+
+            <label>Confirm Password</label>
+            <div className="signup-input">
+              <FaLock />
+              <input
+                type={showConfirm ? "text" : "password"}
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm password"
+                disabled={loading}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirm((p) => !p)}
+              >
+                {showConfirm ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+
+            <button type="submit" className="signup-button" disabled={loading}>
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
-          </div>
-        </form>
+          </form>
 
-        <p className="retro-footer">NEW ACCOUNT // VULNX PLOIT</p>
-      </section>
-    </main>
+          <p className="signup-footer">
+            Already have an account? <Link to="/login">Sign In</Link>
+          </p>
+        </div>
+      </main>
+    </div>
   );
 }

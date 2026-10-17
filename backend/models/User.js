@@ -20,12 +20,20 @@ const userSchema = new mongoose.Schema(
       maxlength: 254,
       unique: true,
     },
+    password: {
+  type: String,
+  required: true,
+  select: false,
+},
+
     isVerified: {
       type: Boolean,
       default: false,
     },
   },
   { timestamps: true }
+
+  
 );
 
 module.exports = mongoose.model("User", userSchema);
