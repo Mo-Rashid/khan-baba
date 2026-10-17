@@ -17,7 +17,6 @@ export async function apiRequest(url, options = {}) {
   });
 
   let data;
-
   try {
     data = await response.json();
   } catch {

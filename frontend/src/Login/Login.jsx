@@ -1,22 +1,42 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";import { FaUser, FaEnvelope, FaLock, FaShieldAlt, FaArrowLeft } from "react-icons/fa";
-import API, { apiRequest } from "./LoginData";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaShieldAlt,
+  FaArrowLeft,
+} from "react-icons/fa";
+import { API, apiRequest } from "./LoginData";
 import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
 
+  const [step, setStep] = useState("details"); // details | otp
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [step, setStep] = useState("details"); // "details" | "otp"
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [resendTimer, setResendTimer] = useState(0);
 
-  // ─── Step 1: Request OTP ───────────────────────────────
-  async function requestOtp(e) {
-    e.preventDefault();
+  const startResendTimer = () => {
+    setResendTimer(60);
+    const id = setInterval(() => {
+      setResendTimer((t) => {
+        if (t <= 1) {
+          clearInterval(id);
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+  };
+
+  const requestOtp = async (e) => {
+    e?.preventDefault();
     setError("");
     setMessage("");
 
@@ -24,37 +44,34 @@ export default function Login() {
     const cleanEmail = email.trim().toLowerCase();
 
     if (!cleanUsername || cleanUsername.length < 3) {
-      setError("Enter a valid username (min 3 characters).");
+      setError("Enter a valid username.");
       return;
     }
-
     if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-      setError("Enter a valid email address.");
+      setError("Enter a valid email.");
       return;
     }
 
     setLoading(true);
-
     try {
-      const result = await apiRequest(API.OTP_REQUEST, {
+      const data = await apiRequest(API.OTP_REQUEST, {
         method: "POST",
         body: JSON.stringify({
           username: cleanUsername,
           email: cleanEmail,
         }),
       });
-
       setStep("otp");
-      setMessage(result.message || "OTP sent to your registered email.");
+      setMessage(data.message || "OTP sent to your email.");
+      startResendTimer();
     } catch (err) {
-      setError(err.message || "Unable to request OTP.");
+      setError(err.message || "Could not send OTP.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  // ─── Step 2: Verify OTP ────────────────────────────────
-  async function verifyOtp(e) {
+  const verifyOtp = async (e) => {
     e.preventDefault();
     setError("");
     setMessage("");
@@ -65,9 +82,8 @@ export default function Login() {
     }
 
     setLoading(true);
-
     try {
-      const result = await apiRequest(API.OTP_VERIFY, {
+      const data = await apiRequest(API.OTP_VERIFY, {
         method: "POST",
         body: JSON.stringify({
           username: username.trim().toLowerCase(),
@@ -76,147 +92,134 @@ export default function Login() {
         }),
       });
 
-      if (!result.token) {
-        throw new Error("Server did not return a token.");
-      }
+      if (!data.token) throw new Error("No token received.");
 
-      localStorage.setItem("token", result.token);
-
-      if (result.user) {
-        localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("token", data.token);
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
       }
 
       navigate("/");
     } catch (err) {
-      setError(err.message || "OTP verification failed.");
+      setError(err.message || "Invalid OTP.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  function goBack() {
-    setStep("details");
-    setOtp("");
-    setError("");
-    setMessage("");
-  }
+  const resendOtp = async () => {
+    if (resendTimer > 0 || loading) return;
+    await requestOtp();
+  };
 
   return (
-    <main className="login-page">
-      <section className="login-card">
-        <div className="login-brand">
-          Vuln<span>Xploit</span>
-        </div>
-
-        <div className="login-symbol">
-          {step === "details" ? <FaShieldAlt /> : <FaLock />}
-        </div>
-
-        <h1>{step === "details" ? "Welcome back" : "Enter OTP"}</h1>
-
-        <p className="login-subtitle">
-          {step === "details"
-            ? "Login with your username and registered email"
-            : `We sent a 6-digit code to ${email}`}
-        </p>
-
-        {error && (
-          <div className="login-error" role="alert">
-            {error}
+    <div className="login-page">
+      <main className="login-main">
+        <div className="login-card">
+          <div className="login-icon">
+            <FaShieldAlt />
           </div>
-        )}
-        {message && (
-          <div className="login-message" role="status">
-            {message}
-          </div>
-        )}
 
-        
+          <h1>{step === "details" ? "Welcome Back" : "Enter OTP"}</h1>
+          <p className="login-subtitle">
+            {step === "details"
+              ? "Login with your username and email"
+              : `We sent a code to ${email}`}
+          </p>
 
-        {/* ─── DETAILS STEP ─── */}
-        {step === "details" && (
-          <form onSubmit={requestOtp}>
-            <label htmlFor="username">Username</label>
-            <div className="input-with-icon">
-              <FaUser />
-              <input
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter username"
-                autoComplete="username"
-                minLength={3}
-                maxLength={30}
+          {error && <div className="login-error">{error}</div>}
+          {message && <div className="login-message">{message}</div>}
+
+          {/* ── STEP 1: Username + Email ── */}
+          {step === "details" && (
+            <form onSubmit={requestOtp}>
+              <label>Username</label>
+              <div className="login-input">
+                <FaUser />
+                <input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter username"
+                  disabled={loading}
+                  required
+                />
+              </div>
+
+              <label>Email Address</label>
+              <div className="login-input">
+                <FaEnvelope />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  disabled={loading}
+                  required
+                />
+              </div>
+
+              <button type="submit" className="login-button" disabled={loading}>
+                {loading ? "Sending OTP..." : "Send OTP"}
+              </button>
+            </form>
+          )}
+
+          {/* ── STEP 2: OTP ── */}
+          {step === "otp" && (
+            <form onSubmit={verifyOtp}>
+              <label>6-digit OTP</label>
+              <div className="login-input">
+                <FaLock />
+                <input
+                  value={otp}
+                  onChange={(e) =>
+                    setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+                  }
+                  placeholder="Enter 6-digit OTP"
+                  inputMode="numeric"
+                  maxLength={6}
+                  disabled={loading}
+                  required
+                />
+              </div>
+
+              <button type="submit" className="login-button" disabled={loading}>
+                {loading ? "Verifying..." : "Verify & Login"}
+              </button>
+
+              <button
+                type="button"
+                className="resend-button"
+                onClick={resendOtp}
+                disabled={loading || resendTimer > 0}
+              >
+                {resendTimer > 0
+                  ? `Resend OTP in ${resendTimer}s`
+                  : "Resend OTP"}
+              </button>
+
+              <button
+                type="button"
+                className="back-button"
+                onClick={() => {
+                  setStep("details");
+                  setOtp("");
+                  setError("");
+                  setMessage("");
+                }}
                 disabled={loading}
-                required
-              />
-            </div>
+              >
+                <FaArrowLeft /> Change details
+              </button>
+            </form>
+          )}
 
-            <label htmlFor="email">Email Address</label>
-            <div className="input-with-icon">
-              <FaEnvelope />
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your registered email"
-                autoComplete="email"
-                disabled={loading}
-                required
-              />
-            </div>
-
-            <button type="submit" disabled={loading}>
-              {loading ? "Sending OTP..." : "Send OTP"}
-            </button>
-          </form>
-        )}
-        
-        
-
-        {/* ─── OTP STEP ─── */}
-        {step === "otp" && (
-          <form onSubmit={verifyOtp}>
-            <label htmlFor="otp">6-digit OTP</label>
-            <div className="input-with-icon">
-              <FaLock />
-              <input
-                id="otp"
-                value={otp}
-                onChange={(e) =>
-                  setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
-                }
-                placeholder="Enter 6-digit OTP"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={6}
-                disabled={loading}
-                required
-              />
-            </div>
-
-            <button type="submit" disabled={loading}>
-              {loading ? "Verifying..." : "Verify & Login"}
-            </button>
-
-            <button
-              type="button"
-              className="secondary-button"
-              disabled={loading}
-              onClick={goBack}
-            >
-              <FaArrowLeft /> Change details
-            </button>
-          </form>
-        )}
-        <p className="login-footer">
-  Secure passwordless authentication
-  <br />
-  Don't have an account?{" "}
-  <Link to="/signup">Create Account</Link>
-</p>
-      </section>
-    </main>
+          <p className="login-footer">
+            Don't have an account?{" "}
+            <Link to="/signup">Create Account</Link>
+          </p>
+        </div>
+      </main>
+    </div>
   );
 }
