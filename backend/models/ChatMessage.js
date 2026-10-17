@@ -8,12 +8,14 @@ const chatMessageSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+
     senderName: {
       type: String,
       required: true,
       trim: true,
       maxlength: 80,
     },
+
     message: {
       type: String,
       required: true,
@@ -21,7 +23,9 @@ const chatMessageSchema = new mongoose.Schema(
       maxlength: 2000,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 module.exports =

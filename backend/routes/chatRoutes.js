@@ -9,6 +9,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // GET /api/chat/messages
+// Fetch the latest 100 messages.
 router.get("/messages", async (req, res) => {
   try {
     const messages = await ChatMessage.find()
@@ -21,7 +22,7 @@ router.get("/messages", async (req, res) => {
       messages: messages.reverse(),
     });
   } catch (error) {
-    console.error("Chat read error:", error);
+    console.error("Chat read error:", error.message);
 
     return res.status(500).json({
       success: false,
@@ -31,8 +32,10 @@ router.get("/messages", async (req, res) => {
 });
 
 // POST /api/chat/messages
+// Only authenticated users can send messages.
 router.post("/messages", authMiddleware, async (req, res) => {
   try {
+    // Validate message
     const message =
       typeof req.body?.message === "string"
         ? req.body.message.trim()
@@ -52,63 +55,40 @@ router.post("/messages", authMiddleware, async (req, res) => {
       });
     }
 
-    const user = req.user || {};
-    const rawUserId = user._id || user.id || user.userId;
+    // Get authenticated user ID from middleware
+    const authUser = req.user || {};
 
-    if (!rawUserId) {
+    const rawUserId =
+      authUser._id ||
+      authUser.id ||
+      authUser.userId;
+
+    if (
+      !rawUserId ||
+      !mongoose.Types.ObjectId.isValid(String(rawUserId))
+    ) {
       return res.status(401).json({
         success: false,
         message: "Please sign in again to send messages.",
       });
     }
 
-    const senderId = String(rawUserId);
+    // Fetch username from MongoDB
+    const user = await User.findById(rawUserId)
+      .select("username")
+      .lean();
 
-    let senderName = [
-      user.firstName,
-      user.lastName,
-    ]
-      .filter((part) => typeof part === "string" && part.trim())
-      .join(" ")
-      .trim();
-
-    if (
-      !senderName &&
-      mongoose.Types.ObjectId.isValid(senderId)
-    ) {
-      const dbUser = await User.findById(senderId)
-        .select("firstName lastName name username email")
-        .lean();
-
-      if (dbUser) {
-        senderName = [
-          dbUser.firstName,
-          dbUser.lastName,
-        ]
-          .filter((part) => typeof part === "string" && part.trim())
-          .join(" ")
-          .trim();
-
-        senderName =
-          senderName ||
-          dbUser.name ||
-          dbUser.username ||
-          dbUser.email ||
-          "";
-      }
+    if (!user || !user.username) {
+      return res.status(401).json({
+        success: false,
+        message: "User account not found. Please sign in again.",
+      });
     }
 
-    senderName = String(
-      senderName ||
-      user.name ||
-      user.username ||
-      user.email ||
-      "Community User"
-    ).trim().slice(0, 80);
-
+    // Save message using username only
     const savedMessage = await ChatMessage.create({
-      senderId,
-      senderName,
+      senderId: String(user._id),
+      senderName: user.username,
       message,
     });
 
@@ -117,7 +97,7 @@ router.post("/messages", authMiddleware, async (req, res) => {
       message: savedMessage,
     });
   } catch (error) {
-    console.error("Chat send error:", error);
+    console.error("Chat send error:", error.message);
 
     return res.status(500).json({
       success: false,

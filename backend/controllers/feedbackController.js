@@ -1,3 +1,5 @@
+
+const mongoose = require("mongoose");
 const Feedback = require("../models/Feedback");
 const User = require("../models/User");
 
@@ -13,14 +15,7 @@ const VALID_SECTIONS = [
   "workshops",
 ];
 
-/*
-|--------------------------------------------------------------------------
-| GET FEEDBACK
-|--------------------------------------------------------------------------
-| GET /api/feedback?section=bug-bounty
-|--------------------------------------------------------------------------
-*/
-
+// GET /api/feedback?section=bug-bounty
 const getFeedback = async (req, res) => {
   try {
     const { section } = req.query;
@@ -43,13 +38,10 @@ const getFeedback = async (req, res) => {
       section,
       status: "approved",
     })
-      .sort({
-        createdAt: -1,
-      })
+      .sort({ createdAt: -1 })
       .lean();
 
     const totalReviews = feedback.length;
-
     const totalRating = feedback.reduce(
       (sum, item) => sum + item.rating,
       0
@@ -78,7 +70,7 @@ const getFeedback = async (req, res) => {
       feedback: formattedFeedback,
     });
   } catch (error) {
-    console.error("GET FEEDBACK ERROR:", error);
+    console.error("GET FEEDBACK ERROR:", error.message);
 
     return res.status(500).json({
       success: false,
@@ -87,30 +79,12 @@ const getFeedback = async (req, res) => {
   }
 };
 
-
-/*
-|--------------------------------------------------------------------------
-| CREATE FEEDBACK
-|--------------------------------------------------------------------------
-| POST /api/feedback
-|--------------------------------------------------------------------------
-*/
-
+// POST /api/feedback
 const createFeedback = async (req, res) => {
   try {
-    const {
-      section,
-      rating,
-      message,
-      tags,
-    } = req.body;
+    const { section, rating, message, tags } = req.body;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate section
-    |--------------------------------------------------------------------------
-    */
-
+    // Validate section
     if (!section) {
       return res.status(400).json({
         success: false,
@@ -125,16 +99,8 @@ const createFeedback = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate message
-    |--------------------------------------------------------------------------
-    */
-
-    if (
-      typeof message !== "string" ||
-      !message.trim()
-    ) {
+    // Validate message
+    if (typeof message !== "string" || !message.trim()) {
       return res.status(400).json({
         success: false,
         message: "Feedback message is required",
@@ -157,13 +123,8 @@ const createFeedback = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate rating
-    |--------------------------------------------------------------------------
-    */
-
-    const numericRating = Number(rating || 5);
+    // Validate rating
+    const numericRating = Number(rating ?? 5);
 
     if (
       !Number.isInteger(numericRating) ||
@@ -176,32 +137,36 @@ const createFeedback = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Find authenticated user
-    |--------------------------------------------------------------------------
-    */
+    // Get authenticated user ID
+    const rawUserId =
+      req.user?._id ||
+      req.user?.id ||
+      req.user?.userId;
 
-    const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(404).json({
+    if (!rawUserId || !mongoose.Types.ObjectId.isValid(String(rawUserId))) {
+      return res.status(401).json({
         success: false,
-        message: "User account not found",
+        message: "Please sign in again.",
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Check duplicate feedback
-    |--------------------------------------------------------------------------
-    */
+    // Fetch username only; no firstName/lastName
+    const user = await User.findById(rawUserId)
+      .select("username")
+      .lean();
 
-    const existingFeedback =
-      await Feedback.findOne({
-        user: user._id,
-        section,
+    if (!user || !user.username) {
+      return res.status(401).json({
+        success: false,
+        message: "Username not found. Please sign in again.",
       });
+    }
+
+    // Check duplicate feedback
+    const existingFeedback = await Feedback.findOne({
+      user: user._id,
+      section,
+    }).select("_id");
 
     if (existingFeedback) {
       return res.status(409).json({
@@ -211,56 +176,29 @@ const createFeedback = async (req, res) => {
       });
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Clean tags
-    |--------------------------------------------------------------------------
-    */
-
+    // Clean tags
     const cleanTags = Array.isArray(tags)
       ? tags
-          .filter(
-            (tag) =>
-              typeof tag === "string"
-          )
+          .filter((tag) => typeof tag === "string")
           .map((tag) => tag.trim())
           .filter(Boolean)
           .slice(0, 5)
       : [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Get username from database
-    |--------------------------------------------------------------------------
-    */
-
-    const username =
-      `${user.firstName || ""} ${
-        user.lastName || ""
-      }`.trim() ||
-      user.email.split("@")[0];
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create feedback
-    |--------------------------------------------------------------------------
-    */
-
-    const newFeedback =
-      await Feedback.create({
-        user: user._id,
-        username,
-        section,
-        rating: numericRating,
-        message: cleanMessage,
-        tags: cleanTags,
-        status: "approved",
-      });
+    // Save feedback with username
+    const newFeedback = await Feedback.create({
+      user: user._id,
+      username: user.username,
+      section,
+      rating: numericRating,
+      message: cleanMessage,
+      tags: cleanTags,
+      status: "approved",
+    });
 
     return res.status(201).json({
       success: true,
       message: "Feedback submitted successfully",
-
       feedback: {
         id: newFeedback._id.toString(),
         username: newFeedback.username,
@@ -272,12 +210,6 @@ const createFeedback = async (req, res) => {
       },
     });
   } catch (error) {
-    /*
-    |--------------------------------------------------------------------------
-    | MongoDB duplicate key
-    |--------------------------------------------------------------------------
-    */
-
     if (error.code === 11000) {
       return res.status(409).json({
         success: false,
@@ -286,10 +218,7 @@ const createFeedback = async (req, res) => {
       });
     }
 
-    console.error(
-      "CREATE FEEDBACK ERROR:",
-      error
-    );
+    console.error("CREATE FEEDBACK ERROR:", error.message);
 
     return res.status(500).json({
       success: false,
@@ -298,22 +227,25 @@ const createFeedback = async (req, res) => {
   }
 };
 
-
-/*
-|--------------------------------------------------------------------------
-| DELETE OWN FEEDBACK
-|--------------------------------------------------------------------------
-| DELETE /api/feedback/:id
-|--------------------------------------------------------------------------
-*/
-
+// DELETE /api/feedback/:id
 const deleteFeedback = async (req, res) => {
   try {
-    const feedback =
-      await Feedback.findOne({
-        _id: req.params.id,
-        user: req.user.id,
+    const rawUserId =
+      req.user?._id ||
+      req.user?.id ||
+      req.user?.userId;
+
+    if (!rawUserId || !mongoose.Types.ObjectId.isValid(String(rawUserId))) {
+      return res.status(401).json({
+        success: false,
+        message: "Please sign in again.",
       });
+    }
+
+    const feedback = await Feedback.findOne({
+      _id: req.params.id,
+      user: rawUserId,
+    });
 
     if (!feedback) {
       return res.status(404).json({
@@ -329,10 +261,7 @@ const deleteFeedback = async (req, res) => {
       message: "Feedback deleted successfully",
     });
   } catch (error) {
-    console.error(
-      "DELETE FEEDBACK ERROR:",
-      error
-    );
+    console.error("DELETE FEEDBACK ERROR:", error.message);
 
     return res.status(500).json({
       success: false,
@@ -341,59 +270,28 @@ const deleteFeedback = async (req, res) => {
   }
 };
 
-
-/*
-|--------------------------------------------------------------------------
-| Time formatter
-|--------------------------------------------------------------------------
-*/
-
 function formatTime(date) {
-  const now = Date.now();
-  const created = new Date(date).getTime();
-
   const seconds = Math.floor(
-    (now - created) / 1000
+    (Date.now() - new Date(date).getTime()) / 1000
   );
 
-  if (seconds < 60) {
-    return "Just now";
-  }
+  if (seconds < 60) return "Just now";
 
-  const minutes = Math.floor(
-    seconds / 60
-  );
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
 
-  if (minutes < 60) {
-    return `${minutes}m ago`;
-  }
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
 
-  const hours = Math.floor(
-    minutes / 60
-  );
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
 
-  if (hours < 24) {
-    return `${hours}h ago`;
-  }
-
-  const days = Math.floor(
-    hours / 24
-  );
-
-  if (days < 30) {
-    return `${days}d ago`;
-  }
-
-  return new Date(date).toLocaleDateString(
-    "en-IN",
-    {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }
-  );
+  return new Date(date).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
-
 
 module.exports = {
   getFeedback,

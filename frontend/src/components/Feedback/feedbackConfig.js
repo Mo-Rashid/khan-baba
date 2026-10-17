@@ -1,9 +1,8 @@
+```javascript
 export const FEEDBACK_CONFIG = {
   "bug-bounty": {
     title: "Student Feedback",
-    subtitle:
-      "What students say about the Bug Bounty learning experience",
-
+    subtitle: "What students say about the Bug Bounty learning experience",
     tags: [
       "🔥 Excellent Content",
       "🧠 Very Informative",
@@ -14,9 +13,7 @@ export const FEEDBACK_CONFIG = {
 
   "ai-red-teaming": {
     title: "Student Feedback",
-    subtitle:
-      "What students say about the AI Red Teaming learning experience",
-
+    subtitle: "What students say about the AI Red Teaming learning experience",
     tags: [
       "🤖 Excellent AI Content",
       "🧠 Very Informative",
@@ -27,9 +24,7 @@ export const FEEDBACK_CONFIG = {
 
   "red-teaming": {
     title: "Student Feedback",
-    subtitle:
-      "What students say about the Red Teaming learning experience",
-
+    subtitle: "What students say about the Red Teaming learning experience",
     tags: [
       "🔥 Excellent Training",
       "🎯 Real-World Skills",
@@ -40,9 +35,7 @@ export const FEEDBACK_CONFIG = {
 
   "ethical-hacking": {
     title: "Student Feedback",
-    subtitle:
-      "What students say about the Ethical Hacking learning experience",
-
+    subtitle: "What students say about the Ethical Hacking learning experience",
     tags: [
       "🔥 Excellent Course",
       "🧠 Very Informative",
@@ -53,9 +46,7 @@ export const FEEDBACK_CONFIG = {
 
   "all-ctf-lab": {
     title: "Student Feedback",
-    subtitle:
-      "What students say about the All-CTF-Lab experience",
-
+    subtitle: "What students say about the All-CTF-Lab experience",
     tags: [
       "🚩 Great Challenges",
       "🔥 Fun Labs",
@@ -66,9 +57,7 @@ export const FEEDBACK_CONFIG = {
 
   certifications: {
     title: "Student Feedback",
-    subtitle:
-      "What students say about their certification experience",
-
+    subtitle: "What students say about their certification experience",
     tags: [
       "🏆 Great Certificate",
       "🔥 Excellent Workshop",
@@ -79,9 +68,7 @@ export const FEEDBACK_CONFIG = {
 
   portfolio: {
     title: "Community Feedback",
-    subtitle:
-      "What the VulnXploit community says about the platform",
-
+    subtitle: "What the VulnXploit community says about the platform",
     tags: [
       "🔥 Excellent Platform",
       "🎨 Great Design",
@@ -92,9 +79,7 @@ export const FEEDBACK_CONFIG = {
 
   courses: {
     title: "Student Feedback",
-    subtitle:
-      "What students say about the courses",
-
+    subtitle: "What students say about the courses",
     tags: [
       "🔥 Excellent Course",
       "🧠 Very Informative",
@@ -105,9 +90,7 @@ export const FEEDBACK_CONFIG = {
 
   workshops: {
     title: "Student Feedback",
-    subtitle:
-      "What students say about the workshops",
-
+    subtitle: "What students say about the workshops",
     tags: [
       "🔥 Excellent Workshop",
       "🧠 Very Informative",
@@ -116,3 +99,4 @@ export const FEEDBACK_CONFIG = {
     ],
   },
 };
+```
