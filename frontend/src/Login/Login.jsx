@@ -3,28 +3,34 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
 
 export default function Login() {
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [identifier, setIdentifier] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [channel, setChannel] = useState("");
 
-  async function requestOtp(event) {
+  async function sendOtp(event) {
     event.preventDefault();
     setError("");
     setMessage("");
 
-    if (!firstName.trim() || !lastName.trim() || !identifier.trim()) {
-      setError("Enter your first name, last name, and email or phone.");
+    const cleanUsername = username.trim().toLowerCase();
+    const cleanEmail = email.trim().toLowerCase();
+
+    if (!/^[a-z0-9_]{3,30}$/.test(cleanUsername)) {
+      setError("Username must be 3–30 characters (letters, numbers, underscores).");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      setError("Enter a valid email address.");
       return;
     }
 
@@ -36,10 +42,10 @@ export default function Login() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            identifier: identifier.trim(),
+            username: cleanUsername,
+            email: cleanEmail,
           }),
         }
       );
@@ -47,16 +53,13 @@ export default function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Could not request OTP.");
+        throw new Error(data.message || "Could not send OTP.");
       }
 
-      setChannel(data.channel);
+      setUsername(cleanUsername);
+      setEmail(cleanEmail);
       setOtpSent(true);
-      setMessage(
-        data.channel === "email"
-          ? "Check your registered email for the OTP."
-          : "OTP requested. Check the delivery method configured by your server."
-      );
+      setMessage("OTP sent. Check your registered email.");
     } catch (err) {
       setError(err.message || "Something went wrong.");
     } finally {
@@ -69,8 +72,8 @@ export default function Login() {
     setError("");
     setMessage("");
 
-    if (!/^\d{4,10}$/.test(code.trim())) {
-      setError("Enter a valid OTP.");
+    if (!/^\d{6}$/.test(code.trim())) {
+      setError("Enter the 6-digit OTP.");
       return;
     }
 
@@ -82,10 +85,10 @@ export default function Login() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            identifier: identifier.trim(),
+            username: username.trim().toLowerCase(),
+            email: email.trim().toLowerCase(),
             code: code.trim(),
           }),
         }
@@ -101,7 +104,6 @@ export default function Login() {
         throw new Error("Server did not return a valid login session.");
       }
 
-      // Match this with your existing AuthContext if needed.
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -113,7 +115,7 @@ export default function Login() {
     }
   }
 
-  function changeIdentifier() {
+  function changeDetails() {
     setOtpSent(false);
     setCode("");
     setError("");
@@ -124,43 +126,38 @@ export default function Login() {
     <main className="otp-login-page">
       <section className="otp-login-card">
         <div className="otp-login-brand">VulnXploit</div>
-        <h1>Welcome Back</h1>
+
+        <h1>{otpSent ? "Verify Your Email" : "Welcome Back"}</h1>
+
         <p className="otp-login-subtitle">
-          Login securely using your registered email or phone.
+          {otpSent
+            ? "Enter the 6-digit code sent to your email."
+            : "Login securely using your username and registered email."}
         </p>
 
         {!otpSent ? (
-          <form onSubmit={requestOtp}>
-            <label htmlFor="first-name">First Name</label>
+          <form onSubmit={sendOtp}>
+            <label htmlFor="username">Username</label>
             <input
-              id="first-name"
-              type="text"
-              autoComplete="given-name"
-              placeholder="Enter first name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-
-            <label htmlFor="last-name">Last Name</label>
-            <input
-              id="last-name"
-              type="text"
-              autoComplete="family-name"
-              placeholder="Enter last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-
-            <label htmlFor="identifier">Email or Phone Number</label>
-            <input
-              id="identifier"
+              id="username"
               type="text"
               autoComplete="username"
-              placeholder="Email or +919876543210"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              maxLength={30}
+              required
+            />
+
+            <label htmlFor="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="Enter your registered email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              maxLength={254}
               required
             />
 
@@ -171,14 +168,12 @@ export default function Login() {
         ) : (
           <form onSubmit={verifyOtp}>
             <div className="otp-destination">
-              Welcome, {firstName} {lastName}
+              Username: {username}
               <br />
-              OTP method: {channel === "email" ? "Email" : "Phone"}
-              <br />
-              {identifier}
+              Email: {email}
             </div>
 
-            <label htmlFor="otp-code">Verification Code</label>
+            <label htmlFor="otp-code">6-Digit OTP</label>
             <input
               id="otp-code"
               type="text"
@@ -187,19 +182,20 @@ export default function Login() {
               placeholder="Enter OTP"
               value={code}
               onChange={(e) =>
-                setCode(e.target.value.replace(/\D/g, "").slice(0, 10))
+                setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
               }
+              maxLength={6}
               required
             />
 
             <button type="submit" disabled={busy}>
-              {busy ? "Verifying..." : "Verify & Login"}
+              {busy ? "Verifying..." : "Verify OTP & Login"}
             </button>
 
             <button
               type="button"
               className="otp-secondary-button"
-              onClick={changeIdentifier}
+              onClick={changeDetails}
               disabled={busy}
             >
               Go Back

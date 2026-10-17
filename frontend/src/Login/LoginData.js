@@ -1,19 +1,20 @@
+
 const API_BASE_URL = "/api";
 
 export const API = {
   SIGNUP: `${API_BASE_URL}/auth/signup`,
   LOGIN: `${API_BASE_URL}/auth/login`,
+  OTP_REQUEST: `${API_BASE_URL}/auth/otp/request`,
+  OTP_VERIFY: `${API_BASE_URL}/auth/otp/verify`,
 };
 
 export async function apiRequest(url, options = {}) {
   const response = await fetch(url, {
     ...options,
-
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
-
     credentials: "include",
   });
 
