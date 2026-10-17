@@ -95,11 +95,11 @@ router.post("/request", requestLimiter, async (req, res) => {
 
     const user = await User.findOne({ username, email });
 
-    if (!user || !user.isVerified) {
-      return res.status(401).json({
-        message: "Account could not be verified.",
-      });
-    }
+    if (!user) {
+  return res.status(401).json({
+    message: "Account could not be verified.",
+  });
+}
 
     const now = Date.now();
     const previous = await OtpChallenge.findOne({ userId: user._id });
@@ -170,11 +170,11 @@ router.post("/verify", verifyLimiter, async (req, res) => {
 
     const user = await User.findOne({ username, email });
 
-    if (!user || !user.isVerified) {
-      return res.status(401).json({
-        message: "Invalid login details or OTP.",
-      });
-    }
+    if (!user) {
+  return res.status(401).json({
+    message: "Invalid login details or OTP.",
+  });
+}
 
     const challenge = await OtpChallenge.findOne({
       userId: user._id,
