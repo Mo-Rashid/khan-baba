@@ -5,9 +5,14 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const { Resend } = require("resend");
+
 const User = require("../models/User");
 
 const router = express.Router();
+
+// ======================================================
+// ENVIRONMENT CONFIGURATION
+// ======================================================
 
 const requiredEnv = ["RESEND_API_KEY", "JWT_SECRET"];
 
@@ -19,76 +24,88 @@ for (const key of requiredEnv) {
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const RESEND_FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL ||
+  "VulnXploit <onboarding@resend.dev>";
+
+// ======================================================
+// OTP DATABASE MODEL
+// ======================================================
+
 const otpSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     unique: true,
   },
-  otpHash: { type: String, required: true },
-  expiresAt: { type: Date, required: true, expires: 0 },
-  attempts: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now },
+  otpHash: {
+    type: String,
+    required: true,
+  },
+  expiresAt: {
+    type: Date,
+    required: true,
+    expires: 0,
+  },
+  attempts: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const OtpChallenge =
   mongoose.models.OtpChallenge ||
   mongoose.model("OtpChallenge", otpSchema);
 
-const otpLimiter = rateLimit({
+// ======================================================
+// RATE LIMITERS
+// ======================================================
+
+const requestLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 5,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { message: "Too many attempts. Try again later." },
+  message: {
+    message: "Too many OTP requests. Try again later.",
+  },
 });
 
-function normalizeName(value) {
-  return String(value || "").trim().toLowerCase();
-}
+const verifyLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    message: "Too many verification attempts. Try again later.",
+  },
+});
 
-function identify(value) {
-  const input = String(value || "").trim();
+// ======================================================
+// HELPERS
+// ======================================================
 
-  if (input.includes("@")) {
-    const email = input.toLowerCase();
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      throw new Error("Enter a valid email address.");
-    }
-
-    return { type: "email", value: email };
-  }
-
-  const phone = input.replace(/[\s()-]/g, "");
-
-  if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
-    throw new Error(
-      "Enter a valid email or phone number with country code."
-    );
-  }
-
-  return { type: "phone", value: phone };
-}
-
-async function findExistingUser(identity, firstName, lastName) {
-  const contactQuery =
-    identity.type === "email"
-      ? { email: identity.value }
-      : { phoneNumber: identity.value };
-
-  const user = await User.findOne(contactQuery);
-
-  if (!user) return null;
+function getEmail(body) {
+  const email = String(
+    body.email || body.identifier || ""
+  )
+    .trim()
+    .toLowerCase();
 
   if (
-    normalizeName(user.firstName) !== normalizeName(firstName) ||
-    normalizeName(user.lastName) !== normalizeName(lastName)
+    email.length > 254 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   ) {
-    return null;
+    const error = new Error("Enter a valid email address.");
+    error.status = 400;
+    throw error;
   }
 
-  return user;
+  return email;
 }
 
 function hashOtp(otp, userId) {
@@ -98,22 +115,30 @@ function hashOtp(otp, userId) {
     .digest("hex");
 }
 
-router.post("/request", otpLimiter, async (req, res) => {
+function safeCompareOtp(expectedHash, suppliedHash) {
+  const expected = Buffer.from(expectedHash, "hex");
+  const supplied = Buffer.from(suppliedHash, "hex");
+
+  return (
+    expected.length === supplied.length &&
+    crypto.timingSafeEqual(expected, supplied)
+  );
+}
+
+// ======================================================
+// REQUEST OTP
+// POST /api/auth/otp/request
+// Body: { "email": "registered@example.com" }
+// ======================================================
+
+router.post("/request", requestLimiter, async (req, res) => {
+  let userId;
+
   try {
-    const { firstName, lastName } = req.body;
-    const identity = identify(req.body.identifier);
+    const email = getEmail(req.body);
 
-    if (!firstName?.trim() || !lastName?.trim()) {
-      return res.status(400).json({
-        message: "Enter your registered first and last name.",
-      });
-    }
-
-    const user = await findExistingUser(
-      identity,
-      firstName,
-      lastName
-    );
+    // Only an existing account can request a login OTP.
+    const user = await User.findOne({ email });
 
     if (!user || !user.email) {
       return res.status(400).json({
@@ -121,54 +146,80 @@ router.post("/request", otpLimiter, async (req, res) => {
       });
     }
 
-    const now = Date.now();
-    const previous = await OtpChallenge.findOne({
-      userId: user._id,
-    });
+    userId = user._id;
 
-    if (previous && now - previous.createdAt.getTime() < 60_000) {
+    const now = Date.now();
+
+    const previous = await OtpChallenge.findOne({ userId });
+
+    if (
+      previous &&
+      previous.createdAt &&
+      now - previous.createdAt.getTime() < 60_000
+    ) {
       return res.status(429).json({
         message: "Please wait 60 seconds before requesting another OTP.",
       });
     }
 
-    const otp = crypto.randomInt(0, 1_000_000)
+    // Generate a cryptographically secure six-digit OTP.
+    const otp = crypto
+      .randomInt(0, 1_000_000)
       .toString()
       .padStart(6, "0");
 
+    // Store only the OTP hash, never the plain OTP.
     await OtpChallenge.findOneAndUpdate(
-      { userId: user._id },
+      { userId },
       {
         $set: {
-          otpHash: hashOtp(otp, user._id),
+          otpHash: hashOtp(otp, userId),
           expiresAt: new Date(now + 5 * 60_000),
           attempts: 0,
           createdAt: new Date(now),
         },
       },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
+      {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+      }
     );
 
-    try {
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ||
-          "VulnXploit <onboarding@resend.dev>",
-        to: [user.email],
-        subject: "Your VulnXploit login OTP",
-        text: `Your login OTP is ${otp}. It expires in 5 minutes. Do not share it.`,
+    // Send OTP using Resend.
+    const result = await resend.emails.send({
+      from: RESEND_FROM_EMAIL,
+      to: [user.email],
+      subject: "Your VulnXploit login OTP",
+      text:
+        `Your login OTP is ${otp}.\n\n` +
+        "It expires in 5 minutes. Do not share this code with anyone.",
+    });
+
+    // Resend can return an API error without throwing an exception.
+    if (result.error) {
+      console.error("Resend error:", result.error);
+
+      await OtpChallenge.deleteOne({ userId });
+
+      return res.status(502).json({
+        message: "Email delivery failed. Check Resend configuration.",
       });
-    } catch (emailError) {
-      await OtpChallenge.deleteOne({ userId: user._id });
-      throw emailError;
     }
 
-    return res.json({
+    return res.status(200).json({
       message: "OTP sent to your registered email.",
       channel: "email",
     });
   } catch (error) {
-    if (error.message.startsWith("Enter a valid")) {
-      return res.status(400).json({ message: error.message });
+    if (userId) {
+      await OtpChallenge.deleteOne({ userId }).catch(() => {});
+    }
+
+    if (error.status === 400) {
+      return res.status(400).json({
+        message: error.message,
+      });
     }
 
     console.error("OTP request failed:", error.message);
@@ -179,10 +230,15 @@ router.post("/request", otpLimiter, async (req, res) => {
   }
 });
 
-router.post("/verify", otpLimiter, async (req, res) => {
+// ======================================================
+// VERIFY OTP
+// POST /api/auth/otp/verify
+// Body: { "email": "registered@example.com", "code": "123456" }
+// ======================================================
+
+router.post("/verify", verifyLimiter, async (req, res) => {
   try {
-    const { firstName, lastName } = req.body;
-    const identity = identify(req.body.identifier);
+    const email = getEmail(req.body);
     const code = String(req.body.code || "").trim();
 
     if (!/^\d{6}$/.test(code)) {
@@ -191,11 +247,8 @@ router.post("/verify", otpLimiter, async (req, res) => {
       });
     }
 
-    const user = await findExistingUser(
-      identity,
-      firstName,
-      lastName
-    );
+    // Re-fetch the registered user from the database.
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({
@@ -222,13 +275,9 @@ router.post("/verify", otpLimiter, async (req, res) => {
       });
     }
 
-    const expected = Buffer.from(challenge.otpHash, "hex");
-    const supplied = Buffer.from(hashOtp(code, user._id), "hex");
+    const suppliedHash = hashOtp(code, user._id);
 
-    if (
-      expected.length !== supplied.length ||
-      !crypto.timingSafeEqual(expected, supplied)
-    ) {
+    if (!safeCompareOtp(challenge.otpHash, suppliedHash)) {
       challenge.attempts += 1;
       await challenge.save();
 
@@ -237,6 +286,7 @@ router.post("/verify", otpLimiter, async (req, res) => {
       });
     }
 
+    // OTP is single-use.
     await OtpChallenge.deleteOne({ _id: challenge._id });
 
     const token = jwt.sign(
@@ -245,7 +295,7 @@ router.post("/verify", otpLimiter, async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    return res.json({
+    return res.status(200).json({
       message: "Login successful.",
       token,
       user: {
@@ -256,8 +306,10 @@ router.post("/verify", otpLimiter, async (req, res) => {
       },
     });
   } catch (error) {
-    if (error.message.startsWith("Enter a valid")) {
-      return res.status(400).json({ message: error.message });
+    if (error.status === 400) {
+      return res.status(400).json({
+        message: error.message,
+      });
     }
 
     console.error("OTP verification failed:", error.message);
