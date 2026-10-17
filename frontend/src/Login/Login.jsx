@@ -3,12 +3,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const API_BASE = (
-  import.meta.env.VITE_API_URL || ""
-).replace(/\/$/, "");
+const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [identifier, setIdentifier] = useState("");
   const [code, setCode] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -22,8 +23,8 @@ export default function Login() {
     setError("");
     setMessage("");
 
-    if (!identifier.trim()) {
-      setError("Enter your email or phone number.");
+    if (!firstName.trim() || !lastName.trim() || !identifier.trim()) {
+      setError("Enter your first name, last name, and email or phone.");
       return;
     }
 
@@ -35,7 +36,11 @@ export default function Login() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ identifier: identifier.trim() }),
+          body: JSON.stringify({
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            identifier: identifier.trim(),
+          }),
         }
       );
 
@@ -50,7 +55,7 @@ export default function Login() {
       setMessage(
         data.channel === "email"
           ? "Check your registered email for the OTP."
-          : "Check your registered phone for the SMS OTP."
+          : "OTP requested. Check the delivery method configured by your server."
       );
     } catch (err) {
       setError(err.message || "Something went wrong.");
@@ -65,7 +70,7 @@ export default function Login() {
     setMessage("");
 
     if (!/^\d{4,10}$/.test(code.trim())) {
-      setError("Enter the OTP you received.");
+      setError("Enter a valid OTP.");
       return;
     }
 
@@ -78,6 +83,8 @@ export default function Login() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
             identifier: identifier.trim(),
             code: code.trim(),
           }),
@@ -90,8 +97,11 @@ export default function Login() {
         throw new Error(data.message || "OTP verification failed.");
       }
 
-      // Update these to match your existing AuthContext
-      // if your application stores authentication differently.
+      if (!data.token || !data.user) {
+        throw new Error("Server did not return a valid login session.");
+      }
+
+      // Match this with your existing AuthContext if needed.
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -114,14 +124,36 @@ export default function Login() {
     <main className="otp-login-page">
       <section className="otp-login-card">
         <div className="otp-login-brand">VulnXploit</div>
-        <h1>Welcome back</h1>
+        <h1>Welcome Back</h1>
         <p className="otp-login-subtitle">
-          Sign in securely with your registered email or phone.
+          Login securely using your registered email or phone.
         </p>
 
         {!otpSent ? (
           <form onSubmit={requestOtp}>
-            <label htmlFor="identifier">Email or phone number</label>
+            <label htmlFor="first-name">First Name</label>
+            <input
+              id="first-name"
+              type="text"
+              autoComplete="given-name"
+              placeholder="Enter first name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+
+            <label htmlFor="last-name">Last Name</label>
+            <input
+              id="last-name"
+              type="text"
+              autoComplete="family-name"
+              placeholder="Enter last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+
+            <label htmlFor="identifier">Email or Phone Number</label>
             <input
               id="identifier"
               type="text"
@@ -139,15 +171,14 @@ export default function Login() {
         ) : (
           <form onSubmit={verifyOtp}>
             <div className="otp-destination">
-              OTP requested via{" "}
-              <strong>
-                {channel === "email" ? "Email" : "SMS"}
-              </strong>
+              Welcome, {firstName} {lastName}
               <br />
-              <span>{identifier}</span>
+              OTP method: {channel === "email" ? "Email" : "Phone"}
+              <br />
+              {identifier}
             </div>
 
-            <label htmlFor="otp-code">Verification code</label>
+            <label htmlFor="otp-code">Verification Code</label>
             <input
               id="otp-code"
               type="text"
@@ -171,7 +202,7 @@ export default function Login() {
               onClick={changeIdentifier}
               disabled={busy}
             >
-              Change email or phone
+              Go Back
             </button>
           </form>
         )}
