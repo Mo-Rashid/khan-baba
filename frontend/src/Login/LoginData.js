@@ -1,3 +1,4 @@
+
 const API_BASE_URL = "/api";
 
 export const API = {
@@ -7,27 +8,37 @@ export const API = {
 };
 
 export async function apiRequest(url, options = {}) {
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-    credentials: "include",
-  });
+  let response;
 
-  let data;
   try {
-    data = await response.json();
+    response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+    });
   } catch {
-    throw new Error("Invalid server response.");
+    throw new Error(
+      "Cannot connect to server. Please try again later."
+    );
   }
 
+  const contentType = response.headers.get("content-type") || "";
+
+  if (!contentType.includes("application/json")) {
+    throw new Error(
+      `Server returned an invalid response (HTTP ${response.status}). Check backend and Nginx configuration.`
+    );
+  }
+
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error(data.message || `Request failed (${response.status})`);
+    throw new Error(
+      data.message || `Request failed (${response.status})`
+    );
   }
 
   return data;
 }
-
-export default API;
