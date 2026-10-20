@@ -77,40 +77,80 @@ export default function Profile() {
     setNotice("");
   };
 
-  const saveProfile = (event) => {
-    event.preventDefault();
+  
+const saveProfile = async (event) => {
+  event.preventDefault();
+  setNotice("");
 
-    const clean = {
-      ...draft,
-      fullName: draft.fullName.trim(),
-      username: draft.username.trim().replace(/^@/, ""),
-      email: draft.email.trim(),
-      headline: draft.headline.trim(),
-      bio: draft.bio.trim(),
-      website: draft.website.trim(),
-      github: draft.github.trim(),
-      linkedin: draft.linkedin.trim(),
-      skills: [...new Set(draft.skills)],
-      certifications: draft.certifications
-        .map((item) => item.trim())
-        .filter(Boolean),
-    };
+  const clean = {
+    ...draft,
+    fullName: draft.fullName.trim(),
+    username: draft.username.trim().replace(/^@/, "").toLowerCase(),
+    email: draft.email.trim(),
+    headline: draft.headline.trim(),
+    location: draft.location.trim(),
+    bio: draft.bio.trim(),
+    website: draft.website.trim(),
+    github: draft.github.trim(),
+    linkedin: draft.linkedin.trim(),
+    skills: [...new Set(draft.skills)],
+    certifications: draft.certifications
+      .map((item) => item.trim())
+      .filter(Boolean),
+  };
 
-    if (!clean.fullName || !clean.username) {
-      setNotice("Full name and username are required.");
+  if (!clean.fullName || !clean.username) {
+    setNotice("Full name and username are required.");
+    return;
+  }
+
+  if (!/^[a-z0-9_.-]{3,30}$/.test(clean.username)) {
+    setNotice("Username must be 3–30 characters: letters, numbers, _, . or -.");
+    return;
+  }
+
+  try {
+    const token =
+      localStorage.getItem("token") ||
+      localStorage.getItem("authToken") ||
+      localStorage.getItem("accessToken");
+
+    if (!token) {
+      setNotice("Login token not found. Check your existing login authentication.");
       return;
     }
 
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(clean));
-      setProfile(clean);
-      setDraft(clean);
-      setEditing(false);
-      setNotice("Profile saved successfully.");
-    } catch {
-      setNotice("Could not save. The profile image may be too large.");
+    const response = await fetch("/api/profile", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(clean),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Unable to save profile.");
     }
-  };
+
+    const savedProfile = {
+      ...emptyProfile,
+      ...result.profile,
+    };
+
+    setProfile(savedProfile);
+    setDraft(savedProfile);
+    setEditing(false);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProfile));
+    setNotice("Profile saved successfully to the database.");
+  } catch (error) {
+    console.error("Profile save failed:", error);
+    setNotice(error.message || "Profile could not be saved.");
+  }
+};
+
 
   const cancelEditing = () => {
     setDraft({ ...profile });
