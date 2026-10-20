@@ -1,4 +1,3 @@
-javascript
 const FEEDBACK_API =
   import.meta.env.VITE_FEEDBACK_API || "/api/feedback";
 
@@ -18,12 +17,7 @@ export const getFeedback = async (section) => {
 };
 
 // CREATE FEEDBACK
-export const createFeedback = async ({
-  section,
-  rating,
-  message,
-  tags,
-}) => {
+export const createFeedback = async ({ section, rating, message, tags }) => {
   const token = localStorage.getItem("token");
 
   if (!token) {

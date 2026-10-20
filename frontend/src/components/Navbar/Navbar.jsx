@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -7,16 +8,13 @@ import {
   FaBug,
   FaRobot,
   FaUserSecret,
-  FaSignInAlt,
   FaSignOutAlt,
   FaFlag,
   FaAward,
   FaUserCircle,
 } from "react-icons/fa";
 
-
 import { useAuth } from "../../context/AuthContext";
-
 import "./Navbar.css";
 
 const NAV_ITEMS = [
@@ -57,47 +55,51 @@ const NAV_ITEMS = [
     icon: <FaUserSecret />,
   },
   {
-  id: "All-CTF-Lab",
-  label: "All-CTF-Lab",
-  path: "/all-ctf-lab",
-  icon: <FaFlag />,
-},
+    id: "All-CTF-Lab",
+    label: "All-CTF-Lab",
+    path: "/all-ctf-lab",
+    icon: <FaFlag />,
+  },
   {
-  id: "Certifications",
-  label: "Certifications",
-  path: "/certifications",
-  icon: <FaAward />,
-},
+    id: "Certifications",
+    label: "Certifications",
+    path: "/certifications",
+    icon: <FaAward />,
+  },
 ];
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Authentication
   const { user, isAuthenticated, logout } = useAuth();
 
-  const isActive = (path) => {
-    return location.pathname === path;
+  const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
-  // =========================
-  // LOGOUT
-  // =========================
-  const handleLogout = () => {
-    logout();
-
-    // Logout ke baad Dashboard
-    navigate("/", { replace: true });
+  const openProfile = () => {
+    navigate("/profile");
   };
 
   return (
     <header className="navbar">
-
-      {/* ================= LOGO ================= */}
+      {/* LOGO */}
       <div
         className="logo-area"
         onClick={() => navigate("/")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") navigate("/");
+        }}
       >
         <div className="logo-wrapper">
           <img
@@ -108,61 +110,53 @@ const Navbar = () => {
         </div>
 
         <div className="logo-content">
-          <h1 className="logo-title">
-            The VulnXploit
-          </h1>
-
-          <p className="logo-sub">
-            CYBER SECURITY PLATFORM
-          </p>
+          <h1 className="logo-title">The VulnXploit</h1>
+          <p className="logo-sub">CYBER SECURITY PLATFORM</p>
         </div>
       </div>
 
-
-      {/* ================= MENU ================= */}
+      {/* NAVIGATION */}
       <nav>
         <ul className="menu">
-
           {NAV_ITEMS.map((item) => (
             <li
               key={item.id}
-              className={
-                isActive(item.path)
-                  ? "active"
-                  : ""
-              }
+              className={isActive(item.path) ? "active" : ""}
               onClick={() => navigate(item.path)}
             >
               {item.icon}
-
-              <span>
-                {item.label}
-              </span>
+              <span>{item.label}</span>
             </li>
           ))}
-
         </ul>
       </nav>
 
-
-      {/* ================= AUTH ================= */}
+      {/* USER / PROFILE */}
       <div className="navbar-auth">
-
         {isAuthenticated ? (
-
-          /* ================= LOGGED IN ================= */
           <div className="logged-user">
-
-            <div className="user-info">
+            <button
+              type="button"
+              className={`user-info ${
+                isActive("/profile") ? "profile-active" : ""
+              }`}
+              onClick={openProfile}
+              title="Open your profile"
+            >
               <FaUserCircle className="user-icon" />
 
               <span className="user-name">
-                {user?.name ||
-                  user?.username ||
-                  user?.email ||
-                  "User"}
+                {user?.name || user?.username || user?.email || "My Profile"}
               </span>
-            </div>
+            </button>
+
+            <button
+              type="button"
+              className="profile-btn"
+              onClick={openProfile}
+            >
+              Profile
+            </button>
 
             <button
               type="button"
@@ -170,33 +164,20 @@ const Navbar = () => {
               onClick={handleLogout}
             >
               <FaSignOutAlt />
-
-              <span>
-                Logout
-              </span>
+              <span>Logout</span>
             </button>
-
           </div>
-
         ) : (
-
-          /* ================= LOGGED OUT ================= */
           <button
             type="button"
-            className="login-btn"
-            onClick={() => navigate("/login")}
+            className="profile-btn"
+            onClick={openProfile}
           >
-            <FaSignInAlt />
-
-            <span>
-              Login
-            </span>
+            <FaUserCircle />
+            <span>Profile</span>
           </button>
-
         )}
-
       </div>
-
     </header>
   );
 };

@@ -185,10 +185,10 @@ const Dashboard = () => {
         <button
           type="button"
           className="login-btn"
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/profile")}
         >
           <FaSignInAlt />
-          Login
+          Profile
         </button>
       </header>
 

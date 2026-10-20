@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
@@ -12,6 +13,7 @@ const userSchema = new mongoose.Schema(
       match: /^[a-z0-9_.-]+$/,
       unique: true,
     },
+
     email: {
       type: String,
       required: true,
@@ -20,20 +22,21 @@ const userSchema = new mongoose.Schema(
       maxlength: 254,
       unique: true,
     },
+
     password: {
-  type: String,
-  required: true,
-  select: false,
-},
+      type: String,
+      required: true,
+      select: false,
+    },
 
     isVerified: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: true }
-
-  
+  {
+    timestamps: true,
+  }
 );
 
 module.exports = mongoose.model("User", userSchema);

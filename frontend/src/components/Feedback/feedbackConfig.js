@@ -1,102 +1,36 @@
-```javascript
 export const FEEDBACK_CONFIG = {
-  "bug-bounty": {
-    title: "Student Feedback",
-    subtitle: "What students say about the Bug Bounty learning experience",
-    tags: [
-      "🔥 Excellent Content",
-      "🧠 Very Informative",
-      "💻 Practical Learning",
-      "🎯 Real-World Skills",
-    ],
-  },
-
-  "ai-red-teaming": {
-    title: "Student Feedback",
-    subtitle: "What students say about the AI Red Teaming learning experience",
-    tags: [
-      "🤖 Excellent AI Content",
-      "🧠 Very Informative",
-      "🔥 Practical Learning",
-      "💡 Great Experience",
-    ],
-  },
-
-  "red-teaming": {
-    title: "Student Feedback",
-    subtitle: "What students say about the Red Teaming learning experience",
-    tags: [
-      "🔥 Excellent Training",
-      "🎯 Real-World Skills",
-      "🧠 Very Informative",
-      "💻 Practical Labs",
-    ],
-  },
-
-  "ethical-hacking": {
-    title: "Student Feedback",
-    subtitle: "What students say about the Ethical Hacking learning experience",
-    tags: [
-      "🔥 Excellent Course",
-      "🧠 Very Informative",
-      "💻 Practical Learning",
-      "🎯 Great Labs",
-    ],
-  },
-
-  "all-ctf-lab": {
-    title: "Student Feedback",
-    subtitle: "What students say about the All-CTF-Lab experience",
-    tags: [
-      "🚩 Great Challenges",
-      "🔥 Fun Labs",
-      "🧠 Great Learning",
-      "💻 Practical Skills",
-    ],
-  },
-
-  certifications: {
-    title: "Student Feedback",
-    subtitle: "What students say about their certification experience",
-    tags: [
-      "🏆 Great Certificate",
-      "🔥 Excellent Workshop",
-      "👨‍🏫 Great Trainer",
-      "💡 Valuable Experience",
-    ],
-  },
-
-  portfolio: {
+  general: {
     title: "Community Feedback",
-    subtitle: "What the VulnXploit community says about the platform",
+    subtitle: "Share your overall experience",
+    tags: ["Helpful", "Interesting", "Clear", "Fun", "Needs work"],
+  },
+  labs: {
+    title: "Labs Feedback",
+    subtitle: "Share your experience with hands-on labs",
     tags: [
-      "🔥 Excellent Platform",
-      "🎨 Great Design",
-      "💡 Useful Content",
-      "🚀 Great Project",
+      "Helpful",
+      "Challenging",
+      "Well structured",
+      "Clear instructions",
+      "Needs improvement",
     ],
   },
-
   courses: {
-    title: "Student Feedback",
-    subtitle: "What students say about the courses",
+    title: "Courses Feedback",
+    subtitle: "Tell us what you learned from the courses",
     tags: [
-      "🔥 Excellent Course",
-      "🧠 Very Informative",
-      "💻 Practical Learning",
-      "🎯 Real-World Skills",
+      "Beginner friendly",
+      "Practical",
+      "Great content",
+      "Too advanced",
+      "Would recommend",
     ],
   },
-
-  workshops: {
-    title: "Student Feedback",
-    subtitle: "What students say about the workshops",
-    tags: [
-      "🔥 Excellent Workshop",
-      "🧠 Very Informative",
-      "👨‍🏫 Great Trainer",
-      "💡 Practical Learning",
-    ],
+  platform: {
+    title: "Platform Feedback",
+    subtitle: "Help us improve VulnXploit overall",
+    tags: ["Smooth UI", "Fast", "Bug free", "Confusing", "Love it"],
   },
 };
-```
+
+export default FEEDBACK_CONFIG;

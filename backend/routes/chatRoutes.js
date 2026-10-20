@@ -9,7 +9,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // GET /api/chat/messages
-// Fetch the latest 100 messages.
+// Community messages read karna
 router.get("/messages", async (req, res) => {
   try {
     const messages = await ChatMessage.find()
@@ -32,10 +32,9 @@ router.get("/messages", async (req, res) => {
 });
 
 // POST /api/chat/messages
-// Only authenticated users can send messages.
+// Sirf authenticated user message bhej sakta hai
 router.post("/messages", authMiddleware, async (req, res) => {
   try {
-    // Validate message
     const message =
       typeof req.body?.message === "string"
         ? req.body.message.trim()
@@ -55,37 +54,36 @@ router.post("/messages", authMiddleware, async (req, res) => {
       });
     }
 
-    // Get authenticated user ID from middleware
-    const authUser = req.user || {};
-
-    const rawUserId =
-      authUser._id ||
-      authUser.id ||
-      authUser.userId;
+    // JWT middleware se authenticated user ID
+    const userId =
+      req.user?.sub ||
+      req.user?.userId ||
+      req.user?.id ||
+      req.user?._id;
 
     if (
-      !rawUserId ||
-      !mongoose.Types.ObjectId.isValid(String(rawUserId))
+      !userId ||
+      !mongoose.Types.ObjectId.isValid(String(userId))
     ) {
       return res.status(401).json({
         success: false,
-        message: "Please sign in again to send messages.",
+        message: "Invalid user token. Please sign in again.",
       });
     }
 
-    // Fetch username from MongoDB
-    const user = await User.findById(rawUserId)
+    // Database se actual username fetch karo
+    const user = await User.findById(userId)
       .select("username")
       .lean();
 
     if (!user || !user.username) {
       return res.status(401).json({
         success: false,
-        message: "User account not found. Please sign in again.",
+        message: "User not found. Please check your profile.",
       });
     }
 
-    // Save message using username only
+    // Username + message MongoDB mein save karo
     const savedMessage = await ChatMessage.create({
       senderId: String(user._id),
       senderName: user.username,
