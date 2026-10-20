@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import "./Profile.css";
 
@@ -9,6 +8,7 @@ const emptyProfile = {
   username: "",
   headline: "",
   email: "",
+  password: "",
   location: "",
   bio: "",
   website: "",
@@ -37,6 +37,14 @@ const skillOptions = [
   "Linux",
 ];
 
+function getToken() {
+  return (
+    localStorage.getItem("token") ||
+    localStorage.getItem("authToken") ||
+    localStorage.getItem("accessToken")
+  );
+}
+
 export default function Profile() {
   const [profile, setProfile] = useState(emptyProfile);
   const [editing, setEditing] = useState(false);
@@ -44,58 +52,44 @@ export default function Profile() {
   const [certInput, setCertInput] = useState("");
   const [notice, setNotice] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [saving, setSaving] = useState(false);
   const fileRef = useRef(null);
 
   useEffect(() => {
-  async function loadProfile() {
-    const token =
-      localStorage.getItem("token") ||
-      localStorage.getItem("authToken") ||
-      localStorage.getItem("accessToken");
+    async function loadProfile() {
+      const token = getToken();
 
-    if (!token) {
-      setNotice("Please login to view your profile.");
-      setLoaded(true);
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const result = await response.json();
-
-      if (response.ok && result.success && result.profile) {
-        const fromDb = { ...emptyProfile, ...result.profile };
-        setProfile(fromDb);
-        setDraft(fromDb);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(fromDb));
-      } else {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const restored = { ...emptyProfile, ...JSON.parse(saved) };
-          setProfile(restored);
-          setDraft(restored);
-        }
+      if (!token) {
+        setLoaded(true);
+        return;
       }
-    } catch {
+
       try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const restored = { ...emptyProfile, ...JSON.parse(saved) };
-          setProfile(restored);
-          setDraft(restored);
-        }
-      } catch {
-        setNotice("Unable to load profile.");
-      }
-    } finally {
-      setLoaded(true);
-    }
-  }
+        const response = await fetch("/api/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const result = await response.json();
 
-  loadProfile();
-}, []);
+        if (response.ok && result.success && result.profile) {
+          const fromDb = {
+            ...emptyProfile,
+            ...result.profile,
+            password: "",
+          };
+          setProfile(fromDb);
+          setDraft(fromDb);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(fromDb));
+        }
+      } catch (err) {
+        console.error("Load profile error:", err);
+        setNotice("Could not load profile from server.");
+      } finally {
+        setLoaded(true);
+      }
+    }
+
+    loadProfile();
+  }, []);
 
   const updateField = (field, value) => {
     setDraft((previous) => ({
@@ -105,81 +99,107 @@ export default function Profile() {
   };
 
   const startEditing = () => {
-    setDraft({ ...profile });
+    setDraft({ ...profile, password: "" });
     setEditing(true);
     setNotice("");
   };
 
-  
-const saveProfile = async (event) => {
-  event.preventDefault();
-  setNotice("");
+  const saveProfile = async (event) => {
+    event.preventDefault();
+    setNotice("");
 
-  const token =
-    localStorage.getItem("token") ||
-    localStorage.getItem("authToken") ||
-    localStorage.getItem("accessToken");
+    const clean = {
+      fullName: draft.fullName.trim(),
+      username: draft.username.trim().replace(/^@/, "").toLowerCase(),
+      email: draft.email.trim().toLowerCase(),
+      password: (draft.password || "").trim(),
+      headline: draft.headline.trim(),
+      location: draft.location.trim(),
+      bio: draft.bio.trim(),
+      website: draft.website.trim(),
+      github: draft.github.trim(),
+      linkedin: draft.linkedin.trim(),
+      skills: [...new Set(draft.skills)],
+      certifications: draft.certifications
+        .map((item) => item.trim())
+        .filter(Boolean),
+      experience: draft.experience || "Beginner",
+      avatar: draft.avatar || "",
+    };
 
-  if (!token) {
-    setNotice("Authentication token missing. Please login again.");
-    return;
-  }
-
-  const clean = {
-    fullName: draft.fullName.trim(),
-    username: draft.username.trim().replace(/^@/, "").toLowerCase(),
-    headline: draft.headline.trim(),
-    location: draft.location.trim(),
-    bio: draft.bio.trim(),
-    website: draft.website.trim(),
-    github: draft.github.trim(),
-    linkedin: draft.linkedin.trim(),
-    skills: [...new Set(draft.skills)],
-    certifications: draft.certifications
-      .map((item) => item.trim())
-      .filter(Boolean),
-    experience: draft.experience || "Beginner",
-    avatar: draft.avatar || "",
-  };
-
-  if (!clean.fullName || !clean.username) {
-    setNotice("Full name and username are required.");
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/profile", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(clean),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Database save failed.");
+    if (!clean.fullName || !clean.username) {
+      setNotice("Full name and username are required.");
+      return;
     }
 
-    const savedProfile = { ...emptyProfile, ...result.profile };
-    setProfile(savedProfile);
-    setDraft(savedProfile);
-    setEditing(false);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProfile));
-    setNotice("Profile saved successfully in MongoDB!");
-  } catch (error) {
-    console.error("Profile save error:", error);
-    setNotice(error.message || "Unable to save profile.");
-  }
-};
-  
+    const token = getToken();
+    setSaving(true);
 
+    try {
+      let response;
 
+      if (!token) {
+        // Create new account + profile in MongoDB
+        if (!clean.email) {
+          setNotice("Email is required to create your profile.");
+          setSaving(false);
+          return;
+        }
+        if (clean.password.length < 8) {
+          setNotice("Password must be at least 8 characters.");
+          setSaving(false);
+          return;
+        }
+
+        response = await fetch("/api/profile/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(clean),
+        });
+      } else {
+        // Update existing profile in MongoDB
+        const { password, ...updateBody } = clean;
+        response = await fetch("/api/profile", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updateBody),
+        });
+      }
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Could not save to database.");
+      }
+
+      if (result.token) {
+        localStorage.setItem("token", result.token);
+      }
+
+      const saved = {
+        ...emptyProfile,
+        ...result.profile,
+        password: "",
+      };
+
+      setProfile(saved);
+      setDraft(saved);
+      setEditing(false);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      setNotice("Profile saved successfully in database!");
+    } catch (error) {
+      console.error("Profile save error:", error);
+      setNotice(error.message || "Unable to save profile.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const cancelEditing = () => {
-    setDraft({ ...profile });
+    setDraft({ ...profile, password: "" });
     setEditing(false);
     setNotice("");
   };
@@ -195,7 +215,6 @@ const saveProfile = async (event) => {
 
   const addCertification = () => {
     const value = certInput.trim();
-
     if (
       value &&
       !draft.certifications.some(
@@ -209,7 +228,6 @@ const saveProfile = async (event) => {
 
   const uploadAvatar = (event) => {
     const file = event.target.files?.[0];
-
     if (!file) return;
 
     if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
@@ -225,12 +243,10 @@ const saveProfile = async (event) => {
     }
 
     const reader = new FileReader();
-
     reader.onload = () => {
       updateField("avatar", String(reader.result || ""));
       setNotice("Image selected. Save your profile to apply it.");
     };
-
     reader.onerror = () => setNotice("Unable to read this image.");
     reader.readAsDataURL(file);
   };
@@ -261,12 +277,14 @@ const saveProfile = async (event) => {
     return <div className="vp-loading">Initializing profile...</div>;
   }
 
+  const hasToken = Boolean(getToken());
   const isCreated = Boolean(profile.fullName && profile.username);
   const shown = editing ? draft : profile;
   const initials =
     shown.fullName
       .trim()
       .split(/\s+/)
+      .filter(Boolean)
       .slice(0, 2)
       .map((part) => part[0])
       .join("")
@@ -294,7 +312,9 @@ const saveProfile = async (event) => {
       <header className="vp-topbar">
         <div className="vp-brand">
           <span className="vp-brand-mark">V</span>
-          <span>Vuln<span>X</span>ploit</span>
+          <span>
+            Vuln<span>X</span>ploit
+          </span>
         </div>
 
         <div className="vp-top-label">
@@ -314,7 +334,11 @@ const saveProfile = async (event) => {
         </div>
 
         {!editing && (
-          <button className="vp-button vp-primary" onClick={startEditing}>
+          <button
+            type="button"
+            className="vp-button vp-primary"
+            onClick={startEditing}
+          >
             {isCreated ? "✎ Edit Profile" : "+ Create Profile"}
           </button>
         )}
@@ -404,7 +428,7 @@ const saveProfile = async (event) => {
                     required
                     maxLength={30}
                     pattern="[A-Za-z0-9_.-]+"
-                    title="Use letters, numbers, dots, underscores or hyphens."
+                    title="Letters, numbers, dots, underscores or hyphens"
                     value={shown.username}
                     onChange={(e) =>
                       updateField("username", e.target.value.replace(/^@/, ""))
@@ -414,6 +438,32 @@ const saveProfile = async (event) => {
                 </div>
               </label>
 
+              <label className="vp-field">
+                Email {!hasToken && "*"}
+                <input
+                  type="email"
+                  maxLength={254}
+                  value={shown.email}
+                  onChange={(e) => updateField("email", e.target.value)}
+                  placeholder="you@example.com"
+                  required={!hasToken}
+                />
+              </label>
+
+              {!hasToken && (
+                <label className="vp-field">
+                  Password *
+                  <input
+                    type="password"
+                    minLength={8}
+                    value={draft.password || ""}
+                    onChange={(e) => updateField("password", e.target.value)}
+                    placeholder="Min 8 characters"
+                    required
+                  />
+                </label>
+              )}
+
               <label className="vp-field vp-field-full">
                 Professional headline
                 <input
@@ -421,17 +471,6 @@ const saveProfile = async (event) => {
                   value={shown.headline}
                   onChange={(e) => updateField("headline", e.target.value)}
                   placeholder="e.g. Cybersecurity Researcher | Application Security"
-                />
-              </label>
-
-              <label className="vp-field">
-                Email
-                <input
-                  type="email"
-                  maxLength={254}
-                  value={shown.email}
-                  onChange={(e) => updateField("email", e.target.value)}
-                  placeholder="you@example.com"
                 />
               </label>
 
@@ -445,18 +484,6 @@ const saveProfile = async (event) => {
                 />
               </label>
 
-              <label className="vp-field vp-field-full">
-                About me
-                <textarea
-                  rows={5}
-                  maxLength={1000}
-                  value={shown.bio}
-                  onChange={(e) => updateField("bio", e.target.value)}
-                  placeholder="Share your interests, experience and goals..."
-                />
-                <span className="vp-counter">{shown.bio.length}/1000</span>
-              </label>
-
               <label className="vp-field">
                 Experience level
                 <select
@@ -467,7 +494,20 @@ const saveProfile = async (event) => {
                   <option>Intermediate</option>
                   <option>Advanced</option>
                   <option>Professional</option>
+                  <option>Expert</option>
                 </select>
+              </label>
+
+              <label className="vp-field vp-field-full">
+                About me
+                <textarea
+                  rows={5}
+                  maxLength={1000}
+                  value={shown.bio}
+                  onChange={(e) => updateField("bio", e.target.value)}
+                  placeholder="Share your interests, experience and goals..."
+                />
+                <span className="vp-counter">{shown.bio.length}/1000</span>
               </label>
             </div>
           </section>
@@ -484,7 +524,6 @@ const saveProfile = async (event) => {
             <div className="vp-skill-picker">
               {skillOptions.map((skill) => {
                 const selected = shown.skills.includes(skill);
-
                 return (
                   <button
                     type="button"
@@ -553,7 +592,7 @@ const saveProfile = async (event) => {
               <span className="vp-section-icon">04</span>
               <div>
                 <h2>Certifications</h2>
-                <p>Add certifications you have actually earned.</p>
+                <p>Add certifications you have earned.</p>
               </div>
             </div>
 
@@ -568,7 +607,7 @@ const saveProfile = async (event) => {
                     addCertification();
                   }
                 }}
-                placeholder="e.g. Certification Name"
+                placeholder="e.g. eJPT"
               />
               <button
                 type="button"
@@ -605,11 +644,16 @@ const saveProfile = async (event) => {
               type="button"
               className="vp-button vp-ghost"
               onClick={cancelEditing}
+              disabled={saving}
             >
               Cancel
             </button>
-            <button type="submit" className="vp-button vp-primary">
-              Save Profile →
+            <button
+              type="submit"
+              className="vp-button vp-primary"
+              disabled={saving}
+            >
+              {saving ? "Saving..." : "Save Profile →"}
             </button>
           </div>
         </form>
@@ -643,12 +687,17 @@ const saveProfile = async (event) => {
 
             <div className="vp-profile-actions">
               <button
+                type="button"
                 className="vp-button vp-primary"
                 onClick={startEditing}
               >
                 ✎ Edit Profile
               </button>
-              <button className="vp-button vp-ghost" onClick={copyProfile}>
+              <button
+                type="button"
+                className="vp-button vp-ghost"
+                onClick={copyProfile}
+              >
                 ↗ Copy Details
               </button>
             </div>
@@ -689,27 +738,42 @@ const saveProfile = async (event) => {
           <section className="vp-content-grid">
             <div className="vp-card">
               <div className="vp-card-heading">
-                <h2><span>01</span> About me</h2>
-                <button className="vp-text-button" onClick={startEditing}>
+                <h2>
+                  <span>01</span> About me
+                </h2>
+                <button
+                  type="button"
+                  className="vp-text-button"
+                  onClick={startEditing}
+                >
                   Edit
                 </button>
               </div>
               <p className="vp-bio">
-                {profile.bio || "Add your bio to introduce yourself to the community."}
+                {profile.bio ||
+                  "Add your bio to introduce yourself to the community."}
               </p>
             </div>
 
             <div className="vp-card">
               <div className="vp-card-heading">
-                <h2><span>02</span> Technical skills</h2>
-                <button className="vp-text-button" onClick={startEditing}>
+                <h2>
+                  <span>02</span> Technical skills
+                </h2>
+                <button
+                  type="button"
+                  className="vp-text-button"
+                  onClick={startEditing}
+                >
                   Edit
                 </button>
               </div>
               <div className="vp-chip-list">
                 {profile.skills.length ? (
                   profile.skills.map((skill) => (
-                    <span className="vp-skill-chip" key={skill}>{skill}</span>
+                    <span className="vp-skill-chip" key={skill}>
+                      {skill}
+                    </span>
                   ))
                 ) : (
                   <p className="vp-muted">No skills added yet.</p>
@@ -719,51 +783,70 @@ const saveProfile = async (event) => {
 
             <div className="vp-card">
               <div className="vp-card-heading">
-                <h2><span>03</span> Certifications</h2>
-                <button className="vp-text-button" onClick={startEditing}>
+                <h2>
+                  <span>03</span> Certifications
+                </h2>
+                <button
+                  type="button"
+                  className="vp-text-button"
+                  onClick={startEditing}
+                >
                   Edit
                 </button>
               </div>
               {profile.certifications.length ? (
                 <ul className="vp-cert-list">
                   {profile.certifications.map((cert) => (
-                    <li key={cert}><span>◇</span>{cert}</li>
+                    <li key={cert}>
+                      <span>◇</span>
+                      {cert}
+                    </li>
                   ))}
                 </ul>
               ) : (
-                <p className="vp-muted">Your earned certifications will appear here.</p>
+                <p className="vp-muted">
+                  Your earned certifications will appear here.
+                </p>
               )}
             </div>
 
             <div className="vp-card">
               <div className="vp-card-heading">
-                <h2><span>04</span> Find me online</h2>
+                <h2>
+                  <span>04</span> Find me online
+                </h2>
               </div>
               <div className="vp-link-list">
                 {[
                   ["Website", profile.website],
                   ["GitHub", profile.github],
                   ["LinkedIn", profile.linkedin],
-                ].filter(([, url]) => url).map(([label, url]) => (
-                  <a
-                    key={label}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="vp-external-link"
-                  >
-                    <span>{label}</span><span>↗</span>
-                  </a>
-                ))}
-                {!profile.website && !profile.github && !profile.linkedin && (
-                  <p className="vp-muted">Add your professional links.</p>
-                )}
+                ]
+                  .filter(([, url]) => url)
+                  .map(([label, url]) => (
+                    <a
+                      key={label}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="vp-external-link"
+                    >
+                      <span>{label}</span>
+                      <span>↗</span>
+                    </a>
+                  ))}
+                {!profile.website &&
+                  !profile.github &&
+                  !profile.linkedin && (
+                    <p className="vp-muted">Add your professional links.</p>
+                  )}
               </div>
             </div>
           </section>
 
           <p className="vp-footer">
-            <span>VULNXploit //</span> HACK ETHICALLY · LEARN CONTINUOUSLY · BUILD SECURELY
+            <span>VULNXploit //</span> HACK ETHICALLY · LEARN CONTINUOUSLY ·
+            BUILD SECURELY
           </p>
         </>
       ) : (
@@ -772,10 +855,14 @@ const saveProfile = async (event) => {
           <p className="vp-eyebrow">YOUR DIGITAL IDENTITY STARTS HERE</p>
           <h2>Build your cybersecurity profile.</h2>
           <p className="vp-muted">
-            Introduce yourself, showcase your technical skills, list earned
-            certifications and link your projects.
+            Introduce yourself, showcase skills, list certifications and link
+            your work. Data is saved to the database.
           </p>
-          <button className="vp-button vp-primary" onClick={startEditing}>
+          <button
+            type="button"
+            className="vp-button vp-primary"
+            onClick={startEditing}
+          >
             Create My Profile →
           </button>
           <div className="vp-empty-features">
