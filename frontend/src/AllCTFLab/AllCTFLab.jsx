@@ -157,9 +157,7 @@ const AllCTFLab = () => {
 <div className={`course-image lab-code-art lab-art-${lab.category}`}>
   <span className="course-level">{lab.level}</span>
 
-  {solvedLabs[lab.id] && (
-    <span className="solved-badge">✓ Solved</span>
-  )}
+
 
   <div className="lab-art-grid" />
 
@@ -217,9 +215,7 @@ const AllCTFLab = () => {
                         }}
                       />
                       <span className="course-level">{lab.level}</span>
-                      {solvedLabs[lab.id] && (
-                        <span className="solved-badge">✓ Solved</span>
-                      )}
+                      
                     </div>
                     <div className="course-content">
                       <h3>{lab.title}</h3>

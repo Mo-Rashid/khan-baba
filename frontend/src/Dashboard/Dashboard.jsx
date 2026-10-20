@@ -675,7 +675,7 @@ const Dashboard = () => {
 
             <a href="#dashboard">Dashboard</a>
 
-            <a href="#portfolio">Portfolio</a>
+            <a href="portfolio">Portfolio</a>
 
             <a href="#services">Services</a>
 
@@ -729,11 +729,11 @@ const Dashboard = () => {
 
             <h3>Contact</h3>
 
-            <p>📧 support@khansploit.com</p>
+            <p>📧 cybercoding075@gmail.com</p>
 
             <p>🌍 India</p>
 
-            <p>🕒 24×7 AI Assistant</p>
+            <p>🕒 24×7 Learning </p>
 
             <button className="footer-btn">
 
