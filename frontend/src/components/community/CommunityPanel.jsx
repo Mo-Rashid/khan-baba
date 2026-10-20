@@ -80,11 +80,12 @@ export default function CommunityPanel() {
     if (!message || sending) return;
 
     if (!isChatLoggedIn()) {
-      setError("Please sign in before sending a message.");
+      setError("Please Profile in before sending a message.");
       return;
     }
 
     setSending(true);
+    
     setError("");
 
     try {

@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import Navbar from "../components/Navbar/Navbar";
+
 import "./Profile.css";
 
 const STORAGE_KEY = "vulnxploit_user_profile";
@@ -308,41 +310,43 @@ export default function Profile() {
   );
 
   return (
+    <>
+    <Navbar/>
     <main className="vp-page">
-      <header className="vp-topbar">
-        <div className="vp-brand">
-          <span className="vp-brand-mark">V</span>
-          <span>
-            Vuln<span>X</span>ploit
-          </span>
-        </div>
+      
 
-        <div className="vp-top-label">
-          <span className="vp-live-dot" />
-          USER PROFILE / {editing ? "EDIT MODE" : "PROFILE CONSOLE"}
-        </div>
-      </header>
+      <section className="bb-hero">
+  <div className="bb-hero-left">
+    <span className="bb-badge">HACKER PROFILE</span>
+    
+    <h1 className="bb-title">
+      HACKERS <span className="gradient-text">IDENTITY</span>
+    </h1>
+    
+    <p className="bb-subtitle">
+      Cybersecurity Profile • Skills • Certifications • Professional Presence
+    </p>
+    
+    <p className="bb-desc">
+      Build and showcase your cybersecurity identity. Highlight your skills, 
+      certifications, experience level, and professional links to stand out 
+      in the ethical hacking community.
+    </p>
+  </div>
 
-      <section className="vp-heading">
-        <div>
-          <p className="vp-eyebrow">IDENTITY MANAGEMENT</p>
-          <h1>{isCreated ? "Your Profile" : "Create Your Profile"}</h1>
-          <p className="vp-muted">
-            Build your cybersecurity identity. Showcase your skills, projects
-            and professional journey.
-          </p>
-        </div>
-
-        {!editing && (
-          <button
-            type="button"
-            className="vp-button vp-primary"
-            onClick={startEditing}
-          >
-            {isCreated ? "✎ Edit Profile" : "+ Create Profile"}
-          </button>
-        )}
-      </section>
+  <div className="bb-hero-right">
+    <div className="bb-profile-wrapper">
+      <img
+        src="https://plain-apac-prod-public.komododecks.com/202610/03/INjFysz5pVXhM3VlY8fZ/image.png"
+        alt="Profile"
+        className="bb-profile-img"
+        onError={(e) => {
+          e.target.src = "/fallback-profile.png"; // better fallback
+        }}
+      />
+    </div>
+  </div>
+</section>
 
       {notice && (
         <div className="vp-notice" role="status">
@@ -873,5 +877,6 @@ export default function Profile() {
         </section>
       )}
     </main>
+    </>
   );
 }
