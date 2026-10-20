@@ -1,9 +1,8 @@
-
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    // Existing account and authentication fields
+    // Existing account fields
     username: {
       type: String,
       required: true,
@@ -35,7 +34,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
-    // Profile information
+    // Profile fields
     fullName: {
       type: String,
       trim: true,
@@ -97,15 +96,21 @@ const userSchema = new mongoose.Schema(
 
     experience: {
       type: String,
-      enum: ["Beginner", "Intermediate", "Professional", "Expert"],
+      enum: [
+        "Beginner",
+        "Intermediate",
+        "Advanced",
+        "Professional",
+        "Expert",
+      ],
       default: "Beginner",
     },
 
-    // Store an image URL here, not a large base64 image.
     avatar: {
       type: String,
-      default: "",
+      trim: true,
       maxlength: 1000,
+      default: "",
     },
   },
   {

@@ -77,10 +77,19 @@ export default function Profile() {
     setNotice("");
   };
 
-  
-const saveProfile = async (event) => {
+  const saveProfile = async (event) => {
   event.preventDefault();
   setNotice("");
+
+  const token =
+    localStorage.getItem("token") ||
+    localStorage.getItem("authToken") ||
+    localStorage.getItem("accessToken");
+
+  if (!token) {
+    setNotice("Authentication token missing. Please login again.");
+    return;
+  }
 
   const clean = {
     ...draft,
@@ -104,22 +113,7 @@ const saveProfile = async (event) => {
     return;
   }
 
-  if (!/^[a-z0-9_.-]{3,30}$/.test(clean.username)) {
-    setNotice("Username must be 3–30 characters: letters, numbers, _, . or -.");
-    return;
-  }
-
   try {
-    const token =
-      localStorage.getItem("token") ||
-      localStorage.getItem("authToken") ||
-      localStorage.getItem("accessToken");
-
-    if (!token) {
-      setNotice("Login token not found. Check your existing login authentication.");
-      return;
-    }
-
     const response = await fetch("/api/profile", {
       method: "PUT",
       headers: {
@@ -132,7 +126,7 @@ const saveProfile = async (event) => {
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      throw new Error(result.message || "Unable to save profile.");
+      throw new Error(result.message || "Database save failed.");
     }
 
     const savedProfile = {
@@ -143,13 +137,21 @@ const saveProfile = async (event) => {
     setProfile(savedProfile);
     setDraft(savedProfile);
     setEditing(false);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProfile));
-    setNotice("Profile saved successfully to the database.");
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(savedProfile)
+    );
+
+    setNotice("Profile saved successfully in MongoDB!");
   } catch (error) {
-    console.error("Profile save failed:", error);
-    setNotice(error.message || "Profile could not be saved.");
+    console.error("Profile save error:", error);
+    setNotice(error.message || "Unable to save profile.");
   }
 };
+
+  
+
 
 
   const cancelEditing = () => {

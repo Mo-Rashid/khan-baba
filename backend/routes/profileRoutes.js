@@ -1,4 +1,3 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("../models/User");
@@ -8,24 +7,15 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-const profileFields = [
-  "fullName",
-  "headline",
-  "location",
-  "bio",
-  "website",
-  "github",
-  "linkedin",
-  "skills",
-  "certifications",
-  "experience",
-  "avatar",
-];
+const getUserId = (req) => {
+  const id = req.user?.sub;
+  return mongoose.isValidObjectId(id) ? id : null;
+};
 
 const profileResponse = (user) => ({
   fullName: user.fullName || "",
-  username: user.username,
-  email: user.email,
+  username: user.username || "",
+  email: user.email || "",
   headline: user.headline || "",
   location: user.location || "",
   bio: user.bio || "",
@@ -38,22 +28,15 @@ const profileResponse = (user) => ({
   avatar: user.avatar || "",
 });
 
-const getAuthenticatedUserId = (req) => {
-  const userId = req.user?.sub;
-
-  return mongoose.isValidObjectId(userId) ? userId : null;
-};
-
 // GET /api/profile
-// Load the complete profile of the logged-in user.
 router.get("/", async (req, res) => {
   try {
-    const userId = getAuthenticatedUserId(req);
+    const userId = getUserId(req);
 
     if (!userId) {
       return res.status(401).json({
         success: false,
-        message: "Invalid user identity.",
+        message: "Invalid user identity. Please login again.",
       });
     }
 
@@ -71,7 +54,7 @@ router.get("/", async (req, res) => {
       profile: profileResponse(user),
     });
   } catch (error) {
-    console.error("Profile fetch error:", error.message);
+    console.error("GET profile error:", error);
 
     return res.status(500).json({
       success: false,
@@ -81,15 +64,14 @@ router.get("/", async (req, res) => {
 });
 
 // PUT /api/profile
-// Update profile fields for the authenticated user.
 router.put("/", async (req, res) => {
   try {
-    const userId = getAuthenticatedUserId(req);
+    const userId = getUserId(req);
 
     if (!userId) {
       return res.status(401).json({
         success: false,
-        message: "Invalid user identity.",
+        message: "Invalid user identity. Please login again.",
       });
     }
 
@@ -104,46 +86,65 @@ router.put("/", async (req, res) => {
       });
     }
 
+    const allowedFields = [
+      "fullName",
+      "username",
+      "headline",
+      "location",
+      "bio",
+      "website",
+      "github",
+      "linkedin",
+      "skills",
+      "certifications",
+      "experience",
+      "avatar",
+    ];
+
     const updates = {};
 
-    for (const field of profileFields) {
-      if (Object.hasOwn(req.body, field)) {
+    for (const field of allowedFields) {
+      if (Object.prototype.hasOwnProperty.call(req.body, field)) {
         updates[field] = req.body[field];
       }
     }
 
-    if (Object.hasOwn(req.body, "username")) {
-      const username = String(req.body.username || "")
-        .trim()
-        .toLowerCase();
-
-      if (
-        username.length < 3 ||
-        username.length > 30 ||
-        !/^[a-z0-9_.-]+$/.test(username)
-      ) {
+    // Username validation
+    if (updates.username !== undefined) {
+      if (typeof updates.username !== "string") {
         return res.status(400).json({
           success: false,
-          message: "Username must be 3–30 characters and use only letters, numbers, _, . or -.",
+          message: "Username must be text.",
         });
       }
 
-      const duplicate = await User.findOne({
-        username,
+      updates.username = updates.username
+        .trim()
+        .replace(/^@/, "")
+        .toLowerCase();
+
+      if (!/^[a-z0-9_.-]{3,30}$/.test(updates.username)) {
+        return res.status(400).json({
+          success: false,
+          message: "Username must be 3–30 characters using letters, numbers, dots, underscores or hyphens.",
+        });
+      }
+
+      const existingUser = await User.findOne({
+        username: updates.username,
         _id: { $ne: userId },
       }).select("_id");
 
-      if (duplicate) {
+      if (existingUser) {
         return res.status(409).json({
           success: false,
           message: "Username is already taken.",
         });
       }
-
-      updates.username = username;
     }
 
-    const stringLimits = {
+    // Text field validation
+    const limits = {
       fullName: 100,
       headline: 120,
       location: 100,
@@ -154,72 +155,83 @@ router.put("/", async (req, res) => {
       avatar: 1000,
     };
 
-    for (const [field, maxLength] of Object.entries(stringLimits)) {
-      if (updates[field] !== undefined) {
-        if (typeof updates[field] !== "string") {
-          return res.status(400).json({
-            success: false,
-            message: `${field} must be a string.`,
-          });
-        }
+    for (const [field, maxLength] of Object.entries(limits)) {
+      if (updates[field] === undefined) continue;
 
-        updates[field] = updates[field].trim();
+      if (typeof updates[field] !== "string") {
+        return res.status(400).json({
+          success: false,
+          message: `${field} must be text.`,
+        });
+      }
 
-        if (updates[field].length > maxLength) {
-          return res.status(400).json({
-            success: false,
-            message: `${field} exceeds the maximum length.`,
-          });
-        }
+      updates[field] = updates[field].trim();
+
+      if (updates[field].length > maxLength) {
+        return res.status(400).json({
+          success: false,
+          message: `${field} is too long. Maximum ${maxLength} characters.`,
+        });
       }
     }
 
+    // URL validation
     for (const field of ["website", "github", "linkedin", "avatar"]) {
-      if (updates[field]) {
-        try {
-          const url = new URL(updates[field]);
+      if (!updates[field]) continue;
 
-          if (!["http:", "https:"].includes(url.protocol)) {
-            throw new Error("Unsupported protocol");
-          }
-        } catch {
-          return res.status(400).json({
-            success: false,
-            message: `${field} must be a valid HTTP or HTTPS URL.`,
-          });
+      try {
+        const parsedUrl = new URL(updates[field]);
+
+        if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+          throw new Error("Invalid protocol");
         }
+      } catch {
+        return res.status(400).json({
+          success: false,
+          message: `${field} must be a valid HTTP or HTTPS URL.`,
+        });
       }
     }
 
+    // Skills and certifications validation
     for (const field of ["skills", "certifications"]) {
-      if (updates[field] !== undefined) {
-        if (
-          !Array.isArray(updates[field]) ||
-          updates[field].length > 50 ||
-          !updates[field].every(
-            (item) =>
-              typeof item === "string" &&
-              item.trim().length > 0 &&
-              item.trim().length <= 100
-          )
-        ) {
-          return res.status(400).json({
-            success: false,
-            message: `${field} must be a list of up to 50 valid strings.`,
-          });
-        }
+      if (updates[field] === undefined) continue;
 
-        updates[field] = [
-          ...new Set(updates[field].map((item) => item.trim())),
-        ];
+      const list = updates[field];
+
+      if (
+        !Array.isArray(list) ||
+        list.length > 50 ||
+        !list.every(
+          (item) =>
+            typeof item === "string" &&
+            item.trim().length > 0 &&
+            item.trim().length <= 100
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: `${field} must contain up to 50 valid text items.`,
+        });
       }
+
+      updates[field] = [
+        ...new Set(list.map((item) => item.trim())),
+      ];
     }
+
+    // Keep these values consistent with the frontend dropdown
+    const allowedExperience = [
+      "Beginner",
+      "Intermediate",
+      "Advanced",
+      "Professional",
+      "Expert",
+    ];
 
     if (
       updates.experience !== undefined &&
-      !["Beginner", "Intermediate", "Professional", "Expert"].includes(
-        updates.experience
-      )
+      !allowedExperience.includes(updates.experience)
     ) {
       return res.status(400).json({
         success: false,
@@ -249,6 +261,8 @@ router.put("/", async (req, res) => {
       profile: profileResponse(user),
     });
   } catch (error) {
+    console.error("PUT profile error:", error);
+
     if (error.code === 11000) {
       return res.status(409).json({
         success: false,
@@ -256,20 +270,24 @@ router.put("/", async (req, res) => {
       });
     }
 
-    console.error("Profile update error:", error.message);
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
 
     return res.status(500).json({
       success: false,
-      message: "Could not update profile.",
+      message: "Could not save profile to the database.",
     });
   }
 });
 
-// Existing endpoint preserved.
 // GET /api/profile/username
 router.get("/username", async (req, res) => {
   try {
-    const userId = getAuthenticatedUserId(req);
+    const userId = getUserId(req);
 
     if (!userId) {
       return res.status(401).json({
@@ -292,7 +310,7 @@ router.get("/username", async (req, res) => {
       username: user.username,
     });
   } catch (error) {
-    console.error("Username fetch error:", error.message);
+    console.error("GET username error:", error);
 
     return res.status(500).json({
       success: false,
@@ -301,11 +319,10 @@ router.get("/username", async (req, res) => {
   }
 });
 
-// Existing endpoint preserved.
 // PUT /api/profile/username
 router.put("/username", async (req, res) => {
   try {
-    const userId = getAuthenticatedUserId(req);
+    const userId = getUserId(req);
 
     if (!userId) {
       return res.status(401).json({
@@ -316,16 +333,13 @@ router.put("/username", async (req, res) => {
 
     const username = String(req.body?.username || "")
       .trim()
+      .replace(/^@/, "")
       .toLowerCase();
 
-    if (
-      username.length < 3 ||
-      username.length > 30 ||
-      !/^[a-z0-9_.-]+$/.test(username)
-    ) {
+    if (!/^[a-z0-9_.-]{3,30}$/.test(username)) {
       return res.status(400).json({
         success: false,
-        message: "Username must be 3–30 characters and use only letters, numbers, _, . or -.",
+        message: "Invalid username format.",
       });
     }
 
@@ -360,14 +374,14 @@ router.put("/username", async (req, res) => {
       username: user.username,
     });
   } catch (error) {
+    console.error("PUT username error:", error);
+
     if (error.code === 11000) {
       return res.status(409).json({
         success: false,
         message: "Username is already taken.",
       });
     }
-
-    console.error("Username update error:", error.message);
 
     return res.status(500).json({
       success: false,
