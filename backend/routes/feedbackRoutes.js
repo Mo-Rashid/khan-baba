@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 
 const {
@@ -11,17 +10,7 @@ const {
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/", getFeedback);
-
-router.post(
-  "/",
-  authMiddleware,
-  createFeedback
-);
-
-router.delete(
-  "/:id",
-  authMiddleware,
-  deleteFeedback
-);
+router.post("/", authMiddleware, createFeedback);
+router.delete("/:id", authMiddleware, deleteFeedback);
 
 module.exports = router;

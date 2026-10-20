@@ -1,27 +1,37 @@
 const FEEDBACK_API =
-  import.meta.env.VITE_FEEDBACK_API || "/api/feedback";
+  `${import.meta.env.VITE_API_URL || ""}/api/feedback`;
 
-// GET FEEDBACK
-export const getFeedback = async (section) => {
-  const response = await fetch(
-    `${FEEDBACK_API}?section=${encodeURIComponent(section)}`
+function getToken() {
+  return (
+    localStorage.getItem("token") ||
+    localStorage.getItem("authToken") ||
+    localStorage.getItem("accessToken")
   );
+}
 
-  const data = await response.json();
+async function parseResponse(response) {
+  const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(data.message || "Unable to load feedback");
+    throw new Error(
+      data.message || `Request failed (${response.status})`
+    );
   }
 
   return data;
-};
+}
 
-// CREATE FEEDBACK
-export const createFeedback = async ({ section, rating, message, tags }) => {
-  const token = localStorage.getItem("token");
+export async function getFeedback(section) {
+  const response = await fetch(
+    `${FEEDBACK_API}?section=${encodeURIComponent(section)}`
+  );
+  return parseResponse(response);
+}
 
+export async function createFeedback({ section, rating, message, tags = [] }) {
+  const token = getToken();
   if (!token) {
-    throw new Error("Please login before submitting feedback.");
+    throw new Error("Please log in before submitting feedback.");
   }
 
   const response = await fetch(FEEDBACK_API, {
@@ -30,46 +40,25 @@ export const createFeedback = async ({ section, rating, message, tags }) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      section,
-      rating,
-      message,
-      tags,
-    }),
+    body: JSON.stringify({ section, rating, message, tags }),
   });
 
-  const data = await response.json();
+  return parseResponse(response);
+}
 
-  if (!response.ok) {
-    throw new Error(data.message || "Unable to submit feedback");
-  }
-
-  return data;
-};
-
-// DELETE FEEDBACK
-export const deleteFeedback = async (feedbackId) => {
-  const token = localStorage.getItem("token");
-
+export async function deleteFeedback(feedbackId) {
+  const token = getToken();
   if (!token) {
-    throw new Error("Please login first.");
+    throw new Error("Please log in first.");
   }
 
   const response = await fetch(
     `${FEEDBACK_API}/${encodeURIComponent(feedbackId)}`,
     {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     }
   );
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Unable to delete feedback");
-  }
-
-  return data;
-};
+  return parseResponse(response);
+}
