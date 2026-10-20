@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const VALID_SECTIONS = [
@@ -17,24 +18,30 @@ const VALID_SECTIONS = [
 
 const feedbackSchema = new mongoose.Schema(
   {
+    // Optional: public feedback doesn't require a user account.
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
       index: true,
     },
+
+    // Username entered in the feedback form.
     username: {
       type: String,
       required: true,
       trim: true,
+      minlength: 2,
       maxlength: 100,
     },
+
     section: {
       type: String,
       required: true,
       enum: VALID_SECTIONS,
       index: true,
     },
+
     rating: {
       type: Number,
       required: true,
@@ -45,6 +52,7 @@ const feedbackSchema = new mongoose.Schema(
         message: "Rating must be an integer from 1 to 5.",
       },
     },
+
     message: {
       type: String,
       required: true,
@@ -52,6 +60,7 @@ const feedbackSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 120,
     },
+
     tags: {
       type: [
         {
@@ -67,11 +76,13 @@ const feedbackSchema = new mongoose.Schema(
           message: "You can select a maximum of 5 tags.",
         },
         {
-          validator: (tags) => new Set(tags).size === tags.length,
+          validator: (tags) =>
+            new Set(tags).size === tags.length,
           message: "Duplicate tags are not allowed.",
         },
       ],
     },
+
     status: {
       type: String,
       enum: ["approved", "pending", "hidden"],
@@ -79,11 +90,13 @@ const feedbackSchema = new mongoose.Schema(
       index: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-// One feedback per user for each section
-feedbackSchema.index({ user: 1, section: 1 }, { unique: true });
+// Do not add the old unique user/section index.
+// Public reviews may have multiple submissions per section.
 
 module.exports = mongoose.model("Feedback", feedbackSchema);
 module.exports.VALID_SECTIONS = VALID_SECTIONS;

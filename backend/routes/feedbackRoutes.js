@@ -1,3 +1,4 @@
+
 const express = require("express");
 const router = express.Router();
 
@@ -10,7 +11,11 @@ const {
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/", getFeedback);
-router.post("/", authMiddleware, createFeedback);
+
+// Public review submission.
+router.post("/", createFeedback);
+
+// Deletion remains protected.
 router.delete("/:id", authMiddleware, deleteFeedback);
 
 module.exports = router;
