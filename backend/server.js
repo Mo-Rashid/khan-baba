@@ -39,6 +39,9 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/labs/mobile", mobileRouter);
 app.use("/api/labs", labRoutes);
 
+app.use(express.json({ limit: "3mb" }));
+app.use(express.urlencoded({ extended: true, limit: "3mb" }));
+
 // Health check
 app.get("/", (req, res) => {
   res.status(200).json({

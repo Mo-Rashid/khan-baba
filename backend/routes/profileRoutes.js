@@ -28,11 +28,19 @@ const profileResponse = (user) => ({
   avatar: user.avatar || "",
 });
 
+function isHttpUrl(value) {
+  try {
+    const u = new URL(value);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 // GET /api/profile
 router.get("/", async (req, res) => {
   try {
     const userId = getUserId(req);
-
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -41,7 +49,6 @@ router.get("/", async (req, res) => {
     }
 
     const user = await User.findById(userId).select("-password");
-
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -55,7 +62,6 @@ router.get("/", async (req, res) => {
     });
   } catch (error) {
     console.error("GET profile error:", error);
-
     return res.status(500).json({
       success: false,
       message: "Could not fetch profile.",
@@ -67,7 +73,6 @@ router.get("/", async (req, res) => {
 router.put("/", async (req, res) => {
   try {
     const userId = getUserId(req);
-
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -75,11 +80,7 @@ router.put("/", async (req, res) => {
       });
     }
 
-    if (
-      !req.body ||
-      typeof req.body !== "object" ||
-      Array.isArray(req.body)
-    ) {
+    if (!req.body || typeof req.body !== "object" || Array.isArray(req.body)) {
       return res.status(400).json({
         success: false,
         message: "Invalid request body.",
@@ -102,14 +103,13 @@ router.put("/", async (req, res) => {
     ];
 
     const updates = {};
-
     for (const field of allowedFields) {
       if (Object.prototype.hasOwnProperty.call(req.body, field)) {
         updates[field] = req.body[field];
       }
     }
 
-    // Username validation
+    // Username
     if (updates.username !== undefined) {
       if (typeof updates.username !== "string") {
         return res.status(400).json({
@@ -118,15 +118,13 @@ router.put("/", async (req, res) => {
         });
       }
 
-      updates.username = updates.username
-        .trim()
-        .replace(/^@/, "")
-        .toLowerCase();
+      updates.username = updates.username.trim().replace(/^@/, "").toLowerCase();
 
       if (!/^[a-z0-9_.-]{3,30}$/.test(updates.username)) {
         return res.status(400).json({
           success: false,
-          message: "Username must be 3–30 characters using letters, numbers, dots, underscores or hyphens.",
+          message:
+            "Username must be 3–30 characters using letters, numbers, dots, underscores or hyphens.",
         });
       }
 
@@ -143,7 +141,7 @@ router.put("/", async (req, res) => {
       }
     }
 
-    // Text field validation
+    // Text limits (avatar NOT limited to 1000)
     const limits = {
       fullName: 100,
       headline: 120,
@@ -152,7 +150,6 @@ router.put("/", async (req, res) => {
       website: 300,
       github: 300,
       linkedin: 300,
-      avatar: 1000,
     };
 
     for (const [field, maxLength] of Object.entries(limits)) {
@@ -175,17 +172,10 @@ router.put("/", async (req, res) => {
       }
     }
 
-    // URL validation
-    for (const field of ["website", "github", "linkedin", "avatar"]) {
+    // Optional HTTP URLs only for links
+    for (const field of ["website", "github", "linkedin"]) {
       if (!updates[field]) continue;
-
-      try {
-        const parsedUrl = new URL(updates[field]);
-
-        if (!["http:", "https:"].includes(parsedUrl.protocol)) {
-          throw new Error("Invalid protocol");
-        }
-      } catch {
+      if (!isHttpUrl(updates[field])) {
         return res.status(400).json({
           success: false,
           message: `${field} must be a valid HTTP or HTTPS URL.`,
@@ -193,12 +183,26 @@ router.put("/", async (req, res) => {
       }
     }
 
-    // Skills and certifications validation
+    // Avatar: empty, data URL, or http URL
+    if (updates.avatar !== undefined) {
+      if (typeof updates.avatar !== "string") {
+        return res.status(400).json({
+          success: false,
+          message: "avatar must be text.",
+        });
+      }
+      if (updates.avatar.length > 2_500_000) {
+        return res.status(400).json({
+          success: false,
+          message: "Avatar is too large. Use an image under 1.5 MB.",
+        });
+      }
+    }
+
     for (const field of ["skills", "certifications"]) {
       if (updates[field] === undefined) continue;
 
       const list = updates[field];
-
       if (
         !Array.isArray(list) ||
         list.length > 50 ||
@@ -215,12 +219,9 @@ router.put("/", async (req, res) => {
         });
       }
 
-      updates[field] = [
-        ...new Set(list.map((item) => item.trim())),
-      ];
+      updates[field] = [...new Set(list.map((item) => item.trim()))];
     }
 
-    // Keep these values consistent with the frontend dropdown
     const allowedExperience = [
       "Beginner",
       "Intermediate",
@@ -242,10 +243,7 @@ router.put("/", async (req, res) => {
     const user = await User.findByIdAndUpdate(
       userId,
       { $set: updates },
-      {
-        new: true,
-        runValidators: true,
-      }
+      { new: true, runValidators: true }
     ).select("-password");
 
     if (!user) {
@@ -266,7 +264,7 @@ router.put("/", async (req, res) => {
     if (error.code === 11000) {
       return res.status(409).json({
         success: false,
-        message: "Username or email is already in use.",
+        message: "Username is already in use.",
       });
     }
 
@@ -280,112 +278,6 @@ router.put("/", async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Could not save profile to the database.",
-    });
-  }
-});
-
-// GET /api/profile/username
-router.get("/username", async (req, res) => {
-  try {
-    const userId = getUserId(req);
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid user identity.",
-      });
-    }
-
-    const user = await User.findById(userId).select("username");
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      username: user.username,
-    });
-  } catch (error) {
-    console.error("GET username error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Could not fetch username.",
-    });
-  }
-});
-
-// PUT /api/profile/username
-router.put("/username", async (req, res) => {
-  try {
-    const userId = getUserId(req);
-
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid user identity.",
-      });
-    }
-
-    const username = String(req.body?.username || "")
-      .trim()
-      .replace(/^@/, "")
-      .toLowerCase();
-
-    if (!/^[a-z0-9_.-]{3,30}$/.test(username)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid username format.",
-      });
-    }
-
-    const duplicate = await User.findOne({
-      username,
-      _id: { $ne: userId },
-    }).select("_id");
-
-    if (duplicate) {
-      return res.status(409).json({
-        success: false,
-        message: "Username is already taken.",
-      });
-    }
-
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $set: { username } },
-      { new: true, runValidators: true }
-    ).select("username");
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Username saved successfully.",
-      username: user.username,
-    });
-  } catch (error) {
-    console.error("PUT username error:", error);
-
-    if (error.code === 11000) {
-      return res.status(409).json({
-        success: false,
-        message: "Username is already taken.",
-      });
-    }
-
-    return res.status(500).json({
-      success: false,
-      message: "Could not update username.",
     });
   }
 });

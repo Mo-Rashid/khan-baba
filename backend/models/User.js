@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    // Existing account fields
     username: {
       type: String,
       required: true,
@@ -31,10 +30,9 @@ const userSchema = new mongoose.Schema(
 
     isVerified: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
-    // Profile fields
     fullName: {
       type: String,
       trim: true,
@@ -96,26 +94,17 @@ const userSchema = new mongoose.Schema(
 
     experience: {
       type: String,
-      enum: [
-        "Beginner",
-        "Intermediate",
-        "Advanced",
-        "Professional",
-        "Expert",
-      ],
+      enum: ["Beginner", "Intermediate", "Advanced", "Professional", "Expert"],
       default: "Beginner",
     },
 
+    // Base64 avatar — no short maxlength
     avatar: {
       type: String,
-      trim: true,
-      maxlength: 1000,
       default: "",
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);

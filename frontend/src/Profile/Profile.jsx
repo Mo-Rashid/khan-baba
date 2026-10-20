@@ -47,22 +47,55 @@ export default function Profile() {
   const fileRef = useRef(null);
 
   useEffect(() => {
+  async function loadProfile() {
+    const token =
+      localStorage.getItem("token") ||
+      localStorage.getItem("authToken") ||
+      localStorage.getItem("accessToken");
+
+    if (!token) {
+      setNotice("Please login to view your profile.");
+      setLoaded(true);
+      return;
+    }
+
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const response = await fetch("/api/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const result = await response.json();
 
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const restored = { ...emptyProfile, ...parsed };
-
-        setProfile(restored);
-        setDraft(restored);
+      if (response.ok && result.success && result.profile) {
+        const fromDb = { ...emptyProfile, ...result.profile };
+        setProfile(fromDb);
+        setDraft(fromDb);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(fromDb));
+      } else {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const restored = { ...emptyProfile, ...JSON.parse(saved) };
+          setProfile(restored);
+          setDraft(restored);
+        }
       }
     } catch {
-      setNotice("Unable to load the saved profile.");
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const restored = { ...emptyProfile, ...JSON.parse(saved) };
+          setProfile(restored);
+          setDraft(restored);
+        }
+      } catch {
+        setNotice("Unable to load profile.");
+      }
     } finally {
       setLoaded(true);
     }
-  }, []);
+  }
+
+  loadProfile();
+}, []);
 
   const updateField = (field, value) => {
     setDraft((previous) => ({
@@ -77,7 +110,8 @@ export default function Profile() {
     setNotice("");
   };
 
-  const saveProfile = async (event) => {
+  
+const saveProfile = async (event) => {
   event.preventDefault();
   setNotice("");
 
@@ -92,10 +126,8 @@ export default function Profile() {
   }
 
   const clean = {
-    ...draft,
     fullName: draft.fullName.trim(),
     username: draft.username.trim().replace(/^@/, "").toLowerCase(),
-    email: draft.email.trim(),
     headline: draft.headline.trim(),
     location: draft.location.trim(),
     bio: draft.bio.trim(),
@@ -106,6 +138,8 @@ export default function Profile() {
     certifications: draft.certifications
       .map((item) => item.trim())
       .filter(Boolean),
+    experience: draft.experience || "Beginner",
+    avatar: draft.avatar || "",
   };
 
   if (!clean.fullName || !clean.username) {
@@ -129,27 +163,17 @@ export default function Profile() {
       throw new Error(result.message || "Database save failed.");
     }
 
-    const savedProfile = {
-      ...emptyProfile,
-      ...result.profile,
-    };
-
+    const savedProfile = { ...emptyProfile, ...result.profile };
     setProfile(savedProfile);
     setDraft(savedProfile);
     setEditing(false);
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(savedProfile)
-    );
-
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProfile));
     setNotice("Profile saved successfully in MongoDB!");
   } catch (error) {
     console.error("Profile save error:", error);
     setNotice(error.message || "Unable to save profile.");
   }
 };
-
   
 
 
