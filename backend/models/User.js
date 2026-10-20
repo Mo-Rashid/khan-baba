@@ -85,11 +85,19 @@ const userSchema = new mongoose.Schema(
     skills: {
       type: [String],
       default: [],
+      validate: {
+        validator: (arr) => Array.isArray(arr) && arr.length <= 50,
+        message: "Maximum 50 skills allowed.",
+      },
     },
 
     certifications: {
       type: [String],
       default: [],
+      validate: {
+        validator: (arr) => Array.isArray(arr) && arr.length <= 50,
+        message: "Maximum 50 certifications allowed.",
+      },
     },
 
     experience: {
@@ -98,7 +106,7 @@ const userSchema = new mongoose.Schema(
       default: "Beginner",
     },
 
-    // Base64 avatar — no short maxlength
+    // Base64 OK — no short maxlength
     avatar: {
       type: String,
       default: "",
